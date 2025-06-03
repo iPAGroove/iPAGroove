@@ -1,10 +1,11 @@
 let allGames = [];
 let displayed = 0;
-const batchSize = 12;
+const batchSize = 6;
 
 const searchInput = document.getElementById('searchInput');
 const genreFilter = document.getElementById('genreFilter');
 const gamesList = document.getElementById('gamesList');
+const topList = document.getElementById('topList');
 
 let currentFilter = '';
 
@@ -21,8 +22,18 @@ fetch('games.json')
   .then(res => res.json())
   .then(data => {
     allGames = data;
+    renderTopGames();
     applyFilter();
   });
+
+function renderTopGames() {
+  // Берем первые 3 игры для топ-листа, можно заменить логику по рейтингу
+  const topGames = allGames.slice(0, 3);
+  topList.innerHTML = '';
+  topGames.forEach(game => {
+    topList.insertAdjacentHTML('beforeend', createTile(game, true));
+  });
+}
 
 function applyFilter() {
   displayed = 0;
@@ -45,14 +56,14 @@ function showMore() {
   displayed += slice.length;
 }
 
-function createTile(game) {
+function createTile(game, small = false) {
   return `
-    <div onclick="openModal(${JSON.stringify(game).replace(/"/g, '&quot;')})"
-         class="bg-white/10 rounded-xl p-4 flex items-center gap-4 cursor-pointer hover:bg-white/20 transition">
+    <div onclick='openModal(${JSON.stringify(game).replace(/'/g, "\\'")})'
+         class="bg-white/10 rounded-xl p-4 flex items-center gap-4 cursor-pointer hover:bg-white/20 transition ${small ? "min-w-[180px]" : ""}">
       <img src="${game.icon}" alt="${game.name}" class="w-16 h-16 rounded-xl flex-shrink-0" />
-      <div class="flex-1">
-        <h3 class="text-lg font-bold">${game.name}</h3>
-        <p class="text-sm text-gray-300">${game.description}</p>
+      <div class="flex-1 ${small ? "overflow-hidden" : ""}">
+        <h3 class="text-lg font-bold truncate">${game.name}</h3>
+        ${small ? '' : `<p class="text-sm text-gray-300 line-clamp-2">${game.description}</p>`}
       </div>
     </div>
   `;
@@ -67,7 +78,10 @@ function openModal(game) {
 
   const screenshots = modal.querySelector('#modalScreenshots');
   screenshots.innerHTML = '';
-  if (game.screenshots) {
+  if (game.screenshot) {
+    screenshots.innerHTML += `<img src="${game.screenshot}" class="w-full rounded-xl mb-2" />`;
+  }
+  if (game.screenshots && Array.isArray(game.screenshots)) {
     game.screenshots.forEach(src => {
       screenshots.innerHTML += `<img src="${src}" class="w-full rounded-xl mb-2" />`;
     });
