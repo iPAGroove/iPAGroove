@@ -1,29 +1,48 @@
 let allGames = [];
+let displayed = 0;
+const batchSize = 12;
+
+const searchInput = document.getElementById('searchInput');
+const genreFilter = document.getElementById('genreFilter');
+const gamesList = document.getElementById('gamesList');
+
+let currentFilter = '';
+
+window.addEventListener('scroll', () => {
+  if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 100) {
+    showMore();
+  }
+});
+
+searchInput.addEventListener('input', applyFilter);
+genreFilter.addEventListener('change', applyFilter);
 
 fetch('games.json')
   .then(res => res.json())
   .then(data => {
     allGames = data;
-    renderTop(data);
-    renderList(data);
+    applyFilter();
   });
 
-const topList = document.getElementById('topList');
-const gamesList = document.getElementById('gamesList');
-const searchInput = document.getElementById('searchInput');
-const genreFilter = document.getElementById('genreFilter');
+function applyFilter() {
+  displayed = 0;
+  currentFilter = searchInput.value.toLowerCase();
+  gamesList.innerHTML = '';
+  showMore();
+}
 
-searchInput.addEventListener('input', filterGames);
-genreFilter.addEventListener('change', filterGames);
+function showMore() {
+  const genre = genreFilter.value;
+  const filtered = allGames.filter(g =>
+    g.name.toLowerCase().includes(currentFilter) &&
+    (genre === "" || g.genre === genre)
+  );
 
-function createCard(game) {
-  return `
-    <div class="min-w-[140px] bg-white/10 rounded-xl p-3 flex flex-col items-center">
-      <img src="${game.icon}" alt="${game.name}" class="w-16 h-16 rounded-xl mb-2" />
-      <h3 class="text-center font-semibold text-sm">${game.name}</h3>
-      <a href="${game.download}" class="mt-auto text-blue-400 underline text-xs">Скачать</a>
-    </div>
-  `;
+  const slice = filtered.slice(displayed, displayed + batchSize);
+  slice.forEach(game => {
+    gamesList.insertAdjacentHTML('beforeend', createTile(game));
+  });
+  displayed += slice.length;
 }
 
 function createTile(game) {
@@ -37,26 +56,4 @@ function createTile(game) {
       <a href="${game.download}" class="text-blue-400 underline text-sm flex-shrink-0">Скачать</a>
     </div>
   `;
-}
-
-function renderTop(games) {
-  const topGames = games.filter(g => g.top);
-  topList.innerHTML = topGames.map(createCard).join('');
-}
-
-function renderList(games) {
-  gamesList.innerHTML = games.map(createTile).join('');
-}
-
-function filterGames() {
-  const search = searchInput.value.toLowerCase();
-  const genre = genreFilter.value;
-
-  const filtered = allGames.filter(g =>
-    g.name.toLowerCase().includes(search) &&
-    (genre === "" || g.genre === genre)
-  );
-
-  renderTop(filtered);
-  renderList(filtered);
 }
