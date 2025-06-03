@@ -1,0 +1,14 @@
+[
+  {
+    "name": "Subway Surfers",
+    "description": "Run and dodge trains in this endless runner.",
+    "icon": "assets/icons/subway.png",
+    "download": "https://example.com/ipa/subway.ipa"
+  },
+  {
+    "name": "Flappy Bird",
+    "description": "Tap to fly and avoid pipes.",
+    "icon": "assets/icons/flappy.png",
+    "download": "https://example.com/ipa/flappy.ipa"
+  }
+]
