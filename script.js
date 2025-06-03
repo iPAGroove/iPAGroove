@@ -14,6 +14,8 @@ const menuToggle = document.getElementById('menuToggle');
 const menuClose = document.getElementById('menuClose');
 const overlay = document.getElementById('overlay');
 
+const catalogSection = document.getElementById('catalogSection');
+
 let currentCatalog = 'games';
 let currentList = 'all';
 let currentFilter = '';
@@ -30,15 +32,18 @@ function closeMenu() {
   overlay.classList.remove('active');
 }
 
+// Навигация
 document.querySelectorAll('.menuItem').forEach(btn => {
   btn.addEventListener('click', () => {
     currentCatalog = btn.dataset.catalog;
     currentList = btn.dataset.list;
     closeMenu();
+    catalogSection.classList.remove('hidden');
     resetAndLoad();
   });
 });
 
+// Обновление списка
 function resetAndLoad() {
   displayed = 0;
   currentFilter = '';
@@ -117,6 +122,7 @@ function createTile(game) {
   `;
 }
 
+// Модальное окно
 function openModal(game) {
   const modal = document.getElementById('gameModal');
   modal.querySelector('#modalIcon').src = game.icon;
@@ -142,8 +148,9 @@ function closeModal() {
   document.getElementById('gameModal').classList.add('hidden');
 }
 
+// Фильтрация
 searchInput.addEventListener('input', applyFilter);
 genreFilter.addEventListener('change', applyFilter);
 
-// Первая загрузка
-resetAndLoad();
+// Удаляем автоматическую загрузку на старте
+// resetAndLoad(); <-- Эта строка удалена
