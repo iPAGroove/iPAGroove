@@ -1,46 +1,94 @@
-const validPasswords = ['password123', 'letmein', 'secret2025', 'mySuperPass'];
+// ----- СХЕМА ХРАНЕНИЯ ПАРОЛЕЙ (SHA-256) -----
+// Вместо хранения паролей в чистом виде — храним их SHA-256-хэши:
+const validPasswordHashes = [
+  // sha256('password123')
+  'ef92b778bafe771e89245b89ecbc08a44a4e166c06659911881f383d4473e94f',
+  // sha256('letmein')
+  '1c8bfe8f801d79745c4631d09fff36c82aa37fc4cce4fc946683d7b336b63032',
+  // sha256('secret2025')
+  'ebc323601c4461ee9026cf1958047246253c66f3a1bad3fd24ce806de865082a',
+  // sha256('mySuperPass')
+  '632321774977f370359d966cd45112e46d2389a501a663de1c44ab1486d8d9a1'
+];
 
+// Элементы DOM
 const passwordOverlay = document.getElementById('passwordOverlay');
-const passwordInput = document.getElementById('passwordInput');
-const passwordSubmit = document.getElementById('passwordSubmit');
-const passwordError = document.getElementById('passwordError');
-const siteContent = document.getElementById('siteContent');
+const passwordInput   = document.getElementById('passwordInput');
+const passwordSubmit  = document.getElementById('passwordSubmit');
+const passwordError   = document.getElementById('passwordError');
+const siteContent     = document.getElementById('siteContent');
+const loader          = document.getElementById('loader');
 
 let allGames = [];
-let allApps = [];
+let allApps  = [];
 let displayed = 0;
 const batchSize = 5;
 
-const searchInput = document.getElementById('searchInput');
-const genreFilter = document.getElementById('genreFilter');
-const gamesList = document.getElementById('gamesList');
-const showMoreBtn = document.getElementById('showMoreBtn');
-const mainListTitle = document.getElementById('mainListTitle');
+const searchInput    = document.getElementById('searchInput');
+const genreFilter    = document.getElementById('genreFilter');
+const gamesList      = document.getElementById('gamesList');
+const showMoreBtn    = document.getElementById('showMoreBtn');
+const mainListTitle  = document.getElementById('mainListTitle');
 
-const sideMenu = document.getElementById('sideMenu');
+const sideMenu   = document.getElementById('sideMenu');
 const menuToggle = document.getElementById('menuToggle');
-const menuClose = document.getElementById('menuClose');
-const overlay = document.getElementById('overlay');
+const menuClose  = document.getElementById('menuClose');
+const overlay    = document.getElementById('overlay');
 
 const catalogSection = document.getElementById('catalogSection');
-
 let currentCatalog = '';
-let currentList = '';
+let currentList    = '';
 
-// Логирование в консоль
+/** Простая обёртка на консоль */
 function log(...args) {
   console.log(...args);
 }
 
-// Обработчик входа по паролю
+/** ----- ФУНКЦИЯ ХЕШИРОВАНИЯ ВВЕДЁННОГО ПАРОЛЯ ----- */
+async function hashPassword(pass) {
+  const enc = new TextEncoder();
+  const data = enc.encode(pass);
+  const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+  return hashHex;
+}
+
+/** ----- ПРОВЕРКА, БЫЛ ЛИ УЖЕ РАЗ РАЗРЕШЕН ДОСТУП ----- */
+function checkLocalAccess() {
+  if (localStorage.getItem('accessGranted') === 'true') {
+    // сразу скрываем оверлей, показываем контент:
+    passwordOverlay.style.display = 'none';
+    showMainContent();
+    preloadData().then(() => {
+      // данные загружены, больше лоадер не нужен
+      loader.style.display = 'none';
+    });
+  }
+}
+
+/** ----- ПОКАЗАТЬ ОСНОВНОЙ КОНТЕНТ С ПЛАВНЫМ ПЕРЕХОДОМ ----- */
+function showMainContent() {
+  siteContent.classList.add('visible');
+}
+
+/** ----- ОБРАБОТЧИК КНОПКИ "Войти" ----- */
 passwordSubmit.addEventListener('click', async () => {
   const entered = passwordInput.value.trim();
   log(`Введён пароль: "${entered}"`);
-  if (validPasswords.includes(entered)) {
+
+  // Посчитаем SHA-256 для введённого:
+  const hash = await hashPassword(entered);
+  if (validPasswordHashes.includes(hash)) {
     log('Пароль правильный, показываем сайт');
     passwordOverlay.style.display = 'none';
-    siteContent.style.display = 'block';
-    await preloadData(); // Только загружаем данные, но не открываем каталог
+    localStorage.setItem('accessGranted', 'true');
+    showMainContent();
+
+    // Сначала показываем лоадер, потом загружаем данные:
+    loader.style.display = 'flex';
+    await preloadData();
+    loader.style.display = 'none';
   } else {
     log('Пароль НЕ правильный');
     passwordError.textContent = 'Неверный пароль. Попробуйте ещё раз.';
@@ -49,14 +97,14 @@ passwordSubmit.addEventListener('click', async () => {
   }
 });
 
-// Вход по Enter
+/** ----- Обработчик Enter в поле пароля ----- */
 passwordInput.addEventListener('keydown', (e) => {
   if (e.key === 'Enter') {
     passwordSubmit.click();
   }
 });
 
-// Меню
+/** ----- МЕНЮ: Открытие / Закрытие ----- */
 menuToggle.addEventListener('click', () => {
   log('Открываем меню');
   sideMenu.classList.add('open');
@@ -73,40 +121,49 @@ function closeMenu() {
   setTimeout(() => overlay.classList.add('hidden'), 300);
 }
 
-// Кнопки меню — выбор каталога
+/** ----- КНОПКИ МЕНЮ: выбор каталога ----- */
 document.querySelectorAll('.menuItem').forEach(btn => {
   btn.addEventListener('click', () => {
     currentCatalog = btn.dataset.catalog;
-    currentList = btn.dataset.list;
+    currentList    = btn.dataset.list;
     log(`Выбран каталог: ${currentCatalog}, список: ${currentList}`);
     closeMenu();
-    resetAndLoad(); // Только здесь вызываем загрузку списка
+    resetAndLoad();
   });
 });
 
-// Загрузка данных
+/** ----- ПРЕДЗАГРУЗКА ДАННЫХ ИЗ JSON ----- */
 async function preloadData() {
   try {
     log('Предзагрузка данных...');
     const gamesResponse = await fetch('games.json');
-    const appsResponse = await fetch('apps.json');
+    const appsResponse  = await fetch('apps.json');
     allGames = await gamesResponse.json();
-    allApps = await appsResponse.json();
+    allApps  = await appsResponse.json();
     log(`Данные загружены: игр=${allGames.length}, приложений=${allApps.length}`);
   } catch (e) {
     console.error('Ошибка загрузки данных:', e);
   }
 }
 
-// Отрисовка списка с фильтрами и пагинацией
+/** ----- ОЧИСТКА И ПОДГОТОВКА ПАГИНАЦИИ/ФИЛЬТРА ----- */
+async function resetAndLoad() {
+  catalogSection.classList.remove('hidden');
+  displayed = batchSize;
+  renderList();
+}
+
+/** ----- РЕНДЕР СПИСКА С ФИЛЬТРАМИ + ПАГИНАЦИЕЙ ----- */
 function renderList() {
   if (!currentCatalog || !currentList) return;
 
   const items = currentCatalog === 'games' ? allGames : allApps;
 
-  let filtered = items.filter(item => {
-    const search = searchInput.value.trim().toLowerCase();
-    const genre = genreFilter.value;
+  // 1) Фильтрация
+  const search = searchInput.value.trim().toLowerCase();
+  const genre  = genreFilter.value;
+
+  const filtered = items.filter(item => {
     if (search && !item.name.toLowerCase().includes(search)) return false;
     if (genre && item.genre !== genre) return false;
     return true;
@@ -114,40 +171,70 @@ function renderList() {
 
   mainListTitle.textContent = `${currentCatalog === 'games' ? 'Игры' : 'Приложения'} — всего: ${filtered.length}`;
 
+  // 2) Пагинация
   const toShow = filtered.slice(0, displayed);
   gamesList.innerHTML = '';
 
   if (toShow.length === 0) {
-    gamesList.innerHTML = '<p>Ничего не найдено</p>';
+    // Ничего не найдено
+    const p = document.createElement('p');
+    p.textContent = 'Ничего не найдено';
+    gamesList.appendChild(p);
     showMoreBtn.style.display = 'none';
     return;
   }
 
+  // 3) Построим каждый item через чистый JS (чтобы избежать XSS)
   toShow.forEach(item => {
-    const div = document.createElement('div');
-    div.className = 'flex items-center gap-4 bg-purple-900 bg-opacity-30 p-3 rounded cursor-pointer hover:bg-purple-700 transition';
-    div.innerHTML = `
-      <img src="${item.icon}" alt="${item.name}" class="w-12 h-12 rounded-xl flex-shrink-0" />
-      <div class="flex-grow">
-        <h3 class="font-semibold text-lg">${item.name}</h3>
-        <p class="text-sm text-purple-200">${item.genre} | ${item.size || '–'}</p>
-      </div>
-      <div class="text-purple-300 font-semibold">${item.rating ? '⭐'+item.rating : ''}</div>
-    `;
-    div.addEventListener('click', () => openModal(item));
-    gamesList.appendChild(div);
+    const container = document.createElement('div');
+    container.className = 'flex items-center gap-4 bg-purple-900 bg-opacity-30 p-3 rounded cursor-pointer hover:bg-purple-700 transition';
+
+    // Иконка
+    const img = document.createElement('img');
+    img.src = item.icon;
+    img.alt = item.name;
+    img.loading = 'lazy';
+    img.className = 'w-12 h-12 rounded-xl flex-shrink-0';
+    container.appendChild(img);
+
+    // Блок с именем/жанром
+    const textWrapper = document.createElement('div');
+    textWrapper.className = 'flex-grow';
+
+    const h3 = document.createElement('h3');
+    h3.className = 'font-semibold text-lg';
+    h3.textContent = item.name;
+    textWrapper.appendChild(h3);
+
+    const p = document.createElement('p');
+    p.className = 'text-sm text-purple-200';
+    p.textContent = `${item.genre} | ${item.size || '–'}`;
+    textWrapper.appendChild(p);
+
+    container.appendChild(textWrapper);
+
+    // Рейтинг
+    if (item.rating) {
+      const span = document.createElement('div');
+      span.className = 'text-purple-300 font-semibold';
+      span.textContent = '⭐' + item.rating;
+      container.appendChild(span);
+    }
+
+    container.addEventListener('click', () => openModal(item));
+    gamesList.appendChild(container);
   });
 
   showMoreBtn.style.display = displayed < filtered.length ? 'inline-block' : 'none';
 }
 
-// Кнопка "Показать ещё"
+/** ----- ПАГИНАЦИЯ: кнопка "Показать ещё" ----- */
 showMoreBtn.addEventListener('click', () => {
   displayed += batchSize;
   renderList();
 });
 
-// Фильтры
+/** ----- ФИЛЬТРЫ: при изменении сбрасываем пагинацию ----- */
 searchInput.addEventListener('input', () => {
   displayed = batchSize;
   renderList();
@@ -157,44 +244,64 @@ genreFilter.addEventListener('change', () => {
   renderList();
 });
 
-// Модальное окно
-const gameModal = document.getElementById('gameModal');
-const modalTitle = document.getElementById('modalTitle');
-const modalDesc = document.getElementById('modalDesc');
-const modalIcon = document.getElementById('modalIcon');
-const modalScreenshots = document.getElementById('modalScreenshots');
-const modalDownload = document.getElementById('modalDownload');
+/** ----- МОДАЛЬНОЕ ОКНО (XSS-безопасно) ----- */
+const gameModal       = document.getElementById('gameModal');
+const modalTitle      = document.getElementById('modalTitle');
+const modalDesc       = document.getElementById('modalDesc');
+const modalIcon       = document.getElementById('modalIcon');
+const modalScreenshots= document.getElementById('modalScreenshots');
+const modalDownload   = document.getElementById('modalDownload');
 
 function openModal(item) {
+  // Устанавливаем текстовые поля безопасно:
   modalTitle.textContent = item.name;
-  modalDesc.textContent = item.description || 'Нет описания';
+  modalDesc.textContent  = item.description || 'Нет описания';
+
+  // Иконка
   modalIcon.src = item.icon;
+  modalIcon.alt = item.name;
+  modalIcon.loading = 'lazy';
+
+  // Скриншоты
   modalScreenshots.innerHTML = '';
-  if (item.screenshots && item.screenshots.length > 0) {
+  if (Array.isArray(item.screenshots) && item.screenshots.length > 0) {
     item.screenshots.forEach(src => {
       const img = document.createElement('img');
       img.src = src;
       img.alt = `${item.name} screenshot`;
+      img.loading = 'lazy';
       img.className = 'w-full rounded mb-2';
       modalScreenshots.appendChild(img);
     });
   }
+
+  // Ссылка Download (если нет – href="#" и текст "Скачать")
   modalDownload.href = item.download || '#';
   modalDownload.textContent = 'Скачать';
-  gameModal.classList.remove('hidden');
+
+  // Показываем модалку с анимацией
+  gameModal.classList.add('show');
 }
 
 function closeModal() {
-  gameModal.classList.add('hidden');
+  gameModal.classList.remove('show');
 }
 
 gameModal.addEventListener('click', (e) => {
-  if (e.target === gameModal) closeModal();
+  if (e.target === gameModal) {
+    closeModal();
+  }
 });
 
-// Загружаем и отображаем список после выбора из меню
+/** ----- ПОКАЗ СПИСКА ПОСЛЕ ВЫБОРА ИЗ МЕНЮ ----- */
 async function resetAndLoad() {
   catalogSection.classList.remove('hidden');
   displayed = batchSize;
   renderList();
 }
+
+/** ----- ОПРОС LOCALSTORAGE И ПОДГРУЗКА ПРИ ЗАГРУЗКЕ СТРАНИЦЫ ----- */
+document.addEventListener('DOMContentLoaded', () => {
+  // Сразу проверим, был ли ранее сохранён «доступ»
+  checkLocalAccess();
+});
