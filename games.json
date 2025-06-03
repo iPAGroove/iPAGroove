@@ -1,23 +1,58 @@
 [
   {
     "name": "Subway Surfers",
-    "description": "Run and dodge trains in this endless runner.",
-    "genre": "Arcade",
-    "icon": "assets/icons/subway.png",
-    "download": "https://example.com/ipa/subway.ipa"
-  },
-  {
-    "name": "Flappy Bird",
-    "description": "Tap to fly and avoid pipes.",
-    "genre": "Arcade",
-    "icon": "assets/icons/flappy.png",
-    "download": "https://example.com/ipa/flappy.ipa"
+    "description": "Беги, уклоняйся и прокачивай реакцию!",
+    "icon": "https://is5-ssl.mzstatic.com/image/thumb/Purple126/v4/3a/e1/ae/3ae1ae25-0f02-5196-eebb-37d2717cbf4b/AppIcon-0-1x_U007emarketing-0-0-85-220.png/460x0w.webp",
+    "download": "#",
+    "genre": "Arcade"
   },
   {
     "name": "Monument Valley",
-    "description": "A surreal exploration through architecture and illusion.",
-    "genre": "Puzzle",
-    "icon": "assets/icons/monument.png",
-    "download": "https://example.com/ipa/monument.ipa"
+    "description": "Головоломка с архитектурной магией.",
+    "icon": "https://is1-ssl.mzstatic.com/image/thumb/Purple113/v4/52/3d/0b/523d0bd5-690e-2182-1e41-f8708b4fcbfc/AppIcon-0-1x_U007emarketing-0-10-0-85-220.png/460x0w.webp",
+    "download": "#",
+    "genre": "Puzzle"
+  },
+  {
+    "name": "Cut the Rope",
+    "description": "Корми Ом-Нома конфетами!",
+    "icon": "https://is1-ssl.mzstatic.com/image/thumb/Purple113/v4/60/62/70/6062703a-95c5-877f-c1dc-c9bc979a0846/AppIcon-0-1x_U007emarketing-0-0-0-85-220-0.png/460x0w.webp",
+    "download": "#",
+    "genre": "Puzzle"
+  },
+  {
+    "name": "Angry Birds 2",
+    "description": "Разрушай укрепления и спасай яйца!",
+    "icon": "https://is1-ssl.mzstatic.com/image/thumb/Purple126/v4/28/cf/2c/28cf2c03-67ff-d9a7-d498-312a047bdc0f/AppIcon-0-1x_U007emarketing-0-5-0-85-220.png/460x0w.webp",
+    "download": "#",
+    "genre": "Arcade"
+  },
+  {
+    "name": "Alto’s Adventure",
+    "description": "Сноуборд с эстетикой и дзеном.",
+    "icon": "https://is2-ssl.mzstatic.com/image/thumb/Purple123/v4/90/9e/6b/909e6bb0-dc5d-fc5f-7f59-f8ec0d98df53/AppIcon-0-1x_U007emarketing-0-0-85-220.png/460x0w.webp",
+    "download": "#",
+    "genre": "Arcade"
+  },
+  {
+    "name": "BADLAND",
+    "description": "Летающая тень в сюрреалистическом мире.",
+    "icon": "https://is3-ssl.mzstatic.com/image/thumb/Purple123/v4/88/13/cf/8813cfb4-4e2f-f8f0-7dcb-42cf6c6f1326/AppIcon-0-1x_U007emarketing-0-10-0-85-220.png/460x0w.webp",
+    "download": "#",
+    "genre": "Arcade"
+  },
+  {
+    "name": "Threes!",
+    "description": "Числовая головоломка на залипание.",
+    "icon": "https://is1-ssl.mzstatic.com/image/thumb/Purple123/v4/2f/f1/c7/2ff1c72d-0f96-0dc3-9e88-274f098f0d8d/AppIcon-0-1x_U007emarketing-0-5-0-85-220.png/460x0w.webp",
+    "download": "#",
+    "genre": "Puzzle"
+  },
+  {
+    "name": "Geometry Dash",
+    "description": "Музыкальный платформер на реакцию.",
+    "icon": "https://is3-ssl.mzstatic.com/image/thumb/Purple126/v4/d5/5f/67/d55f6727-402c-9c27-6e2b-255ec9d67d27/AppIcon-0-1x_U007emarketing-0-7-0-85-220.png/460x0w.webp",
+    "download": "#",
+    "genre": "Arcade"
   }
 ]
