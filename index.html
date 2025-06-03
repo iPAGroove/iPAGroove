@@ -101,9 +101,8 @@
   <button id="menuClose" class="text-white text-2xl mb-6 leading-none select-none">×</button>
   <h2 class="text-white text-xl mb-4 font-bold">Меню</h2>
   <ul class="space-y-4 text-white">
-    <li><button data-catalog="games" data-list="top" class="menuItem w-full text-left py-2 px-3 rounded">🎮 Игры — Топ недели</button></li>
+    <!-- Убраны пункты топ недели -->
     <li><button data-catalog="games" data-list="all" class="menuItem w-full text-left py-2 px-3 rounded">🎮 Игры — Все</button></li>
-    <li><button data-catalog="apps" data-list="top" class="menuItem w-full text-left py-2 px-3 rounded">📱 Приложения — Топ недели</button></li>
     <li><button data-catalog="apps" data-list="all" class="menuItem w-full text-left py-2 px-3 rounded">📱 Приложения — Все</button></li>
   </ul>
 </nav>
@@ -122,10 +121,13 @@
     </select>
   </div>
 
+  <!-- Убран блок топ недели -->
+  <!--
   <section>
     <h2 id="listTitle" class="text-xl font-bold mb-2">👑 Топ недели</h2>
     <div id="topList" class="flex gap-4 scroll-x pb-4"></div>
   </section>
+  -->
 
   <section>
     <h2 id="mainListTitle" class="text-xl font-bold mb-2">Все игры</h2>
