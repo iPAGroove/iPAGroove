@@ -3,12 +3,19 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>iOS Game Catalog — Минимал</title>
-<script defer src="minimal.js"></script>
+<title>iOS Game Catalog — App Store Style</title>
+<script defer src="appstore.js"></script>
 <script src="https://cdn.tailwindcss.com"></script>
 <style>
   body {
     background: #0f172a;
+  }
+  .scroll-x {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .scroll-x::-webkit-scrollbar {
+    display: none;
   }
 </style>
 </head>
@@ -27,7 +34,15 @@
   </select>
 </div>
 
-<div id="gamesList" class="space-y-4"></div>
+<section>
+  <h2 class="text-xl font-bold mb-2">👑 Топ недели</h2>
+  <div id="topList" class="flex gap-4 scroll-x pb-4"></div>
+</section>
+
+<section>
+  <h2 class="text-xl font-bold mb-2">Все игры</h2>
+  <div id="gamesList" class="space-y-4"></div>
+</section>
 
 <footer class="mt-8 text-center text-gray-400 text-sm">
   &copy; 2025 iOS Game Zone
