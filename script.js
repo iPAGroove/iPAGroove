@@ -1,5 +1,5 @@
 // Массив разрешённых паролей
-const validPasswords = [password123, letmein, secret2025, mySuperPass]; 
+const validPasswords = ['password123', 'letmein', 'secret2025', 'mySuperPass']; 
 
 const passwordOverlay = document.getElementById('passwordOverlay');
 const passwordInput = document.getElementById('passwordInput');
