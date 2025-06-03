@@ -29,14 +29,22 @@ let currentCatalog = 'games';
 let currentList = 'all';
 let currentFilter = '';
 
+// Простое логирование в консоль вместо вывода на страницу
+function log(...args) {
+  console.log(...args);
+}
+
 // Обработка нажатия кнопки входа по паролю
 passwordSubmit.addEventListener('click', () => {
   const entered = passwordInput.value.trim();
+  log(`Введён пароль: "${entered}"`);
   if (validPasswords.includes(entered)) {
+    log('Пароль правильный, показываем сайт');
     passwordOverlay.style.display = 'none';
     siteContent.style.display = 'block';
     resetAndLoad();
   } else {
+    log('Пароль НЕ правильный');
     passwordError.textContent = 'Неверный пароль. Попробуйте ещё раз.';
     passwordInput.value = '';
     passwordInput.focus();
@@ -52,6 +60,7 @@ passwordInput.addEventListener('keydown', (e) => {
 
 // Меню
 menuToggle.addEventListener('click', () => {
+  log('Открываем меню');
   sideMenu.classList.add('open');
   overlay.classList.add('active');
 });
@@ -63,6 +72,7 @@ overlay.addEventListener('click', () => {
 });
 
 function closeMenu() {
+  log('Закрываем меню');
   sideMenu.classList.remove('open');
   overlay.classList.remove('active');
 }
@@ -72,6 +82,7 @@ document.querySelectorAll('.menuItem').forEach(btn => {
   btn.addEventListener('click', () => {
     currentCatalog = btn.dataset.catalog;
     currentList = btn.dataset.list;
+    log(`Выбран каталог: ${currentCatalog}, список: ${currentList}`);
     closeMenu();
     resetAndLoad();
   });
@@ -80,10 +91,12 @@ document.querySelectorAll('.menuItem').forEach(btn => {
 // Загрузка JSON с играми и приложениями
 async function loadData() {
   try {
+    log('Загрузка данных...');
     const gamesResponse = await fetch('games.json');
     const appsResponse = await fetch('apps.json');
     allGames = await gamesResponse.json();
     allApps = await appsResponse.json();
+    log(`Данные загружены: игр=${allGames.length}, приложений=${allApps.length}`);
   } catch (e) {
     console.error('Ошибка загрузки данных:', e);
   }
@@ -107,6 +120,8 @@ function renderList() {
   showMoreBtn.style.display = filtered.length > batchSize ? 'inline-block' : 'none';
   mainListTitle.textContent = currentCatalog === 'games' ? 'Игры' : 'Приложения';
 
+  log(`Отрисовка списка: найдено ${filtered.length} элементов, показываем первые ${batchSize}`);
+
   loadMore(filtered);
 }
 
@@ -128,8 +143,10 @@ function loadMore(filtered) {
 
   if (displayed >= filteredItems.length) {
     showMoreBtn.style.display = 'none';
+    log('Показаны все элементы');
   } else {
     showMoreBtn.style.display = 'inline-block';
+    log(`Показано ${displayed} элементов, осталось ещё`);
   }
 }
 
