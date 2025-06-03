@@ -65,40 +65,49 @@ function loadData() {
       .then(res => res.json())
       .then(data => {
         allGames = data;
-        applyFilter();
+        renderBatch();
       });
   } else if (currentCatalog === 'apps' && allApps.length === 0) {
     fetch('apps.json')
       .then(res => res.json())
       .then(data => {
         allApps = data;
-        applyFilter();
+        renderBatch();
       });
   } else {
-    applyFilter();
+    renderBatch();
   }
 }
 
-function applyFilter() {
-  displayed = 0;
-  currentFilter = searchInput.value.toLowerCase();
-  gamesList.innerHTML = '';
-  showMore();
+function filterItems(items) {
+  let filtered = items;
+
+  // Поиск
+  if (searchInput.value.trim()) {
+    const search = searchInput.value.trim().toLowerCase();
+    filtered = filtered.filter(i => i.title.toLowerCase().includes(search));
+  }
+  // Фильтр по жанру
+  if (genreFilter.value) {
+    filtered = filtered.filter(i => i.genre === genreFilter.value);
+  }
+  return filtered;
 }
 
-function showMore() {
-  const genre = genreFilter.value;
-  const data = currentCatalog === 'games' ? allGames : allApps;
-  const filtered = data.filter(g =>
-    g.name.toLowerCase().includes(currentFilter) &&
-    (genre === "" || g.genre === genre)
-  );
+function renderBatch() {
+  const items = currentCatalog === 'games' ? allGames : allApps;
+  const filtered = filterItems(items);
 
-  const slice = filtered.slice(displayed, displayed + batchSize);
-  slice.forEach(game => {
-    gamesList.insertAdjacentHTML('beforeend', createTile(game));
-  });
-  displayed += slice.length;
+  if (displayed === 0) {
+    gamesList.innerHTML = '';
+  }
+
+  const nextBatch = filtered.slice(displayed, displayed + batchSize);
+  for (const item of nextBatch) {
+    gamesList.appendChild(createItemCard(item));
+  }
+
+  displayed += nextBatch.length;
 
   if (displayed < filtered.length) {
     showMoreBtn.classList.remove('hidden');
@@ -107,50 +116,86 @@ function showMore() {
   }
 }
 
-showMoreBtn.addEventListener('click', showMore);
+// Создание карточки игры/приложения
+function createItemCard(item) {
+  const card = document.createElement('div');
+  card.className = 'bg-purple-900 bg-opacity-50 rounded-lg p-3 flex gap-4 cursor-pointer hover:bg-purple-800 transition';
 
-function createTile(game) {
-  return `
-    <div onclick='openModal(${JSON.stringify(game).replace(/'/g, "\\'")})'
-         class="bg-white/10 rounded-xl p-4 flex items-center gap-4 cursor-pointer hover:bg-white/20 transition">
-      <img src="${game.icon}" alt="${game.name}" class="w-16 h-16 rounded-xl flex-shrink-0" />
-      <div class="flex-1">
-        <h3 class="text-lg font-bold truncate">${game.name}</h3>
-        <p class="text-sm text-gray-300 line-clamp-2">${game.description}</p>
-      </div>
-    </div>
-  `;
+  const icon = document.createElement('img');
+  icon.src = item.icon;
+  icon.alt = item.title;
+  icon.className = 'w-16 h-16 rounded-xl flex-shrink-0';
+  card.appendChild(icon);
+
+  const info = document.createElement('div');
+  info.className = 'flex flex-col justify-between flex-grow';
+
+  const title = document.createElement('h3');
+  title.textContent = item.title;
+  title.className = 'font-semibold text-lg truncate';
+  info.appendChild(title);
+
+  const desc = document.createElement('p');
+  desc.textContent = item.description;
+  desc.className = 'text-sm text-gray-300 line-clamp-2';
+  info.appendChild(desc);
+
+  card.appendChild(info);
+
+  card.addEventListener('click', () => {
+    openModal(item);
+  });
+
+  return card;
 }
 
-// Модальное окно
-function openModal(game) {
-  const modal = document.getElementById('gameModal');
-  modal.querySelector('#modalIcon').src = game.icon;
-  modal.querySelector('#modalTitle').textContent = game.name;
-  modal.querySelector('#modalDesc').textContent = game.description;
-  modal.querySelector('#modalDownload').href = game.download;
+// Модалка
+const modal = document.getElementById('gameModal');
+const modalTitle = document.getElementById('modalTitle');
+const modalDesc = document.getElementById('modalDesc');
+const modalIcon = document.getElementById('modalIcon');
+const modalDownload = document.getElementById('modalDownload');
+const modalScreenshots = document.getElementById('modalScreenshots');
 
-  const screenshots = modal.querySelector('#modalScreenshots');
-  screenshots.innerHTML = '';
-  if (game.screenshot) {
-    screenshots.innerHTML += `<img src="${game.screenshot}" class="w-full rounded-xl mb-2" />`;
-  }
-  if (game.screenshots && Array.isArray(game.screenshots)) {
-    game.screenshots.forEach(src => {
-      screenshots.innerHTML += `<img src="${src}" class="w-full rounded-xl mb-2" />`;
-    });
+function openModal(item) {
+  modalTitle.textContent = item.title;
+  modalDesc.textContent = item.description;
+  modalIcon.src = item.icon;
+  modalDownload.href = item.downloadUrl || '#';
+  modalDownload.textContent = item.downloadUrl ? 'Скачать' : 'Ссылки отсутствуют';
+
+  // Скриншоты
+  modalScreenshots.innerHTML = '';
+  if (item.screenshots && item.screenshots.length) {
+    for (const scr of item.screenshots) {
+      const img = document.createElement('img');
+      img.src = scr;
+      img.alt = item.title + ' screenshot';
+      img.className = 'rounded-lg mb-2 w-full max-h-48 object-contain';
+      modalScreenshots.appendChild(img);
+    }
   }
 
   modal.classList.remove('hidden');
 }
 
-function closeModal() {
-  document.getElementById('gameModal').classList.add('hidden');
-}
+window.closeModal = function () {
+  modal.classList.add('hidden');
+};
 
-// Фильтрация
-searchInput.addEventListener('input', applyFilter);
-genreFilter.addEventListener('change', applyFilter);
+// Ленивый показ "Показать ещё"
+showMoreBtn.addEventListener('click', () => {
+  renderBatch();
+});
 
-// Удаляем автоматическую загрузку на старте
-// resetAndLoad(); <-- Эта строка удалена
+// Фильтры
+searchInput.addEventListener('input', () => {
+  displayed = 0;
+  gamesList.innerHTML = '';
+  renderBatch();
+});
+genreFilter.addEventListener('change', () => {
+  displayed = 0;
+  gamesList.innerHTML = '';
+  renderBatch();
+});
