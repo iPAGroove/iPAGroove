@@ -20,7 +20,6 @@
     .scroll-x::-webkit-scrollbar {
       display: none;
     }
-    /* Меню: по умолчанию скрыто слева */
     #sideMenu {
       transition: transform 0.3s ease;
       transform: translateX(-100%);
@@ -98,7 +97,7 @@
   <h1 class="text-lg font-extrabold flex items-center select-none text-white" style="text-shadow: 0 0 8px rgba(110,28,255,0.9);">
     <span style="font-size: 1.6rem; margin-right: 0.3rem;">📱</span>iPA Groove
   </h1>
-  <div style="width: 32px;"></div> <!-- Чтобы заголовок был по центру -->
+  <div style="width: 32px;"></div>
 </header>
 
 <nav id="sideMenu" class="fixed top-0 left-0 h-full w-64 p-6 z-50">
@@ -112,7 +111,7 @@
 
 <div id="overlay" class="fixed inset-0 bg-black/50 z-45 hidden"></div>
 
-<!-- Контент страницы -->
+<!-- Новый <main> блок -->
 <main class="pt-14 px-4 pb-8 min-h-screen">
 
   <div id="filterSection" class="mb-4">
@@ -124,14 +123,14 @@
     </select>
   </div>
 
-  <h2 id="listTitle" class="text-xl font-bold mb-2"></h2>
-  <div id="topList" class="flex gap-4 overflow-x-auto scroll-x mb-6"></div>
-
   <h2 id="mainListTitle" class="text-xl font-bold mb-2"></h2>
-  <div id="gamesList" class="space-y-4"></div>
+  <div id="gamesList" class="space-y-4 mb-4"></div>
+  <div id="showMoreContainer" class="text-center">
+    <button id="showMoreBtn" class="hidden">Показать ещё</button>
+  </div>
 </main>
 
-<!-- Модалка с информацией об игре/приложении -->
+<!-- Модалка -->
 <div id="gameModal" class="fixed inset-0 bg-black/70 backdrop-blur z-60 hidden flex items-end sm:items-center justify-center p-4">
   <div class="rounded-2xl p-4 w-full max-w-md max-h-[90vh] overflow-auto" style="background: rgba(40,0,90,0.95);">
     <div class="flex items-center gap-4 mb-4">
