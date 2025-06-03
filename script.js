@@ -1,5 +1,4 @@
-// ----- СХЕМА ХРАНЕНИЯ ПАРОЛЕЙ (SHA-256) -----
-// Вместо хранения паролей в чистом виде — храним их SHA-256-хэши:
+// ----- ХЭШИРОВАНИЕ ПАРОЛЕЙ (SHA-256) -----
 const validPasswordHashes = [
   // sha256('password123')
   'ef92b778bafe771e89245b89ecbc08a44a4e166c06659911881f383d4473e94f',
@@ -19,8 +18,8 @@ const passwordError   = document.getElementById('passwordError');
 const siteContent     = document.getElementById('siteContent');
 const loader          = document.getElementById('loader');
 
-let allGames = [];
-let allApps  = [];
+let allGames  = [];
+let allApps   = [];
 let displayed = 0;
 const batchSize = 5;
 
@@ -39,7 +38,7 @@ const catalogSection = document.getElementById('catalogSection');
 let currentCatalog = '';
 let currentList    = '';
 
-/** Простая обёртка на консоль */
+/** Логирование в консоль */
 function log(...args) {
   console.log(...args);
 }
@@ -54,16 +53,14 @@ async function hashPassword(pass) {
   return hashHex;
 }
 
-/** ----- ПРОВЕРКА, БЫЛ ЛИ УЖЕ РАЗ РАЗРЕШЕН ДОСТУП ----- */
-function checkLocalAccess() {
+/** ----- ПРОВЕРКА, БЫЛ ЛИ УЖЕ РАЗ РАЗРЕШЕН ДОСТУП (localStorage) ----- */
+async function checkLocalAccess() {
   if (localStorage.getItem('accessGranted') === 'true') {
-    // сразу скрываем оверлей, показываем контент:
-    passwordOverlay.style.display = 'none';
+    // Показать лоадер, загрузить данные, а потом основной контент
+    loader.style.display = 'flex';
+    await preloadData();
+    loader.style.display = 'none';
     showMainContent();
-    preloadData().then(() => {
-      // данные загружены, больше лоадер не нужен
-      loader.style.display = 'none';
-    });
   }
 }
 
@@ -77,18 +74,20 @@ passwordSubmit.addEventListener('click', async () => {
   const entered = passwordInput.value.trim();
   log(`Введён пароль: "${entered}"`);
 
-  // Посчитаем SHA-256 для введённого:
+  // Вычисляем SHA-256 для введённого пароля:
   const hash = await hashPassword(entered);
   if (validPasswordHashes.includes(hash)) {
     log('Пароль правильный, показываем сайт');
     passwordOverlay.style.display = 'none';
     localStorage.setItem('accessGranted', 'true');
-    showMainContent();
 
-    // Сначала показываем лоадер, потом загружаем данные:
+    // Сначала показываем лоадер:
     loader.style.display = 'flex';
+    // Ждём загрузки данных:
     await preloadData();
+    // Спрячем лоадер и покажем основной контент:
     loader.style.display = 'none';
+    showMainContent();
   } else {
     log('Пароль НЕ правильный');
     passwordError.textContent = 'Неверный пароль. Попробуйте ещё раз.';
@@ -97,7 +96,7 @@ passwordSubmit.addEventListener('click', async () => {
   }
 });
 
-/** ----- Обработчик Enter в поле пароля ----- */
+/** ----- ОБРАБОТЧИК Enter в поле пароля ----- */
 passwordInput.addEventListener('keydown', (e) => {
   if (e.key === 'Enter') {
     passwordSubmit.click();
@@ -136,8 +135,10 @@ document.querySelectorAll('.menuItem').forEach(btn => {
 async function preloadData() {
   try {
     log('Предзагрузка данных...');
-    const gamesResponse = await fetch('games.json');
-    const appsResponse  = await fetch('apps.json');
+    const [gamesResponse, appsResponse] = await Promise.all([
+      fetch('games.json'),
+      fetch('apps.json')
+    ]);
     allGames = await gamesResponse.json();
     allApps  = await appsResponse.json();
     log(`Данные загружены: игр=${allGames.length}, приложений=${allApps.length}`);
@@ -147,7 +148,7 @@ async function preloadData() {
 }
 
 /** ----- ОЧИСТКА И ПОДГОТОВКА ПАГИНАЦИИ/ФИЛЬТРА ----- */
-async function resetAndLoad() {
+function resetAndLoad() {
   catalogSection.classList.remove('hidden');
   displayed = batchSize;
   renderList();
@@ -176,7 +177,6 @@ function renderList() {
   gamesList.innerHTML = '';
 
   if (toShow.length === 0) {
-    // Ничего не найдено
     const p = document.createElement('p');
     p.textContent = 'Ничего не найдено';
     gamesList.appendChild(p);
@@ -184,7 +184,7 @@ function renderList() {
     return;
   }
 
-  // 3) Построим каждый item через чистый JS (чтобы избежать XSS)
+  // 3) Генерация карточек безопасно (без innerHTML)
   toShow.forEach(item => {
     const container = document.createElement('div');
     container.className = 'flex items-center gap-4 bg-purple-900 bg-opacity-30 p-3 rounded cursor-pointer hover:bg-purple-700 transition';
@@ -234,7 +234,7 @@ showMoreBtn.addEventListener('click', () => {
   renderList();
 });
 
-/** ----- ФИЛЬТРЫ: при изменении сбрасываем пагинацию ----- */
+/** ----- ФИЛЬТРЫ: сброс пагинации при вводе/смене жанра ----- */
 searchInput.addEventListener('input', () => {
   displayed = batchSize;
   renderList();
@@ -244,25 +244,22 @@ genreFilter.addEventListener('change', () => {
   renderList();
 });
 
-/** ----- МОДАЛЬНОЕ ОКНО (XSS-безопасно) ----- */
-const gameModal       = document.getElementById('gameModal');
-const modalTitle      = document.getElementById('modalTitle');
-const modalDesc       = document.getElementById('modalDesc');
-const modalIcon       = document.getElementById('modalIcon');
-const modalScreenshots= document.getElementById('modalScreenshots');
-const modalDownload   = document.getElementById('modalDownload');
+/** ----- МОДАЛЬНОЕ ОКНО (XSS‐БЕЗОПАСНО) ----- */
+const gameModal        = document.getElementById('gameModal');
+const modalTitle       = document.getElementById('modalTitle');
+const modalDesc        = document.getElementById('modalDesc');
+const modalIcon        = document.getElementById('modalIcon');
+const modalScreenshots = document.getElementById('modalScreenshots');
+const modalDownload    = document.getElementById('modalDownload');
 
 function openModal(item) {
-  // Устанавливаем текстовые поля безопасно:
   modalTitle.textContent = item.name;
   modalDesc.textContent  = item.description || 'Нет описания';
 
-  // Иконка
   modalIcon.src = item.icon;
   modalIcon.alt = item.name;
   modalIcon.loading = 'lazy';
 
-  // Скриншоты
   modalScreenshots.innerHTML = '';
   if (Array.isArray(item.screenshots) && item.screenshots.length > 0) {
     item.screenshots.forEach(src => {
@@ -275,11 +272,9 @@ function openModal(item) {
     });
   }
 
-  // Ссылка Download (если нет – href="#" и текст "Скачать")
   modalDownload.href = item.download || '#';
   modalDownload.textContent = 'Скачать';
 
-  // Показываем модалку с анимацией
   gameModal.classList.add('show');
 }
 
@@ -288,20 +283,17 @@ function closeModal() {
 }
 
 gameModal.addEventListener('click', (e) => {
-  if (e.target === gameModal) {
-    closeModal();
-  }
+  if (e.target === gameModal) closeModal();
 });
 
 /** ----- ПОКАЗ СПИСКА ПОСЛЕ ВЫБОРА ИЗ МЕНЮ ----- */
-async function resetAndLoad() {
+function resetAndLoad() {
   catalogSection.classList.remove('hidden');
   displayed = batchSize;
   renderList();
 }
 
-/** ----- ОПРОС LOCALSTORAGE И ПОДГРУЗКА ПРИ ЗАГРУЗКЕ СТРАНИЦЫ ----- */
+/** ----- КОД ВЫПОЛНЯЕТСЯ ПРИ ЗАГРУЗКЕ СТРАНИЦЫ ----- */
 document.addEventListener('DOMContentLoaded', () => {
-  // Сразу проверим, был ли ранее сохранён «доступ»
   checkLocalAccess();
 });
