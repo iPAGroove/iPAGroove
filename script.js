@@ -1,4 +1,3 @@
-// --- Массив валидных паролей ---
 const validPasswords = ['password123', 'letmein', 'secret2025', 'mySuperPass'];
 
 const passwordOverlay = document.getElementById('passwordOverlay');
@@ -25,8 +24,8 @@ const overlay = document.getElementById('overlay');
 
 const catalogSection = document.getElementById('catalogSection');
 
-let currentCatalog = 'games';
-let currentList = 'all';
+let currentCatalog = '';
+let currentList = '';
 
 // Логирование в консоль
 function log(...args) {
@@ -34,14 +33,14 @@ function log(...args) {
 }
 
 // Обработчик входа по паролю
-passwordSubmit.addEventListener('click', () => {
+passwordSubmit.addEventListener('click', async () => {
   const entered = passwordInput.value.trim();
   log(`Введён пароль: "${entered}"`);
   if (validPasswords.includes(entered)) {
     log('Пароль правильный, показываем сайт');
     passwordOverlay.style.display = 'none';
     siteContent.style.display = 'block';
-    resetAndLoad();
+    await preloadData(); // Только загружаем данные, но не открываем каталог
   } else {
     log('Пароль НЕ правильный');
     passwordError.textContent = 'Неверный пароль. Попробуйте ещё раз.';
@@ -81,14 +80,14 @@ document.querySelectorAll('.menuItem').forEach(btn => {
     currentList = btn.dataset.list;
     log(`Выбран каталог: ${currentCatalog}, список: ${currentList}`);
     closeMenu();
-    resetAndLoad();
+    resetAndLoad(); // Только здесь вызываем загрузку списка
   });
 });
 
-// Загрузка данных (предполагается, что есть файлы games.json и apps.json)
-async function loadData() {
+// Загрузка данных
+async function preloadData() {
   try {
-    log('Загрузка данных...');
+    log('Предзагрузка данных...');
     const gamesResponse = await fetch('games.json');
     const appsResponse = await fetch('apps.json');
     allGames = await gamesResponse.json();
@@ -101,12 +100,13 @@ async function loadData() {
 
 // Отрисовка списка с фильтрами и пагинацией
 function renderList() {
+  if (!currentCatalog || !currentList) return;
+
   const items = currentCatalog === 'games' ? allGames : allApps;
 
   let filtered = items.filter(item => {
     const search = searchInput.value.trim().toLowerCase();
     const genre = genreFilter.value;
-
     if (search && !item.name.toLowerCase().includes(search)) return false;
     if (genre && item.genre !== genre) return false;
     return true;
@@ -114,7 +114,6 @@ function renderList() {
 
   mainListTitle.textContent = `${currentCatalog === 'games' ? 'Игры' : 'Приложения'} — всего: ${filtered.length}`;
 
-  // Отображаем часть списка
   const toShow = filtered.slice(0, displayed);
   gamesList.innerHTML = '';
 
@@ -189,17 +188,13 @@ function closeModal() {
   gameModal.classList.add('hidden');
 }
 
-// Закрыть модалку при клике вне контента
 gameModal.addEventListener('click', (e) => {
   if (e.target === gameModal) closeModal();
 });
 
-// Начальная загрузка после правильного пароля
+// Загружаем и отображаем список после выбора из меню
 async function resetAndLoad() {
   catalogSection.classList.remove('hidden');
   displayed = batchSize;
-  if (allGames.length === 0 && allApps.length === 0) {
-    await loadData();
-  }
   renderList();
 }
