@@ -2,13 +2,22 @@
   {
     "name": "Subway Surfers",
     "description": "Run and dodge trains in this endless runner.",
+    "genre": "Arcade",
     "icon": "assets/icons/subway.png",
     "download": "https://example.com/ipa/subway.ipa"
   },
   {
     "name": "Flappy Bird",
     "description": "Tap to fly and avoid pipes.",
+    "genre": "Arcade",
     "icon": "assets/icons/flappy.png",
     "download": "https://example.com/ipa/flappy.ipa"
+  },
+  {
+    "name": "Monument Valley",
+    "description": "A surreal exploration through architecture and illusion.",
+    "genre": "Puzzle",
+    "icon": "assets/icons/monument.png",
+    "download": "https://example.com/ipa/monument.ipa"
   }
 ]
