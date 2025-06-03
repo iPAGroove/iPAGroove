@@ -1,5 +1,28 @@
-// Массив разрешённых паролей
-const validPasswords = ['password123', 'letmein', 'secret2025', 'mySuperPass']; 
+// --- Логгер на экран ---
+const logDiv = document.createElement('div');
+logDiv.style.position = 'fixed';
+logDiv.style.bottom = '0';
+logDiv.style.left = '0';
+logDiv.style.right = '0';
+logDiv.style.maxHeight = '150px';
+logDiv.style.overflowY = 'auto';
+logDiv.style.background = 'rgba(0,0,0,0.8)';
+logDiv.style.color = 'white';
+logDiv.style.fontSize = '12px';
+logDiv.style.zIndex = '99999';
+logDiv.style.padding = '4px';
+document.body.appendChild(logDiv);
+
+function log(msg) {
+  console.log(msg);
+  const p = document.createElement('div');
+  p.textContent = msg;
+  logDiv.appendChild(p);
+  logDiv.scrollTop = logDiv.scrollHeight;
+}
+
+// --- Исправленный массив паролей (строки в кавычках) ---
+const validPasswords = ['password123', 'letmein', 'secret2025', 'mySuperPass'];
 
 const passwordOverlay = document.getElementById('passwordOverlay');
 const passwordInput = document.getElementById('passwordInput');
@@ -32,32 +55,42 @@ let currentFilter = '';
 // Обработка нажатия кнопки входа по паролю
 passwordSubmit.addEventListener('click', () => {
   const entered = passwordInput.value.trim();
+  log(`Нажата кнопка Войти, введён пароль: "${entered}"`);
   if (validPasswords.includes(entered)) {
-    // Пароль правильный
+    log('Пароль правильный, показываем сайт');
     passwordOverlay.style.display = 'none';
     siteContent.style.display = 'block';
     resetAndLoad();
   } else {
+    log('Пароль НЕ правильный');
     passwordError.textContent = 'Неверный пароль. Попробуйте ещё раз.';
     passwordInput.value = '';
     passwordInput.focus();
   }
 });
 
-// Можно также вход по Enter в поле
+// Вход по Enter в поле
 passwordInput.addEventListener('keydown', (e) => {
   if (e.key === 'Enter') {
+    log('Нажат Enter в поле пароля');
     passwordSubmit.click();
   }
 });
 
 // Меню
 menuToggle.addEventListener('click', () => {
+  log('Открываем меню');
   sideMenu.classList.add('open');
   overlay.classList.add('active');
 });
-menuClose.addEventListener('click', closeMenu);
-overlay.addEventListener('click', closeMenu);
+menuClose.addEventListener('click', () => {
+  log('Закрываем меню');
+  closeMenu();
+});
+overlay.addEventListener('click', () => {
+  log('Закрываем меню кликом на оверлей');
+  closeMenu();
+});
 
 function closeMenu() {
   sideMenu.classList.remove('open');
@@ -69,6 +102,7 @@ document.querySelectorAll('.menuItem').forEach(btn => {
   btn.addEventListener('click', () => {
     currentCatalog = btn.dataset.catalog;
     currentList = btn.dataset.list;
+    log(`Выбран каталог: ${currentCatalog}, список: ${currentList}`);
     closeMenu();
     resetAndLoad();
   });
@@ -77,12 +111,14 @@ document.querySelectorAll('.menuItem').forEach(btn => {
 // Загрузка JSON с играми и приложениями
 async function loadData() {
   try {
+    log('Загрузка данных...');
     const gamesResponse = await fetch('games.json');
     const appsResponse = await fetch('apps.json');
     allGames = await gamesResponse.json();
     allApps = await appsResponse.json();
+    log(`Данные загружены: игр=${allGames.length}, приложений=${allApps.length}`);
   } catch (e) {
-    console.error('Ошибка загрузки данных:', e);
+    log('Ошибка загрузки данных: ' + e.message);
   }
 }
 
@@ -104,6 +140,7 @@ function renderList() {
   showMoreBtn.style.display = filtered.length > batchSize ? 'inline-block' : 'none';
   mainListTitle.textContent = currentCatalog === 'games' ? 'Игры' : 'Приложения';
 
+  log(`Отрисовка списка: найдено ${filtered.length} элементов, показываем первые ${batchSize}`);
   loadMore(filtered);
 }
 
@@ -125,8 +162,10 @@ function loadMore(filtered) {
 
   if (displayed >= filteredItems.length) {
     showMoreBtn.style.display = 'none';
+    log('Показаны все элементы');
   } else {
     showMoreBtn.style.display = 'inline-block';
+    log(`Показано ${displayed} элементов, осталось ещё`);
   }
 }
 
@@ -190,4 +229,3 @@ async function resetAndLoad() {
   genreFilter.value = '';
   renderList();
 }
-
