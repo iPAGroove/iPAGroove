@@ -46,7 +46,7 @@
 
 <!-- Модалка с информацией об игре -->
 <div id="gameModal" class="fixed inset-0 bg-black/70 backdrop-blur z-50 hidden flex items-end sm:items-center justify-center p-4">
-  <div class="bg-[#1e293b] rounded-2xl p-4 w-full max-w-md">
+  <div class="bg-[#1e293b] rounded-2xl p-4 w-full max-w-md max-h-[90vh] overflow-auto">
     <div class="flex items-center gap-4 mb-4">
       <img id="modalIcon" src="" class="w-16 h-16 rounded-xl" />
       <div>
@@ -55,7 +55,7 @@
       </div>
     </div>
     <div id="modalScreenshots" class="mb-4 space-y-2"></div>
-    <a id="modalDownload" href="#" class="block text-center bg-blue-500 text-white py-2 rounded-xl font-semibold">Скачать</a>
+    <a id="modalDownload" href="#" target="_blank" class="block text-center bg-blue-500 text-white py-2 rounded-xl font-semibold">Скачать</a>
     <button onclick="closeModal()" class="mt-4 w-full text-sm text-gray-400">Закрыть</button>
   </div>
 </div>
@@ -66,4 +66,3 @@
 
 </body>
 </html>
-
