@@ -1,4 +1,4 @@
-// --- Исправленный массив паролей (строки в кавычках) ---
+// --- Массив валидных паролей ---
 const validPasswords = ['password123', 'letmein', 'secret2025', 'mySuperPass'];
 
 const passwordOverlay = document.getElementById('passwordOverlay');
@@ -27,14 +27,13 @@ const catalogSection = document.getElementById('catalogSection');
 
 let currentCatalog = 'games';
 let currentList = 'all';
-let currentFilter = '';
 
-// Простое логирование в консоль вместо вывода на страницу
+// Логирование в консоль
 function log(...args) {
   console.log(...args);
 }
 
-// Обработка нажатия кнопки входа по паролю
+// Обработчик входа по паролю
 passwordSubmit.addEventListener('click', () => {
   const entered = passwordInput.value.trim();
   log(`Введён пароль: "${entered}"`);
@@ -51,7 +50,7 @@ passwordSubmit.addEventListener('click', () => {
   }
 });
 
-// Вход по Enter в поле
+// Вход по Enter
 passwordInput.addEventListener('keydown', (e) => {
   if (e.key === 'Enter') {
     passwordSubmit.click();
@@ -62,22 +61,20 @@ passwordInput.addEventListener('keydown', (e) => {
 menuToggle.addEventListener('click', () => {
   log('Открываем меню');
   sideMenu.classList.add('open');
+  overlay.classList.remove('hidden');
   overlay.classList.add('active');
 });
-menuClose.addEventListener('click', () => {
-  closeMenu();
-});
-overlay.addEventListener('click', () => {
-  closeMenu();
-});
+menuClose.addEventListener('click', closeMenu);
+overlay.addEventListener('click', closeMenu);
 
 function closeMenu() {
   log('Закрываем меню');
   sideMenu.classList.remove('open');
   overlay.classList.remove('active');
+  setTimeout(() => overlay.classList.add('hidden'), 300);
 }
 
-// При клике по пунктам меню — загружаем список
+// Кнопки меню — выбор каталога
 document.querySelectorAll('.menuItem').forEach(btn => {
   btn.addEventListener('click', () => {
     currentCatalog = btn.dataset.catalog;
@@ -88,7 +85,7 @@ document.querySelectorAll('.menuItem').forEach(btn => {
   });
 });
 
-// Загрузка JSON с играми и приложениями
+// Загрузка данных (предполагается, что есть файлы games.json и apps.json)
 async function loadData() {
   try {
     log('Загрузка данных...');
@@ -102,95 +99,89 @@ async function loadData() {
   }
 }
 
-// Отрисовка списка с учётом фильтров и пагинации
+// Отрисовка списка с фильтрами и пагинацией
 function renderList() {
   const items = currentCatalog === 'games' ? allGames : allApps;
 
-  // Фильтрация
   let filtered = items.filter(item => {
-    const searchLower = searchInput.value.toLowerCase();
+    const search = searchInput.value.trim().toLowerCase();
     const genre = genreFilter.value;
-    const titleMatch = item.title.toLowerCase().includes(searchLower);
-    const genreMatch = genre === '' || (item.genre && item.genre === genre);
-    return titleMatch && genreMatch;
+
+    if (search && !item.name.toLowerCase().includes(search)) return false;
+    if (genre && item.genre !== genre) return false;
+    return true;
   });
 
-  displayed = 0;
+  mainListTitle.textContent = `${currentCatalog === 'games' ? 'Игры' : 'Приложения'} — всего: ${filtered.length}`;
+
+  // Отображаем часть списка
+  const toShow = filtered.slice(0, displayed);
   gamesList.innerHTML = '';
-  showMoreBtn.style.display = filtered.length > batchSize ? 'inline-block' : 'none';
-  mainListTitle.textContent = currentCatalog === 'games' ? 'Игры' : 'Приложения';
 
-  log(`Отрисовка списка: найдено ${filtered.length} элементов, показываем первые ${batchSize}`);
-
-  loadMore(filtered);
-}
-
-// Подгрузка следующей партии
-function loadMore(filtered) {
-  const items = currentCatalog === 'games' ? allGames : allApps;
-
-  let filteredItems = filtered || items;
-
-  const nextBatch = filteredItems.slice(displayed, displayed + batchSize);
-  nextBatch.forEach(item => {
-    const el = document.createElement('div');
-    el.className = 'game-item p-3 rounded-lg cursor-pointer bg-gradient-to-r from-purple-600 to-purple-900 hover:from-purple-700 hover:to-purple-800';
-    el.textContent = item.title;
-    el.addEventListener('click', () => showModal(item));
-    gamesList.appendChild(el);
-  });
-  displayed += nextBatch.length;
-
-  if (displayed >= filteredItems.length) {
+  if (toShow.length === 0) {
+    gamesList.innerHTML = '<p>Ничего не найдено</p>';
     showMoreBtn.style.display = 'none';
-    log('Показаны все элементы');
-  } else {
-    showMoreBtn.style.display = 'inline-block';
-    log(`Показано ${displayed} элементов, осталось ещё`);
+    return;
   }
+
+  toShow.forEach(item => {
+    const div = document.createElement('div');
+    div.className = 'flex items-center gap-4 bg-purple-900 bg-opacity-30 p-3 rounded cursor-pointer hover:bg-purple-700 transition';
+    div.innerHTML = `
+      <img src="${item.icon}" alt="${item.name}" class="w-12 h-12 rounded-xl flex-shrink-0" />
+      <div class="flex-grow">
+        <h3 class="font-semibold text-lg">${item.name}</h3>
+        <p class="text-sm text-purple-200">${item.genre} | ${item.size || '–'}</p>
+      </div>
+      <div class="text-purple-300 font-semibold">${item.rating ? '⭐'+item.rating : ''}</div>
+    `;
+    div.addEventListener('click', () => openModal(item));
+    gamesList.appendChild(div);
+  });
+
+  showMoreBtn.style.display = displayed < filtered.length ? 'inline-block' : 'none';
 }
 
 // Кнопка "Показать ещё"
 showMoreBtn.addEventListener('click', () => {
-  const items = currentCatalog === 'games' ? allGames : allApps;
-  let filtered = items.filter(item => {
-    const searchLower = searchInput.value.toLowerCase();
-    const genre = genreFilter.value;
-    const titleMatch = item.title.toLowerCase().includes(searchLower);
-    const genreMatch = genre === '' || (item.genre && item.genre === genre);
-    return titleMatch && genreMatch;
-  });
-  loadMore(filtered);
+  displayed += batchSize;
+  renderList();
 });
 
-// Обработчики фильтров
-searchInput.addEventListener('input', renderList);
-genreFilter.addEventListener('change', renderList);
+// Фильтры
+searchInput.addEventListener('input', () => {
+  displayed = batchSize;
+  renderList();
+});
+genreFilter.addEventListener('change', () => {
+  displayed = batchSize;
+  renderList();
+});
 
 // Модальное окно
 const gameModal = document.getElementById('gameModal');
 const modalTitle = document.getElementById('modalTitle');
 const modalDesc = document.getElementById('modalDesc');
 const modalIcon = document.getElementById('modalIcon');
-const modalDownload = document.getElementById('modalDownload');
 const modalScreenshots = document.getElementById('modalScreenshots');
+const modalDownload = document.getElementById('modalDownload');
 
-function showModal(item) {
-  modalTitle.textContent = item.title;
-  modalDesc.textContent = item.description || '';
-  modalIcon.src = item.icon || '';
-  modalDownload.href = item.download || '#';
+function openModal(item) {
+  modalTitle.textContent = item.name;
+  modalDesc.textContent = item.description || 'Нет описания';
+  modalIcon.src = item.icon;
   modalScreenshots.innerHTML = '';
-
   if (item.screenshots && item.screenshots.length > 0) {
-    item.screenshots.forEach(url => {
+    item.screenshots.forEach(src => {
       const img = document.createElement('img');
-      img.src = url;
-      img.className = 'rounded-lg mb-2 w-full';
+      img.src = src;
+      img.alt = `${item.name} screenshot`;
+      img.className = 'w-full rounded mb-2';
       modalScreenshots.appendChild(img);
     });
   }
-
+  modalDownload.href = item.download || '#';
+  modalDownload.textContent = 'Скачать';
   gameModal.classList.remove('hidden');
 }
 
@@ -198,20 +189,17 @@ function closeModal() {
   gameModal.classList.add('hidden');
 }
 
+// Закрыть модалку при клике вне контента
 gameModal.addEventListener('click', (e) => {
   if (e.target === gameModal) closeModal();
 });
 
-// Инициализация
+// Начальная загрузка после правильного пароля
 async function resetAndLoad() {
-  await loadData();
   catalogSection.classList.remove('hidden');
-  searchInput.value = '';
-  genreFilter.value = '';
-  renderList();
-}
-
-  searchInput.value = '';
-  genreFilter.value = '';
+  displayed = batchSize;
+  if (allGames.length === 0 && allApps.length === 0) {
+    await loadData();
+  }
   renderList();
 }
