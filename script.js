@@ -47,13 +47,35 @@ function showMore() {
 
 function createTile(game) {
   return `
-    <div class="bg-white/10 rounded-xl p-4 flex items-center gap-4">
+    <div onclick="openModal(${JSON.stringify(game).replace(/"/g, '&quot;')})"
+         class="bg-white/10 rounded-xl p-4 flex items-center gap-4 cursor-pointer hover:bg-white/20 transition">
       <img src="${game.icon}" alt="${game.name}" class="w-16 h-16 rounded-xl flex-shrink-0" />
       <div class="flex-1">
         <h3 class="text-lg font-bold">${game.name}</h3>
         <p class="text-sm text-gray-300">${game.description}</p>
       </div>
-      <a href="${game.download}" class="text-blue-400 underline text-sm flex-shrink-0">Скачать</a>
     </div>
   `;
+}
+
+function openModal(game) {
+  const modal = document.getElementById('gameModal');
+  modal.querySelector('#modalIcon').src = game.icon;
+  modal.querySelector('#modalTitle').textContent = game.name;
+  modal.querySelector('#modalDesc').textContent = game.description;
+  modal.querySelector('#modalDownload').href = game.download;
+
+  const screenshots = modal.querySelector('#modalScreenshots');
+  screenshots.innerHTML = '';
+  if (game.screenshots) {
+    game.screenshots.forEach(src => {
+      screenshots.innerHTML += `<img src="${src}" class="w-full rounded-xl mb-2" />`;
+    });
+  }
+
+  modal.classList.remove('hidden');
+}
+
+function closeModal() {
+  document.getElementById('gameModal').classList.add('hidden');
 }
