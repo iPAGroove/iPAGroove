@@ -3,47 +3,72 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Каталог игр для iOS</title>
+  <title>iOS Game Catalog</title>
   <script defer src="script.js"></script>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    /* Дополнительная анимация для плавного появления карточек */
-    .fade-in {
-      animation: fadeIn 0.8s ease-in-out;
+    body {
+      background: linear-gradient(to bottom right, #1e3a8a, #0f172a);
+      min-height: 100vh;
     }
+
+    .card-glow {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .card-glow:hover {
+      transform: scale(1.03);
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+    }
+
+    .glass-button {
+      background: linear-gradient(to right, #3b82f6, #9333ea);
+      color: white;
+      border-radius: 9999px;
+      padding: 0.5rem 1.25rem;
+      transition: all 0.3s;
+    }
+
+    .glass-button:hover {
+      filter: brightness(1.1);
+      box-shadow: 0 0 10px rgba(147, 51, 234, 0.4);
+    }
+
+    .fade-in {
+      animation: fadeIn 0.7s ease-out;
+    }
+
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(10px); }
       to { opacity: 1; transform: translateY(0); }
     }
   </style>
 </head>
-<body class="bg-gradient-to-br from-blue-50 to-blue-100 text-gray-900">
-  <!-- Шапка -->
-  <header class="bg-white shadow-md py-4 mb-6">
-    <div class="container mx-auto text-center">
-      <h1 class="text-3xl font-extrabold text-blue-600">Каталог игр для iOS</h1>
-    </div>
+<body class="text-white font-sans">
+  <header class="py-6 text-center">
+    <h1 class="text-3xl sm:text-4xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500">📱 Каталог iOS игр</h1>
   </header>
 
-  <div class="container mx-auto px-4">
-    <!-- Форма поиска и фильтрации -->
-    <div class="flex flex-col sm:flex-row gap-4 mb-6">
-      <input id="searchInput" type="text" placeholder="Поиск игр..." class="flex-grow p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-400 transition" />
-      <select id="genreFilter" class="p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-400 transition">
+  <main class="max-w-5xl mx-auto px-4">
+    <!-- Поиск и фильтр -->
+    <div class="flex flex-col sm:flex-row gap-3 mb-6 justify-center">
+      <input id="searchInput" type="text" placeholder="Поиск игр..." class="flex-1 px-4 py-2 rounded-lg bg-white/10 text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500" />
+      <select id="genreFilter" class="px-4 py-2 rounded-lg bg-white/10 text-white focus:outline-none focus:ring-2 focus:ring-purple-500">
         <option value="">Все жанры</option>
         <option value="Arcade">Arcade</option>
         <option value="Puzzle">Puzzle</option>
       </select>
     </div>
-    <!-- Список игр -->
-    <div id="game-list" class="grid gap-6 md:grid-cols-2 lg:grid-cols-3"></div>
-  </div>
 
-  <!-- Футер -->
-  <footer class="mt-8 bg-white py-4 shadow-inner">
-    <div class="container mx-auto text-center text-gray-600">
-      &copy; 2025 Каталог игр для iOS. Все права защищены.
-    </div>
+    <!-- Список игр -->
+    <div id="game-list" class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3"></div>
+  </main>
+
+  <footer class="mt-12 text-center text-sm text-gray-400 pb-4">
+    &copy; 2025 iOS Game Zone
   </footer>
 </body>
 </html>
