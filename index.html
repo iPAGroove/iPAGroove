@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>iOS Game Catalog — App Store Style</title>
+  <title>iOS Каталог — Игры и Приложения</title>
   <script defer src="script.js"></script>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
@@ -22,31 +22,47 @@
 <body class="text-white font-sans max-w-xl mx-auto p-4">
 
 <header class="mb-4 text-center">
-  <h1 class="text-3xl font-bold">📱 Каталог iOS игр</h1>
+  <h1 class="text-3xl font-bold">📱 Каталог iOS: Игры и Приложения</h1>
 </header>
 
-<div class="sticky top-0 bg-[#0f172a] py-2 mb-4 z-10">
-  <input id="searchInput" type="text" placeholder="Поиск..." class="w-full p-3 rounded bg-white/10 placeholder-gray-400 text-white focus:outline-none mb-3" />
-  <select id="genreFilter" class="w-full p-3 rounded bg-white/10 text-white">
-    <option value="">Все жанры</option>
-    <option value="Arcade">Arcade</option>
-    <option value="Puzzle">Puzzle</option>
-  </select>
+<div class="sticky top-0 bg-[#0f172a] py-2 mb-4 z-10 space-y-2">
+  <input id="searchInput" type="text" placeholder="Поиск..." class="w-full p-3 rounded bg-white/10 placeholder-gray-400 text-white focus:outline-none" />
+  
+  <div class="flex gap-2">
+    <select id="typeFilter" class="flex-1 p-3 rounded bg-white/10 text-white">
+      <option value="">Все (игры и приложения)</option>
+      <option value="game">Только игры</option>
+      <option value="app">Только приложения</option>
+    </select>
+    <select id="genreFilter" class="flex-1 p-3 rounded bg-white/10 text-white">
+      <option value="">Все жанры / категории</option>
+      <option value="Arcade">Arcade</option>
+      <option value="Puzzle">Puzzle</option>
+      <option value="Utility">Utility</option>
+      <option value="Productivity">Productivity</option>
+      <!-- Можно добавить больше категорий -->
+    </select>
+  </div>
 </div>
 
 <section>
-  <h2 class="text-xl font-bold mb-2">👑 Топ недели</h2>
-  <div id="topList" class="flex gap-4 scroll-x pb-4"></div>
+  <h2 class="text-xl font-bold mb-2">👑 Топ недели — Игры</h2>
+  <div id="topGamesList" class="space-y-2"></div>
 </section>
 
-<section>
-  <h2 class="text-xl font-bold mb-2">Все игры</h2>
-  <div id="gamesList" class="space-y-4"></div>
+<section class="mt-6">
+  <h2 class="text-xl font-bold mb-2">🎮 Все игры</h2>
+  <div id="gamesList" class="space-y-2"></div>
 </section>
 
-<!-- Модалка с информацией об игре -->
-<div id="gameModal" class="fixed inset-0 bg-black/70 backdrop-blur z-50 hidden flex items-end sm:items-center justify-center p-4">
-  <div class="bg-[#1e293b] rounded-2xl p-4 w-full max-w-md max-h-[90vh] overflow-auto">
+<section class="mt-6">
+  <h2 class="text-xl font-bold mb-2">📱 Все приложения</h2>
+  <div id="appsList" class="space-y-2"></div>
+</section>
+
+<!-- Модалка с информацией -->
+<div id="itemModal" class="fixed inset-0 bg-black/70 backdrop-blur z-50 hidden flex items-end sm:items-center justify-center p-4">
+  <div class="bg-[#1e293b] rounded-2xl p-4 w-full max-w-md max-h-[90vh] overflow-y-auto">
     <div class="flex items-center gap-4 mb-4">
       <img id="modalIcon" src="" class="w-16 h-16 rounded-xl" />
       <div>
