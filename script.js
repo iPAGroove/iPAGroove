@@ -1,3 +1,12 @@
+// Массив разрешённых паролей
+const validPasswords = ['password123', 'letmein', 'secret2025', 'mySuperPass']; 
+
+const passwordOverlay = document.getElementById('passwordOverlay');
+const passwordInput = document.getElementById('passwordInput');
+const passwordSubmit = document.getElementById('passwordSubmit');
+const passwordError = document.getElementById('passwordError');
+const siteContent = document.getElementById('siteContent');
+
 let allGames = [];
 let allApps = [];
 let displayed = 0;
@@ -20,6 +29,28 @@ let currentCatalog = 'games';
 let currentList = 'all';
 let currentFilter = '';
 
+// Обработка нажатия кнопки входа по паролю
+passwordSubmit.addEventListener('click', () => {
+  const entered = passwordInput.value.trim();
+  if (validPasswords.includes(entered)) {
+    // Пароль правильный
+    passwordOverlay.style.display = 'none';
+    siteContent.style.display = 'block';
+    resetAndLoad();
+  } else {
+    passwordError.textContent = 'Неверный пароль. Попробуйте ещё раз.';
+    passwordInput.value = '';
+    passwordInput.focus();
+  }
+});
+
+// Можно также вход по Enter в поле
+passwordInput.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') {
+    passwordSubmit.click();
+  }
+});
+
 // Меню
 menuToggle.addEventListener('click', () => {
   sideMenu.classList.add('open');
@@ -27,175 +58,136 @@ menuToggle.addEventListener('click', () => {
 });
 menuClose.addEventListener('click', closeMenu);
 overlay.addEventListener('click', closeMenu);
+
 function closeMenu() {
   sideMenu.classList.remove('open');
   overlay.classList.remove('active');
 }
 
-// Навигация
+// При клике по пунктам меню — загружаем список
 document.querySelectorAll('.menuItem').forEach(btn => {
   btn.addEventListener('click', () => {
     currentCatalog = btn.dataset.catalog;
     currentList = btn.dataset.list;
     closeMenu();
-    catalogSection.classList.remove('hidden');
     resetAndLoad();
   });
 });
 
-// Обновление списка
-function resetAndLoad() {
-  displayed = 0;
-  currentFilter = '';
-  searchInput.value = '';
-  genreFilter.value = '';
-  gamesList.innerHTML = '';
-  showMoreBtn.classList.add('hidden');
-
-  const catalogName = currentCatalog === 'games' ? 'Игры' : 'Приложения';
-  mainListTitle.textContent = `Все — ${catalogName}`;
-  document.getElementById('filterSection').style.display = 'block';
-
-  loadData();
-}
-
-function loadData() {
-  if (currentCatalog === 'games' && allGames.length === 0) {
-    fetch('games.json')
-      .then(res => res.json())
-      .then(data => {
-        allGames = data;
-        renderBatch();
-      });
-  } else if (currentCatalog === 'apps' && allApps.length === 0) {
-    fetch('apps.json')
-      .then(res => res.json())
-      .then(data => {
-        allApps = data;
-        renderBatch();
-      });
-  } else {
-    renderBatch();
+// Загрузка JSON с играми и приложениями
+async function loadData() {
+  try {
+    const gamesResponse = await fetch('games.json');
+    const appsResponse = await fetch('apps.json');
+    allGames = await gamesResponse.json();
+    allApps = await appsResponse.json();
+  } catch (e) {
+    console.error('Ошибка загрузки данных:', e);
   }
 }
 
-function filterItems(items) {
-  let filtered = items;
-
-  // Поиск
-  if (searchInput.value.trim()) {
-    const search = searchInput.value.trim().toLowerCase();
-    filtered = filtered.filter(i => i.title.toLowerCase().includes(search));
-  }
-  // Фильтр по жанру
-  if (genreFilter.value) {
-    filtered = filtered.filter(i => i.genre === genreFilter.value);
-  }
-  return filtered;
-}
-
-function renderBatch() {
+// Отрисовка списка с учётом фильтров и пагинации
+function renderList() {
   const items = currentCatalog === 'games' ? allGames : allApps;
-  const filtered = filterItems(items);
 
-  if (displayed === 0) {
-    gamesList.innerHTML = '';
-  }
-
-  const nextBatch = filtered.slice(displayed, displayed + batchSize);
-  for (const item of nextBatch) {
-    gamesList.appendChild(createItemCard(item));
-  }
-
-  displayed += nextBatch.length;
-
-  if (displayed < filtered.length) {
-    showMoreBtn.classList.remove('hidden');
-  } else {
-    showMoreBtn.classList.add('hidden');
-  }
-}
-
-// Создание карточки игры/приложения
-function createItemCard(item) {
-  const card = document.createElement('div');
-  card.className = 'bg-purple-900 bg-opacity-50 rounded-lg p-3 flex gap-4 cursor-pointer hover:bg-purple-800 transition';
-
-  const icon = document.createElement('img');
-  icon.src = item.icon;
-  icon.alt = item.title;
-  icon.className = 'w-16 h-16 rounded-xl flex-shrink-0';
-  card.appendChild(icon);
-
-  const info = document.createElement('div');
-  info.className = 'flex flex-col justify-between flex-grow';
-
-  const title = document.createElement('h3');
-  title.textContent = item.title;
-  title.className = 'font-semibold text-lg truncate';
-  info.appendChild(title);
-
-  const desc = document.createElement('p');
-  desc.textContent = item.description;
-  desc.className = 'text-sm text-gray-300 line-clamp-2';
-  info.appendChild(desc);
-
-  card.appendChild(info);
-
-  card.addEventListener('click', () => {
-    openModal(item);
+  // Фильтрация
+  let filtered = items.filter(item => {
+    const searchLower = searchInput.value.toLowerCase();
+    const genre = genreFilter.value;
+    const titleMatch = item.title.toLowerCase().includes(searchLower);
+    const genreMatch = genre === '' || (item.genre && item.genre === genre);
+    return titleMatch && genreMatch;
   });
 
-  return card;
+  displayed = 0;
+  gamesList.innerHTML = '';
+  showMoreBtn.style.display = filtered.length > batchSize ? 'inline-block' : 'none';
+  mainListTitle.textContent = currentCatalog === 'games' ? 'Игры' : 'Приложения';
+
+  loadMore(filtered);
 }
 
-// Модалка
-const modal = document.getElementById('gameModal');
+// Подгрузка следующей партии
+function loadMore(filtered) {
+  const items = currentCatalog === 'games' ? allGames : allApps;
+
+  let filteredItems = filtered || items;
+
+  const nextBatch = filteredItems.slice(displayed, displayed + batchSize);
+  nextBatch.forEach(item => {
+    const el = document.createElement('div');
+    el.className = 'game-item p-3 rounded-lg cursor-pointer bg-gradient-to-r from-purple-600 to-purple-900 hover:from-purple-700 hover:to-purple-800';
+    el.textContent = item.title;
+    el.addEventListener('click', () => showModal(item));
+    gamesList.appendChild(el);
+  });
+  displayed += nextBatch.length;
+
+  if (displayed >= filteredItems.length) {
+    showMoreBtn.style.display = 'none';
+  } else {
+    showMoreBtn.style.display = 'inline-block';
+  }
+}
+
+// Кнопка "Показать ещё"
+showMoreBtn.addEventListener('click', () => {
+  const items = currentCatalog === 'games' ? allGames : allApps;
+  let filtered = items.filter(item => {
+    const searchLower = searchInput.value.toLowerCase();
+    const genre = genreFilter.value;
+    const titleMatch = item.title.toLowerCase().includes(searchLower);
+    const genreMatch = genre === '' || (item.genre && item.genre === genre);
+    return titleMatch && genreMatch;
+  });
+  loadMore(filtered);
+});
+
+// Обработчики фильтров
+searchInput.addEventListener('input', renderList);
+genreFilter.addEventListener('change', renderList);
+
+// Модальное окно
+const gameModal = document.getElementById('gameModal');
 const modalTitle = document.getElementById('modalTitle');
 const modalDesc = document.getElementById('modalDesc');
 const modalIcon = document.getElementById('modalIcon');
 const modalDownload = document.getElementById('modalDownload');
 const modalScreenshots = document.getElementById('modalScreenshots');
 
-function openModal(item) {
+function showModal(item) {
   modalTitle.textContent = item.title;
-  modalDesc.textContent = item.description;
-  modalIcon.src = item.icon;
-  modalDownload.href = item.downloadUrl || '#';
-  modalDownload.textContent = item.downloadUrl ? 'Скачать' : 'Ссылки отсутствуют';
-
-  // Скриншоты
+  modalDesc.textContent = item.description || '';
+  modalIcon.src = item.icon || '';
+  modalDownload.href = item.download || '#';
   modalScreenshots.innerHTML = '';
-  if (item.screenshots && item.screenshots.length) {
-    for (const scr of item.screenshots) {
+
+  if (item.screenshots && item.screenshots.length > 0) {
+    item.screenshots.forEach(url => {
       const img = document.createElement('img');
-      img.src = scr;
-      img.alt = item.title + ' screenshot';
-      img.className = 'rounded-lg mb-2 w-full max-h-48 object-contain';
+      img.src = url;
+      img.className = 'rounded-lg mb-2 w-full';
       modalScreenshots.appendChild(img);
-    }
+    });
   }
 
-  modal.classList.remove('hidden');
+  gameModal.classList.remove('hidden');
 }
 
-window.closeModal = function () {
-  modal.classList.add('hidden');
-};
+function closeModal() {
+  gameModal.classList.add('hidden');
+}
 
-// Ленивый показ "Показать ещё"
-showMoreBtn.addEventListener('click', () => {
-  renderBatch();
+gameModal.addEventListener('click', (e) => {
+  if (e.target === gameModal) closeModal();
 });
 
-// Фильтры
-searchInput.addEventListener('input', () => {
-  displayed = 0;
-  gamesList.innerHTML = '';
-  renderBatch();
-});
-genreFilter.addEventListener('change', () => {
-  displayed = 0;
-  gamesList.innerHTML = '';
-  renderBatch();
-});
+// Инициализация
+async function resetAndLoad() {
+  await loadData();
+  catalogSection.classList.remove('hidden');
+  searchInput.value = '';
+  genreFilter.value = '';
+  renderList();
+}
+
