@@ -3,88 +3,65 @@
     "name": "Subway Surfers",
     "description": "Беги, уклоняйся и прокачивай реакцию!",
     "icon": "https://is5-ssl.mzstatic.com/image/thumb/Purple126/v4/3a/e1/ae/3ae1ae25-0f02-5196-eebb-37d2717cbf4b/AppIcon-0-1x_U007emarketing-0-0-85-220.png/460x0w.webp",
+    "screenshot": "https://is5-ssl.mzstatic.com/image/thumb/Purple126/v4/3a/e1/ae/3ae1ae25-0f02-5196-eebb-37d2717cbf4b/AppIcon-0-1x_U007emarketing-0-0-85-220.png/460x0w.webp",
     "download": "#",
-    "genre": "Arcade",
-    "screenshots": [
-      "https://is1-ssl.mzstatic.com/image/thumb/Purple112/v4/e7/b7/64/e7b764e5-4419-c21a-4e8f-0fd822dcd0e4/pr_source.jpg/406x722bb.jpg",
-      "https://is1-ssl.mzstatic.com/image/thumb/Purple122/v4/f0/1c/76/f01c76f0-63c3-8cf2-82a5-cb6257e867d3/pr_source.jpg/406x722bb.jpg"
-    ]
+    "genre": "Arcade"
   },
   {
     "name": "Monument Valley",
     "description": "Головоломка с архитектурной магией.",
     "icon": "https://is1-ssl.mzstatic.com/image/thumb/Purple113/v4/52/3d/0b/523d0bd5-690e-2182-1e41-f8708b4fcbfc/AppIcon-0-1x_U007emarketing-0-10-0-85-220.png/460x0w.webp",
+    "screenshot": "https://is1-ssl.mzstatic.com/image/thumb/Purple113/v4/52/3d/0b/523d0bd5-690e-2182-1e41-f8708b4fcbfc/AppIcon-0-1x_U007emarketing-0-10-0-85-220.png/460x0w.webp",
     "download": "#",
-    "genre": "Puzzle",
-    "screenshots": [
-      "https://is1-ssl.mzstatic.com/image/thumb/Purple123/v4/69/cb/96/69cb9638-c7b8-74de-2aa3-2f16b1f82ca3/pr_source.jpg/406x722bb.jpg",
-      "https://is1-ssl.mzstatic.com/image/thumb/Purple113/v4/26/29/e3/2629e32b-d632-7250-d708-7cc60bdf1746/pr_source.jpg/406x722bb.jpg"
-    ]
+    "genre": "Puzzle"
   },
   {
     "name": "Cut the Rope",
     "description": "Корми Ом-Нома конфетами!",
     "icon": "https://is1-ssl.mzstatic.com/image/thumb/Purple113/v4/60/62/70/6062703a-95c5-877f-c1dc-c9bc979a0846/AppIcon-0-1x_U007emarketing-0-0-0-85-220-0.png/460x0w.webp",
+    "screenshot": "https://is1-ssl.mzstatic.com/image/thumb/Purple113/v4/60/62/70/6062703a-95c5-877f-c1dc-c9bc979a0846/AppIcon-0-1x_U007emarketing-0-0-0-85-220-0.png/460x0w.webp",
     "download": "#",
-    "genre": "Puzzle",
-    "screenshots": [
-      "https://is1-ssl.mzstatic.com/image/thumb/Purple123/v4/8e/fd/5f/8efd5fb4-e63d-d3e2-f7d5-4b6c26417633/pr_source.jpg/406x722bb.jpg",
-      "https://is1-ssl.mzstatic.com/image/thumb/Purple123/v4/bc/62/06/bc6206ff-5c35-cfdd-b3ee-bca2a8de8f45/pr_source.jpg/406x722bb.jpg"
-    ]
+    "genre": "Puzzle"
   },
   {
     "name": "Angry Birds 2",
     "description": "Разрушай укрепления и спасай яйца!",
     "icon": "https://is1-ssl.mzstatic.com/image/thumb/Purple126/v4/28/cf/2c/28cf2c03-67ff-d9a7-d498-312a047bdc0f/AppIcon-0-1x_U007emarketing-0-5-0-85-220.png/460x0w.webp",
+    "screenshot": "https://is1-ssl.mzstatic.com/image/thumb/Purple126/v4/28/cf/2c/28cf2c03-67ff-d9a7-d498-312a047bdc0f/AppIcon-0-1x_U007emarketing-0-5-0-85-220.png/460x0w.webp",
     "download": "#",
-    "genre": "Arcade",
-    "screenshots": [
-      "https://is1-ssl.mzstatic.com/image/thumb/Purple113/v4/b9/96/e0/b996e07a-9614-e03e-823a-df34b7b1f0e6/pr_source.jpg/406x722bb.jpg",
-      "https://is1-ssl.mzstatic.com/image/thumb/Purple113/v4/8b/36/75/8b367577-845f-7c67-85bc-63766aa1f3a6/pr_source.jpg/406x722bb.jpg"
-    ]
+    "genre": "Arcade"
   },
   {
     "name": "Alto’s Adventure",
     "description": "Сноуборд с эстетикой и дзеном.",
     "icon": "https://is2-ssl.mzstatic.com/image/thumb/Purple123/v4/90/9e/6b/909e6bb0-dc5d-fc5f-7f59-f8ec0d98df53/AppIcon-0-1x_U007emarketing-0-0-85-220.png/460x0w.webp",
+    "screenshot": "https://is2-ssl.mzstatic.com/image/thumb/Purple123/v4/90/9e/6b/909e6bb0-dc5d-fc5f-7f59-f8ec0d98df53/AppIcon-0-1x_U007emarketing-0-0-85-220.png/460x0w.webp",
     "download": "#",
-    "genre": "Arcade",
-    "screenshots": [
-      "https://is1-ssl.mzstatic.com/image/thumb/Purple113/v4/cf/3c/9d/cf3c9dd6-60ef-2f59-32cc-b7aebc823eb3/pr_source.jpg/406x722bb.jpg",
-      "https://is1-ssl.mzstatic.com/image/thumb/Purple123/v4/6b/9e/42/6b9e4291-4cc1-2b55-c6ee-cfc2a52e7fd6/pr_source.jpg/406x722bb.jpg"
-    ]
+    "genre": "Arcade"
   },
   {
     "name": "BADLAND",
     "description": "Летающая тень в сюрреалистическом мире.",
     "icon": "https://is3-ssl.mzstatic.com/image/thumb/Purple123/v4/88/13/cf/8813cfb4-4e2f-f8f0-7dcb-42cf6c6f1326/AppIcon-0-1x_U007emarketing-0-10-0-85-220.png/460x0w.webp",
+    "screenshot": "https://is3-ssl.mzstatic.com/image/thumb/Purple123/v4/88/13/cf/8813cfb4-4e2f-f8f0-7dcb-42cf6c6f1326/AppIcon-0-1x_U007emarketing-0-10-0-85-220.png/460x0w.webp",
     "download": "#",
-    "genre": "Arcade",
-    "screenshots": [
-      "https://is1-ssl.mzstatic.com/image/thumb/Purple113/v4/e4/65/86/e465861b-734f-6a09-4f47-4a0db6bd0da0/pr_source.jpg/406x722bb.jpg",
-      "https://is1-ssl.mzstatic.com/image/thumb/Purple123/v4/af/f3/47/aff347e0-9df7-6273-e49f-228ae186ee9c/pr_source.jpg/406x722bb.jpg"
-    ]
+    "genre": "Arcade"
   },
   {
     "name": "Threes!",
     "description": "Числовая головоломка на залипание.",
     "icon": "https://is1-ssl.mzstatic.com/image/thumb/Purple123/v4/2f/f1/c7/2ff1c72d-0f96-0dc3-9e88-274f098f0d8d/AppIcon-0-1x_U007emarketing-0-5-0-85-220.png/460x0w.webp",
+    "screenshot": "https://is1-ssl.mzstatic.com/image/thumb/Purple123/v4/2f/f1/c7/2ff1c72d-0f96-0dc3-9e88-274f098f0d8d/AppIcon-0-1x_U007emarketing-0-5-0-85-220.png/460x0w.webp",
     "download": "#",
-    "genre": "Puzzle",
-    "screenshots": [
-      "https://is1-ssl.mzstatic.com/image/thumb/Purple113/v4/b2/7e/e7/b27ee752-3793-99d2-60b0-337254f616fc/pr_source.jpg/406x722bb.jpg",
-      "https://is1-ssl.mzstatic.com/image/thumb/Purple123/v4/b1/fc/17/b1fc17bb-c382-bb5e-1a0a-72e5a195fd1b/pr_source.jpg/406x722bb.jpg"
-    ]
+    "genre": "Puzzle"
   },
   {
     "name": "Geometry Dash",
     "description": "Музыкальный платформер на реакцию.",
     "icon": "https://is3-ssl.mzstatic.com/image/thumb/Purple126/v4/d5/5f/67/d55f6727-402c-9c27-6e2b-255ec9d67d27/AppIcon-0-1x_U007emarketing-0-7-0-85-220.png/460x0w.webp",
+    "screenshot": "https://is3-ssl.mzstatic.com/image/thumb/Purple126/v4/d5/5f/67/d55f6727-402c-9c27-6e2b-255ec9d67d27/AppIcon-0-1x_U007emarketing-0-7-0-85-220.png/460x0w.webp",
     "download": "#",
-    "genre": "Arcade",
-    "screenshots": [
-      "https://is1-ssl.mzstatic.com/image/thumb/Purple123/v4/e1/eb/b0/e1ebb0cf-cf9f-e5c7-d64b-0c8188c5bb53/pr_source.jpg/406x722bb.jpg",
-      "https://is1-ssl.mzstatic.com/image/thumb/Purple123/v4/92/9c/eb/929cebfe-7b79-7f1a-f6b5-9a97921c6f11/pr_source.jpg/406x722bb.jpg"
-    ]
+    "genre": "Arcade"
   }
 ]
+
