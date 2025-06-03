@@ -41,9 +41,6 @@
       background: rgba(20, 0, 80, 0.85);
       backdrop-filter: saturate(180%) blur(8px);
     }
-    .menuItem {
-      transition: background-color 0.3s ease;
-    }
     .menuItem:hover {
       background-color: rgba(110, 28, 255, 0.3);
     }
@@ -91,9 +88,7 @@
 <body class="text-white font-sans max-w-xl mx-auto p-0">
 
 <header class="flex items-center justify-between px-4 py-2 fixed w-full top-0 left-0 z-40">
-  <button id="menuToggle" aria-label="Открыть меню" class="text-white text-2xl leading-none select-none rounded-md p-1">
-    ☰
-  </button>
+  <button id="menuToggle" aria-label="Открыть меню" class="text-white text-2xl leading-none select-none rounded-md p-1">☰</button>
   <h1 class="text-lg font-extrabold flex items-center select-none text-white" style="text-shadow: 0 0 8px rgba(110,28,255,0.9);">
     <span style="font-size: 1.6rem; margin-right: 0.3rem;">📱</span>iPA Groove
   </h1>
@@ -111,22 +106,22 @@
 
 <div id="overlay" class="fixed inset-0 bg-black/50 z-45 hidden"></div>
 
-<!-- Новый <main> блок -->
 <main class="pt-14 px-4 pb-8 min-h-screen">
-
-  <div id="filterSection" class="mb-4">
-    <input id="searchInput" type="text" placeholder="Поиск..." class="w-full p-3 rounded placeholder-gray-400 focus:outline-none mb-3" />
-    <select id="genreFilter" class="w-full p-3 rounded">
-      <option value="">All genres</option>
-      <option value="Arcade">Arcade</option>
-      <option value="Puzzle">Puzzle</option>
-    </select>
-  </div>
-
-  <h2 id="mainListTitle" class="text-xl font-bold mb-2"></h2>
-  <div id="gamesList" class="space-y-4 mb-4"></div>
-  <div id="showMoreContainer" class="text-center">
-    <button id="showMoreBtn" class="hidden">Показать ещё</button>
+  <!-- Каталог скрыт по умолчанию -->
+  <div id="catalogSection" class="hidden">
+    <div id="filterSection" class="mb-4">
+      <input id="searchInput" type="text" placeholder="Поиск..." class="w-full p-3 rounded placeholder-gray-400 focus:outline-none mb-3" />
+      <select id="genreFilter" class="w-full p-3 rounded">
+        <option value="">All genres</option>
+        <option value="Arcade">Arcade</option>
+        <option value="Puzzle">Puzzle</option>
+      </select>
+    </div>
+    <h2 id="mainListTitle" class="text-xl font-bold mb-2"></h2>
+    <div id="gamesList" class="space-y-4 mb-4"></div>
+    <div id="showMoreContainer" class="text-center">
+      <button id="showMoreBtn" class="hidden">Показать ещё</button>
+    </div>
   </div>
 </main>
 
