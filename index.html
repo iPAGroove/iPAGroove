@@ -14,7 +14,18 @@
       font-family: 'Inter', sans-serif;
     }
 
-    /* --------------------- БОКОВОЕ МЕНЮ --------------------- */
+    #loader {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.8);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 9998;
+      color: white;
+      font-size: 1.2rem;
+    }
+
     #sideMenu {
       position: fixed;
       top: 0;
@@ -23,7 +34,6 @@
       width: 280px;
       background: rgba(40,0,90,0.95);
       padding: 1.5rem;
-      box-sizing: border-box;
       transition: left 0.3s ease;
       z-index: 50;
       overflow-y: auto;
@@ -31,6 +41,7 @@
     #sideMenu.open {
       left: 0;
     }
+
     #overlay {
       transition: opacity 0.3s ease;
     }
@@ -39,7 +50,6 @@
       opacity: 1;
     }
 
-    /* --------------------- МОДАЛЬНОЕ ОКНО --------------------- */
     #gameModal {
       position: fixed;
       inset: 0;
@@ -55,15 +65,8 @@
       display: flex;
     }
     #gameModal .modalContent {
-      transform: scale(0.95);
-      opacity: 0;
-      transition: all 0.3s ease;
-    }
-    #gameModal.show .modalContent {
       transform: scale(1);
       opacity: 1;
-    }
-    #gameModal .modalContent {
       background: rgba(40,0,90,0.95);
       border-radius: 1rem;
       padding: 1rem;
@@ -71,6 +74,7 @@
       max-width: 24rem;
       max-height: 90vh;
       overflow-y: auto;
+      transition: all 0.3s ease;
     }
 
     @media (min-width: 640px) {
@@ -86,90 +90,70 @@
 </head>
 <body class="text-white font-sans max-w-screen-sm mx-auto p-0">
 
-  <!-- Основной контент сайта -->
-  <div id="siteContent">
-    <header class="flex items-center justify-between px-4 py-2 fixed w-full top-0 left-0 z-40 bg-transparent">
-      <button id="menuToggle" aria-label="Открыть меню" class="text-white text-2xl leading-none select-none rounded-md p-1">☰</button>
-      <h1 class="text-lg font-extrabold flex items-center select-none text-white" style="text-shadow: 0 0 8px rgba(110,28,255,0.9);">
-        <span style="font-size: 1.6rem; margin-right: 0.3rem;">📱</span>iPA Groove
-      </h1>
-      <div style="width: 32px;"></div>
-    </header>
+  <div id="loader">Загрузка данных...</div>
 
-    <nav id="sideMenu">
-      <button id="menuClose" class="text-white text-2xl mb-6 leading-none select-none">×</button>
-      <h2 class="text-white text-xl mb-4 font-bold">Main</h2>
-      <ul class="space-y-4 text-white">
-        <li>
-          <button data-catalog="games" data-list="all" class="menuItem w-full text-left py-2 px-3 rounded hover:bg-purple-700 transition">
-            🎮 All Games
-          </button>
-        </li>
-        <li>
-          <button data-catalog="apps" data-list="all" class="menuItem w-full text-left py-2 px-3 rounded hover:bg-purple-700 transition">
-            📱 All Apps
-          </button>
-        </li>
-      </ul>
-    </nav>
+  <header class="flex items-center justify-between px-4 py-2 fixed w-full top-0 left-0 z-40 bg-transparent">
+    <button id="menuToggle" aria-label="Открыть меню" class="text-white text-2xl p-1">☰</button>
+    <h1 class="text-lg font-extrabold text-white" style="text-shadow: 0 0 8px rgba(110,28,255,0.9);">
+      <span style="font-size: 1.6rem; margin-right: 0.3rem;">📱</span>iPA Groove
+    </h1>
+    <div style="width: 32px;"></div>
+  </header>
 
-    <div id="overlay" class="fixed inset-0 bg-black/50 z-45 hidden"></div>
+  <nav id="sideMenu">
+    <button id="menuClose" class="text-white text-2xl mb-6">×</button>
+    <h2 class="text-white text-xl mb-4 font-bold">Main</h2>
+    <ul class="space-y-4 text-white">
+      <li>
+        <button data-catalog="games" data-list="all" class="menuItem w-full text-left py-2 px-3 rounded hover:bg-purple-700">
+          🎮 All Games
+        </button>
+      </li>
+      <li>
+        <button data-catalog="apps" data-list="all" class="menuItem w-full text-left py-2 px-3 rounded hover:bg-purple-700">
+          📱 All Apps
+        </button>
+      </li>
+    </ul>
+  </nav>
 
-    <main class="pt-14 pb-8 min-h-screen">
-      <!-- Каталог скрыт по умолчанию -->
-      <div id="catalogSection" class="hidden">
-        <div id="filterSection" class="mb-4">
-          <input
-            id="searchInput"
-            type="text"
-            placeholder="Поиск..."
-            class="w-full p-3 rounded placeholder-gray-400 focus:outline-none mb-3 text-black"
-          />
-          <select id="genreFilter" class="w-full p-3 rounded text-black">
-            <option value="">All genres</option>
-            <option value="Arcade">Arcade</option>
-            <option value="Puzzle">Puzzle</option>
-          </select>
-        </div>
-        <h2 id="mainListTitle" class="text-xl font-bold mb-2"></h2>
-        <div id="gamesList" class="space-y-4 mb-4"></div>
-        <div id="showMoreContainer" class="text-center">
-          <button
-            id="showMoreBtn"
-            class="hidden px-4 py-2 bg-purple-700 rounded text-white hover:bg-purple-900 transition"
-          >
-            Показать ещё
-          </button>
-        </div>
+  <div id="overlay" class="fixed inset-0 bg-black/50 z-45 hidden"></div>
+
+  <main class="pt-14 pb-8 min-h-screen">
+    <div id="catalogSection" class="">
+      <div id="filterSection" class="mb-4">
+        <input id="searchInput" type="text" placeholder="Поиск..." class="w-full p-3 rounded text-black mb-3" />
+        <select id="genreFilter" class="w-full p-3 rounded text-black">
+          <option value="">All genres</option>
+          <option value="Arcade">Arcade</option>
+          <option value="Puzzle">Puzzle</option>
+        </select>
       </div>
-    </main>
-
-    <!-- Модалка -->
-    <div id="gameModal">
-      <div class="modalContent">
-        <div class="flex items-center gap-4 mb-4">
-          <img id="modalIcon" src="" alt="Icon" class="w-16 h-16 rounded-xl" loading="lazy"/>
-          <div>
-            <h3 id="modalTitle" class="text-xl font-bold"></h3>
-            <p id="modalDesc" class="text-sm text-gray-300"></p>
-          </div>
-        </div>
-        <div id="modalScreenshots" class="mb-4 space-y-2"></div>
-        <a
-          id="modalDownload"
-          href="#"
-          target="_blank"
-          class="block bg-purple-600 text-white text-center py-2 rounded hover:bg-purple-800 transition"
-        >
-          Скачать
-        </a>
-        <button onclick="closeModal()" class="mt-4 w-full text-sm text-gray-400">Закрыть</button>
+      <h2 id="mainListTitle" class="text-xl font-bold mb-2"></h2>
+      <div id="gamesList" class="space-y-4 mb-4"></div>
+      <div id="showMoreContainer" class="text-center">
+        <button id="showMoreBtn" class="hidden px-4 py-2 bg-purple-700 rounded hover:bg-purple-900">Показать ещё</button>
       </div>
     </div>
+  </main>
 
-    <footer class="mt-8 text-center text-gray-400 text-sm pb-4">
-      &copy; 2025 iOS Game Zone
-    </footer>
+  <div id="gameModal">
+    <div class="modalContent">
+      <div class="flex items-center gap-4 mb-4">
+        <img id="modalIcon" src="" alt="Icon" class="w-16 h-16 rounded-xl" />
+        <div>
+          <h3 id="modalTitle" class="text-xl font-bold"></h3>
+          <p id="modalDesc" class="text-sm text-gray-300"></p>
+        </div>
+      </div>
+      <div id="modalScreenshots" class="mb-4 space-y-2"></div>
+      <a id="modalDownload" href="#" target="_blank" class="block bg-purple-600 text-center py-2 rounded hover:bg-purple-800">Скачать</a>
+      <button onclick="closeModal()" class="mt-4 w-full text-sm text-gray-400">Закрыть</button>
+    </div>
   </div>
+
+  <footer class="mt-8 text-center text-gray-400 text-sm pb-4">
+    &copy; 2025 iOS Game Zone
+  </footer>
 </body>
 </html>
