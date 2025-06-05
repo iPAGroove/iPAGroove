@@ -1,12 +1,12 @@
 [
   {
-    "name": "Subway Surfers",
-    "description": "Беги, уклоняйся и прокачивай реакцию!",
-    "icon": "https://is5-ssl.mzstatic.com/image/thumb/Purple126/v4/3a/e1/ae/3ae1ae25-0f02-5196-eebb-37d2717cbf4b/AppIcon-0-1x_U007emarketing-0-0-85-220.png/460x0w.webp",
-    "version": "1.12.3",
-    "download": "https://example.com/download-subway-surfers",
-    "genre": "Arcade"
-  },
+  "name": "Good Pizza",
+  "description": "- Unlimited Cash\n- Unlimited Diamonds\n- Unlimited Pizza Pass Claim",
+  "icon": "https://github.com/iPAGroove/iPAGroove/blob/main/good%20pizza.jpeg",
+  "version": "5.30.0",
+  "download": "https://example.com/download-subway-surfers",
+  "genre": "Games"
+},
   {
     "name": "Monument Valley",
     "description": "Головоломка с архитектур...",
