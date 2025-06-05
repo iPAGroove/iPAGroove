@@ -1,18 +1,18 @@
 [
   {
-    "name": "Youtube",
+    "name": "YouTube",
     "description": "Premium unlocked",
     "icon": "https://github.com/iPAGroove/iPAGroove/blob/main/IMG_5565.JPG?raw=true",
     "version": "20.21.6",
     "download": "https://vhistoretg.s3.eu-north-1.amazonaws.com/YouTube_iPA+Groove(1).ipa",
-    "genre": "Arcade"
+    "genre": "Apps"
   },
   {
-    "name": "Monument Valley",
-    "description": "Головоломка с архитектур...",
-    "version": "2.4.5",
+    "name": "YouTube Music",
+    "description": "Premium unlocked",
+    "version": "8.2.2",
     "download": "https://example.com/download-monument-valley",
     "icon": "...",
-    "genre": "Puzzle"
+    "genre": "Apps"
   }
 ]
