@@ -3,98 +3,153 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Каталог iOS файлов</title>
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.3.2/dist/tailwind.min.css" rel="stylesheet" />
+  <title>iOS Game & App Catalog — App Store Style</title>
+  <script defer src="script.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
   <style>
     body {
-      background: linear-gradient(135deg, #2a2a72 0%, #009ffd 100%);
+      background: linear-gradient(135deg, #3b006d, #6e1cff, #23004d);
       min-height: 100vh;
+      color: #e0d7ff;
+      font-family: 'Inter', sans-serif;
     }
+
     #loader {
-      display: none;
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,0.6);
-      color: white;
-      font-size: 1.5rem;
+      background: rgba(0, 0, 0, 0.8);
+      display: none;
       align-items: center;
       justify-content: center;
-      z-index: 9999;
+      z-index: 9998;
+      color: white;
+      font-size: 1.2rem;
     }
+
     #sideMenu {
-      transition: transform 0.3s ease;
-      transform: translateX(-100%);
+      position: fixed;
+      top: 0;
+      left: -300px;
+      height: 100%;
+      width: 280px;
+      background: rgba(40,0,90,0.95);
+      padding: 1.5rem;
+      transition: left 0.3s ease;
+      z-index: 50;
+      overflow-y: auto;
     }
     #sideMenu.open {
-      transform: translateX(0);
+      left: 0;
+    }
+
+    #overlay {
+      transition: opacity 0.3s ease;
     }
     #overlay.active {
       display: block;
+      opacity: 1;
     }
-    #overlay {
-      display: none;
+
+    #gameModal {
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,0.5);
-      z-index: 50;
+      background: rgba(0,0,0,0.7);
+      backdrop-filter: blur(4px);
+      z-index: 60;
+      display: none;
+      align-items: flex-end;
+      justify-content: center;
+      padding: 1rem;
     }
-    .modal {
-      transition: opacity 0.3s ease;
-      opacity: 0;
-      pointer-events: none;
+    #gameModal.show {
+      display: flex;
     }
-    .modal.show {
+    #gameModal .modalContent {
+      transform: scale(1);
       opacity: 1;
-      pointer-events: auto;
+      background: rgba(40,0,90,0.95);
+      border-radius: 1rem;
+      padding: 1rem;
+      width: 100%;
+      max-width: 24rem;
+      max-height: 90vh;
+      overflow-y: auto;
+      transition: all 0.3s ease;
+    }
+
+    @media (min-width: 640px) {
+      main {
+        padding-left: 1.5rem;
+        padding-right: 1.5rem;
+      }
+      #mainListTitle {
+        font-size: 1.25rem;
+      }
     }
   </style>
 </head>
-<body class="text-white font-sans">
+<body class="text-white font-sans max-w-screen-sm mx-auto p-0">
 
-  <div id="loader" class="flex">Загрузка...</div>
+  <div id="loader">Загрузка данных...</div>
 
-  <!-- Кнопка меню -->
-  <button id="menuToggle" aria-label="Открыть меню" class="fixed top-4 left-4 z-50 bg-purple-700 p-3 rounded-md hover:bg-purple-800 focus:outline-none focus:ring-2 focus:ring-purple-400">
-    ☰ Меню
-  </button>
+  <header class="flex items-center justify-between px-4 py-2 fixed w-full top-0 left-0 z-40 backdrop-blur-md bg-[rgba(20,0,40,0.6)] border-b border-purple-500/30 shadow-md">
+    <button id="menuToggle" aria-label="Открыть меню" class="text-white text-2xl p-1">☰</button>
+   <h1 class="text-lg font-extrabold text-white flex items-center gap-1" style="text-shadow: 0 0 8px rgba(110,28,255,0.9);">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" width="24" height="24" fill="white" style="filter: drop-shadow(0 0 5px #8b5cf6);">
+    <path d="M318.7 268c-.2-57 46.5-84.2 48.7-85.6-26.6-38.7-67.8-44-82.5-44.6-35.2-3.6-68.6 20.8-86.4 20.8-17.7 0-45.1-20.3-74.2-19.8-38.1.6-73.3 22.2-92.8 56.3-39.6 68.6-10.1 170.3 28.4 226.1 18.8 27.1 41.1 57.4 70.4 56 28.1-1.1 38.7-18.1 72.5-18.1 33.7 0 43.1 18.1 72.6 17.6 29.9-.5 48.8-27.6 67.5-54.9 21.2-31 29.8-61 30-62.7-.6-.3-57.3-21.9-57.5-86.1zM250.2 84.5c15.7-19 26.3-45.5 23.4-72.1-22.6.9-49.9 15.1-66 34-14.5 16.9-27.2 44.1-23.8 70.1 25 .6 51-14.3 66.4-32z"/>
+  </svg>
+  iPA Groove
+</h1>
+    <div style="width: 32px;"></div>
+  </header>
 
-  <!-- Меню -->
-  <nav id="sideMenu" class="fixed top-0 left-0 h-full w-64 bg-purple-900/90 shadow-lg p-6 z-50 flex flex-col gap-4">
-    <button id="menuClose" aria-label="Закрыть меню" class="self-end text-2xl hover:text-purple-300">×</button>
-    <h2 class="text-2xl font-bold mb-4">Категории</h2>
-    <button class="menuItem text-lg p-2 rounded hover:bg-purple-700" data-catalog="games">Игры</button>
-    <button class="menuItem text-lg p-2 rounded hover:bg-purple-700" data-catalog="apps">Приложения</button>
+  <nav id="sideMenu">
+    <button id="menuClose" class="text-white text-2xl mb-6">×</button>
+    <h2 class="text-white text-xl mb-4 font-bold">Main</h2>
+    <ul class="space-y-4 text-white">
+      <li>
+        <button data-catalog="games" data-list="all" class="menuItem w-full text-left py-2 px-3 rounded hover:bg-purple-700">
+          🎮 All Games
+        </button>
+      </li>
+      <li>
+        <button data-catalog="apps" data-list="all" class="menuItem w-full text-left py-2 px-3 rounded hover:bg-purple-700">
+          📱 All Apps
+        </button>
+      </li>
+    </ul>
   </nav>
 
-  <!-- Темный оверлей -->
-  <div id="overlay" tabindex="-1"></div>
+  <div id="overlay" class="fixed inset-0 bg-black/50 z-45 hidden"></div>
 
-  <!-- Основной контент -->
-  <main class="max-w-4xl mx-auto p-6 mt-16">
-    <h1 id="mainListTitle" class="text-3xl font-bold mb-6">Все игры</h1>
-    <div id="gamesList" class="grid grid-cols-1 sm:grid-cols-2 gap-4"></div>
-    <button id="showMoreBtn" class="mt-6 px-5 py-2 bg-purple-700 rounded hover:bg-purple-800 focus:outline-none focus:ring-2 focus:ring-purple-400 hidden">
-      Показать ещё
-    </button>
+  <main class="pt-14 pb-8 min-h-screen">
+    <!-- Убраны блоки с поиском и выбором жанра -->
+    <div id="catalogSection">
+      <h2 id="mainListTitle" class="text-xl font-bold mb-2"></h2>
+      <div id="gamesList" class="space-y-4 mb-4"></div>
+      <div id="showMoreContainer" class="text-center">
+        <button id="showMoreBtn" class="hidden px-4 py-2 bg-purple-700 rounded hover:bg-purple-900">Показать ещё</button>
+      </div>
+    </div>
   </main>
 
-  <!-- Модальное окно -->
-  <div id="gameModal" class="modal fixed inset-0 flex items-center justify-center bg-black bg-opacity-75 z-50 p-4">
-    <div class="bg-purple-900 rounded-xl p-6 max-w-md w-full relative">
-      <button id="modalClose" aria-label="Закрыть окно" class="absolute top-3 right-3 text-3xl hover:text-purple-300">×</button>
-      <div class="flex gap-4 items-center mb-4">
-        <img id="modalIcon" src="" alt="" class="w-20 h-20 rounded-lg object-cover" />
+  <div id="gameModal">
+    <div class="modalContent">
+      <div class="flex items-center gap-4 mb-4">
+        <img id="modalIcon" src="" alt="Icon" class="w-16 h-16 rounded-xl" />
         <div>
-          <h2 id="modalTitle" class="text-2xl font-bold"></h2>
-          <p id="modalVersion" class="text-purple-300 mt-1"></p>
+          <h3 id="modalTitle" class="text-xl font-bold"></h3>
+          <p id="modalDesc" class="text-sm text-gray-300"></p>
         </div>
       </div>
-      <a id="modalDownload" href="#" class="block w-full bg-purple-700 text-white py-3 text-center rounded hover:bg-purple-800 focus:outline-none focus:ring-2 focus:ring-purple-400" download>
-        Скачать
-      </a>
+      <div id="modalScreenshots" class="mb-4 space-y-2"></div>
+      <a id="modalDownload" href="#" target="_blank" class="block bg-purple-600 text-center py-2 rounded hover:bg-purple-800">Скачать</a>
+      <button onclick="closeModal()" class="mt-4 w-full text-sm text-gray-400">Закрыть</button>
     </div>
   </div>
 
-  <script src="script.js" type="module"></script>
+  <footer class="mt-8 text-center text-gray-400 text-sm pb-4">
+    &copy; 2025 iOS Game Zone
+  </footer>
 </body>
 </html>
