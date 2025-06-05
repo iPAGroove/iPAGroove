@@ -73,7 +73,7 @@ document.addEventListener("DOMContentLoaded", () => {
       closeMenu();
       const type = btn.dataset.catalog;
       const items = type === "games" ? gamesData : appsData;
-      mainListTitle.textContent = type === "games" ? "Игры" : "Приложения";
+      mainListTitle.textContent = type === "games" ? "Games" : "Apps";
       renderList(items);
     });
   });
