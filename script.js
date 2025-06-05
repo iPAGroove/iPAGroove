@@ -41,7 +41,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function openModal(item) {
-    modalTitle.textContent = `${item.name}${item.version ? ` — версия ${item.version}` : ""}`;
+    modalTitle.textContent = `${item.name}${item.version ? ` — Version ${item.version}` : ""}`;
     modalDesc.textContent = item.description || "";
     modalIcon.src = item.icon || "";
     modalIcon.alt = item.name || "";
