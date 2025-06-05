@@ -1,123 +1,157 @@
-document.addEventListener("DOMContentLoaded", () => {
-  const menuToggle = document.getElementById("menuToggle");
-  const menuClose = document.getElementById("menuClose");
-  const sideMenu = document.getElementById("sideMenu");
-  const overlay = document.getElementById("overlay");
-  const catalogSection = document.getElementById("catalogSection");
-  const mainListTitle = document.getElementById("mainListTitle");
-  const gamesList = document.getElementById("gamesList");
+"use strict";
 
-  const menuItems = document.querySelectorAll(".menuItem");
+const loader = document.getElementById('loader');
+const sideMenu = document.getElementById('sideMenu');
+const menuToggle = document.getElementById('menuToggle');
+const menuClose = document.getElementById('menuClose');
+const overlay = document.getElementById('overlay');
 
-  // Хранилище для данных
-  let gamesData = [];
-  let appsData = [];
+const mainListTitle = document.getElementById('mainListTitle');
+const gamesList = document.getElementById('gamesList');
+const showMoreBtn = document.getElementById('showMoreBtn');
 
-  // Функция для загрузки JSON
-  async function loadJSON(url) {
-    try {
-      const response = await fetch(url);
-      if (!response.ok) throw new Error("Ошибка загрузки " + url);
-      return await response.json();
-    } catch (e) {
-      console.error(e);
-      return [];
-    }
+const gameModal = document.getElementById('gameModal');
+const modalTitle = document.getElementById('modalTitle');
+const modalVersion = document.getElementById('modalVersion');
+const modalDownload = document.getElementById('modalDownload');
+const modalIcon = document.getElementById('modalIcon');
+const modalClose = document.getElementById('modalClose');
+
+let currentItems = [];
+let itemsPerPage = 6;
+let currentPage = 1;
+
+async function fetchJSON(filename) {
+  showLoader();
+  try {
+    const response = await fetch(filename);
+    if (!response.ok) throw new Error(`Ошибка загрузки ${filename}`);
+    const data = await response.json();
+    return data;
+  } catch (e) {
+    alert(e.message);
+    return [];
+  } finally {
+    hideLoader();
+  }
+}
+
+function showLoader() {
+  loader.style.display = 'flex';
+}
+function hideLoader() {
+  loader.style.display = 'none';
+}
+
+function openMenu() {
+  sideMenu.classList.add('open');
+  overlay.classList.add('active');
+}
+function closeMenu() {
+  sideMenu.classList.remove('open');
+  overlay.classList.remove('active');
+}
+
+menuToggle.addEventListener('click', openMenu);
+menuClose.addEventListener('click', closeMenu);
+overlay.addEventListener('click', () => {
+  closeMenu();
+  closeModal();
+});
+
+modalClose.addEventListener('click', closeModal);
+
+// Отобразить список игр или приложений
+function renderList(items, page = 1) {
+  if (!items || !items.length) {
+    gamesList.innerHTML = '<p class="text-center text-lg text-purple-300">Пусто</p>';
+    showMoreBtn.style.display = 'none';
+    return;
   }
 
-  // Загрузка данных из файлов
-  async function loadData() {
-    gamesData = await loadJSON("games.json");
-    appsData = await loadJSON("apps.json");
-  }
+  if (page === 1) gamesList.innerHTML = '';
 
-  // Закрыть меню
-  function closeMenu() {
-    sideMenu.classList.remove("open");
-    overlay.classList.remove("active");
-    overlay.classList.add("hidden");
-  }
+  const start = (page - 1) * itemsPerPage;
+  const end = start + itemsPerPage;
+  const pagedItems = items.slice(start, end);
 
-  menuToggle.addEventListener("click", () => {
-    sideMenu.classList.add("open");
-    overlay.classList.add("active");
-    overlay.classList.remove("hidden");
-  });
+  for (const item of pagedItems) {
+    const div = document.createElement('div');
+    div.className = "bg-purple-900/60 rounded-xl p-3 flex gap-3 items-center cursor-pointer hover:bg-purple-700 transition";
+    div.tabIndex = 0;
+    div.setAttribute('role', 'button');
+    div.setAttribute('aria-label', `Открыть ${item.title}`);
 
-  menuClose.addEventListener("click", closeMenu);
-  overlay.addEventListener("click", closeMenu);
+    div.innerHTML = `
+      <img src="${item.icon}" alt="Иконка ${item.title}" class="w-16 h-16 rounded-lg flex-shrink-0 object-cover" />
+      <div class="flex flex-col justify-center">
+        <h3 class="font-semibold text-lg">${item.title}</h3>
+        <p class="text-sm text-purple-300">Версия: ${item.version}</p>
+      </div>
+    `;
 
-  // Рендер списка
-  function renderList(title, items) {
-    mainListTitle.textContent = title;
-    gamesList.innerHTML = "";
-
-    if (items.length === 0) {
-      gamesList.innerHTML = "<p>Список пуст.</p>";
-      return;
-    }
-
-    items.forEach(item => {
-      const container = document.createElement("div");
-      container.className = "flex items-center gap-4 bg-purple-900 bg-opacity-30 p-3 rounded cursor-pointer hover:bg-purple-700";
-
-      const img = document.createElement("img");
-      img.src = item.icon;
-      img.alt = item.name;
-      img.className = "w-12 h-12 rounded-xl flex-shrink-0";
-      container.appendChild(img);
-
-      const textWrapper = document.createElement("div");
-      textWrapper.className = "flex-grow";
-
-      const h3 = document.createElement("h3");
-      h3.className = "font-semibold text-lg";
-      h3.textContent = item.name;
-      textWrapper.appendChild(h3);
-
-      if (item.description) {
-        const desc = document.createElement("p");
-        desc.className = "text-sm text-gray-300";
-        desc.textContent = item.description;
-        textWrapper.appendChild(desc);
-      }
-
-      container.appendChild(textWrapper);
-
-      // Кнопка Скачать, если есть ссылка
-      if (item.download && item.download !== "#") {
-        const downloadLink = document.createElement("a");
-        downloadLink.href = item.download;
-        downloadLink.target = "_blank";
-        downloadLink.textContent = "Скачать";
-        downloadLink.className = "ml-auto px-3 py-1 bg-purple-600 rounded hover:bg-purple-800 text-sm";
-        container.appendChild(downloadLink);
-      }
-
-      gamesList.appendChild(container);
-    });
-
-    catalogSection.scrollIntoView({ behavior: "smooth" });
-  }
-
-  // Обработчик клика по меню
-  menuItems.forEach(button => {
-    button.addEventListener("click", async () => {
-      const catalogType = button.getAttribute("data-catalog");
-      closeMenu();
-
-      // Если данные еще не загружены, загрузим
-      if (gamesData.length === 0 || appsData.length === 0) {
-        document.getElementById("loader").style.display = "flex";
-        await loadData();
-        document.getElementById("loader").style.display = "none";
-      }
-
-      if (catalogType === "games") {
-        renderList("🎮 Все игры", gamesData);
-      } else if (catalogType === "apps") {
-        renderList("📱 Все приложения", appsData);
+    div.addEventListener('click', () => openModal(item));
+    div.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        openModal(item);
       }
     });
+
+    gamesList.appendChild(div);
+  }
+
+  // Показать или скрыть кнопку "Показать ещё"
+  if (end < items.length) {
+    showMoreBtn.style.display = 'inline-block';
+  } else {
+    showMoreBtn.style.display = 'none';
+  }
+}
+
+// Открыть модальное окно с информацией
+function openModal(item) {
+  modalTitle.textContent = item.title;
+  modalVersion.textContent = `Версия: ${item.version}`;
+  modalDownload.href = item.downloadUrl;
+  modalDownload.setAttribute('download', '');
+  modalIcon.src = item.icon;
+  modalIcon.alt = `Иконка ${item.title}`;
+  gameModal.classList.add('show');
+  document.body.style.overflow = 'hidden';
+}
+
+// Закрыть модальное окно
+function closeModal() {
+  gameModal.classList.remove('show');
+  document.body.style.overflow = '';
+}
+
+let currentCatalog = 'games';
+
+async function loadCatalog(catalog) {
+  currentCatalog = catalog;
+  currentPage = 1;
+  mainListTitle.textContent = catalog === 'games' ? 'Все игры' : 'Все приложения';
+  const data = await fetchJSON(`${catalog}.json`);
+  currentItems = data;
+  renderList(currentItems, currentPage);
+  closeMenu();
+}
+
+showMoreBtn.addEventListener('click', () => {
+  currentPage++;
+  renderList(currentItems, currentPage);
+});
+
+// При загрузке страницы - по умолчанию игры
+window.addEventListener('DOMContentLoaded', () => {
+  loadCatalog('games');
+});
+
+// Обработчики для меню
+document.querySelectorAll('.menuItem').forEach(btn => {
+  btn.addEventListener('click', () => {
+    loadCatalog(btn.dataset.catalog);
   });
 });
