@@ -23,7 +23,6 @@
       justify-content: center;
       z-index: 9998;
       color: white;
-      font-family: 'Inter', sans-serif;
       font-size: 1.2rem;
     }
 
@@ -35,13 +34,16 @@
       width: 280px;
       background: rgba(40,0,90,0.95);
       padding: 1.5rem;
-      box-sizing: border-box;
       transition: left 0.3s ease;
       z-index: 50;
       overflow-y: auto;
     }
     #sideMenu.open {
       left: 0;
+    }
+
+    #overlay {
+      transition: opacity 0.3s ease;
     }
     #overlay.active {
       display: block;
@@ -63,6 +65,8 @@
       display: flex;
     }
     #gameModal .modalContent {
+      transform: scale(1);
+      opacity: 1;
       background: rgba(40,0,90,0.95);
       border-radius: 1rem;
       padding: 1rem;
@@ -70,8 +74,6 @@
       max-width: 24rem;
       max-height: 90vh;
       overflow-y: auto;
-      transform: scale(1);
-      opacity: 1;
       transition: all 0.3s ease;
     }
 
@@ -90,74 +92,61 @@
 
   <div id="loader">Загрузка данных...</div>
 
-  <div id="siteContent">
-    <header class="flex items-center justify-between px-4 py-2 fixed w-full top-0 left-0 z-40 bg-transparent">
-      <button id="menuToggle" aria-label="Открыть меню" class="text-white text-2xl leading-none select-none rounded-md p-1">☰</button>
-      <h1 class="text-lg font-extrabold flex items-center select-none text-white" style="text-shadow: 0 0 8px rgba(110,28,255,0.9);">
-        <span style="font-size: 1.6rem; margin-right: 0.3rem;">📱</span>iPA Groove
-      </h1>
-      <div style="width: 32px;"></div>
-    </header>
+  <header class="flex items-center justify-between px-4 py-2 fixed w-full top-0 left-0 z-40 bg-transparent">
+    <button id="menuToggle" aria-label="Открыть меню" class="text-white text-2xl p-1">☰</button>
+    <h1 class="text-lg font-extrabold text-white" style="text-shadow: 0 0 8px rgba(110,28,255,0.9);">
+      <span style="font-size: 1.6rem; margin-right: 0.3rem;">📱</span>iPA Groove
+    </h1>
+    <div style="width: 32px;"></div>
+  </header>
 
-    <nav id="sideMenu">
-      <button id="menuClose" class="text-white text-2xl mb-6 leading-none select-none">×</button>
-      <h2 class="text-white text-xl mb-4 font-bold">Main</h2>
-      <ul class="space-y-4 text-white">
-        <li>
-          <button data-catalog="games" data-list="all" class="menuItem w-full text-left py-2 px-3 rounded hover:bg-purple-700 transition">
-            🎮 All Games
-          </button>
-        </li>
-        <li>
-          <button data-catalog="apps" data-list="all" class="menuItem w-full text-left py-2 px-3 rounded hover:bg-purple-700 transition">
-            📱 All Apps
-          </button>
-        </li>
-      </ul>
-    </nav>
+  <nav id="sideMenu">
+    <button id="menuClose" class="text-white text-2xl mb-6">×</button>
+    <h2 class="text-white text-xl mb-4 font-bold">Main</h2>
+    <ul class="space-y-4 text-white">
+      <li>
+        <button data-catalog="games" data-list="all" class="menuItem w-full text-left py-2 px-3 rounded hover:bg-purple-700">
+          🎮 All Games
+        </button>
+      </li>
+      <li>
+        <button data-catalog="apps" data-list="all" class="menuItem w-full text-left py-2 px-3 rounded hover:bg-purple-700">
+          📱 All Apps
+        </button>
+      </li>
+    </ul>
+  </nav>
 
-    <div id="overlay" class="fixed inset-0 bg-black/50 z-45 hidden"></div>
+  <div id="overlay" class="fixed inset-0 bg-black/50 z-45 hidden"></div>
 
-    <main class="pt-14 pb-8 min-h-screen">
-      <div id="catalogSection">
-        <h2 id="mainListTitle" class="text-xl font-bold mb-4">Каталог</h2>
-        <div id="gamesList" class="space-y-4 mb-4"></div>
-        <div id="showMoreContainer" class="text-center">
-          <button
-            id="showMoreBtn"
-            class="hidden px-4 py-2 bg-purple-700 rounded text-white hover:bg-purple-900 transition"
-          >
-            Показать ещё
-          </button>
-        </div>
-      </div>
-    </main>
-
-    <div id="gameModal">
-      <div class="modalContent">
-        <div class="flex items-center gap-4 mb-4">
-          <img id="modalIcon" src="" alt="Icon" class="w-16 h-16 rounded-xl" loading="lazy"/>
-          <div>
-            <h3 id="modalTitle" class="text-xl font-bold"></h3>
-            <p id="modalDesc" class="text-sm text-gray-300"></p>
-          </div>
-        </div>
-        <div id="modalScreenshots" class="mb-4 space-y-2"></div>
-        <a
-          id="modalDownload"
-          href="#"
-          target="_blank"
-          class="block bg-purple-600 text-white text-center py-2 rounded hover:bg-purple-800 transition"
-        >
-          Скачать
-        </a>
-        <button onclick="closeModal()" class="mt-4 w-full text-sm text-gray-400">Закрыть</button>
+  <main class="pt-14 pb-8 min-h-screen">
+    <!-- Убраны блоки с поиском и выбором жанра -->
+    <div id="catalogSection">
+      <h2 id="mainListTitle" class="text-xl font-bold mb-2"></h2>
+      <div id="gamesList" class="space-y-4 mb-4"></div>
+      <div id="showMoreContainer" class="text-center">
+        <button id="showMoreBtn" class="hidden px-4 py-2 bg-purple-700 rounded hover:bg-purple-900">Показать ещё</button>
       </div>
     </div>
+  </main>
 
-    <footer class="mt-8 text-center text-gray-400 text-sm pb-4">
-      &copy; 2025 iOS Game Zone
-    </footer>
+  <div id="gameModal">
+    <div class="modalContent">
+      <div class="flex items-center gap-4 mb-4">
+        <img id="modalIcon" src="" alt="Icon" class="w-16 h-16 rounded-xl" />
+        <div>
+          <h3 id="modalTitle" class="text-xl font-bold"></h3>
+          <p id="modalDesc" class="text-sm text-gray-300"></p>
+        </div>
+      </div>
+      <div id="modalScreenshots" class="mb-4 space-y-2"></div>
+      <a id="modalDownload" href="#" target="_blank" class="block bg-purple-600 text-center py-2 rounded hover:bg-purple-800">Скачать</a>
+      <button onclick="closeModal()" class="mt-4 w-full text-sm text-gray-400">Закрыть</button>
+    </div>
   </div>
+
+  <footer class="mt-8 text-center text-gray-400 text-sm pb-4">
+    &copy; 2025 iOS Game Zone
+  </footer>
 </body>
 </html>
