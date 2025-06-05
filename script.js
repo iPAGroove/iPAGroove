@@ -3,6 +3,47 @@ document.addEventListener("DOMContentLoaded", () => {
   const menuClose = document.getElementById("menuClose");
   const sideMenu = document.getElementById("sideMenu");
   const overlay = document.getElementById("overlay");
+  const catalogSection = document.getElementById("catalogSection");
+  const mainListTitle = document.getElementById("mainListTitle");
+  const gamesList = document.getElementById("gamesList");
+
+  const menuItems = document.querySelectorAll(".menuItem");
+
+  const demoGames = [
+    {
+      name: "Clash Royale",
+      icon: "https://upload.wikimedia.org/wikipedia/en/6/6f/Clash_Royale_app_icon.png"
+    },
+    {
+      name: "Subway Surfers",
+      icon: "https://upload.wikimedia.org/wikipedia/en/thumb/5/5d/Subway_Surfers_app_icon.png/220px-Subway_Surfers_app_icon.png"
+    },
+    {
+      name: "Among Us",
+      icon: "https://upload.wikimedia.org/wikipedia/en/f/f2/Among_Us_cover_art.png"
+    }
+  ];
+
+  const demoApps = [
+    {
+      name: "Notion",
+      icon: "https://upload.wikimedia.org/wikipedia/commons/e/e9/Notion-logo.svg"
+    },
+    {
+      name: "Telegram",
+      icon: "https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg"
+    },
+    {
+      name: "Spotify",
+      icon: "https://upload.wikimedia.org/wikipedia/commons/1/19/Spotify_logo_without_text.svg"
+    }
+  ];
+
+  function closeMenu() {
+    sideMenu.classList.remove("open");
+    overlay.classList.remove("active");
+    overlay.classList.add("hidden");
+  }
 
   menuToggle.addEventListener("click", () => {
     sideMenu.classList.add("open");
@@ -13,28 +54,9 @@ document.addEventListener("DOMContentLoaded", () => {
   menuClose.addEventListener("click", closeMenu);
   overlay.addEventListener("click", closeMenu);
 
-  function closeMenu() {
-    sideMenu.classList.remove("open");
-    overlay.classList.remove("active");
-    overlay.classList.add("hidden");
-  }
-
-  const mainListTitle = document.getElementById("mainListTitle");
-  const gamesList = document.getElementById("gamesList");
-  const showMoreBtn = document.getElementById("showMoreBtn");
-
-  // Примерные данные
-  const gamesData = [
-    { name: "Clash Royale", icon: "https://via.placeholder.com/100", desc: "Мобильная стратегия." },
-    { name: "Subway Surfers", icon: "https://via.placeholder.com/100", desc: "Аркадный раннер." }
-  ];
-  const appsData = [
-    { name: "Telegram", icon: "https://via.placeholder.com/100", desc: "Мессенджер." },
-    { name: "Notion", icon: "https://via.placeholder.com/100", desc: "Органайзер и заметки." }
-  ];
-
-  function renderList(items) {
-    mainListTitle.textContent = `Каталог — всего: ${items.length}`;
+  // Показ списка
+  function renderList(title, items) {
+    mainListTitle.textContent = title;
     gamesList.innerHTML = "";
 
     items.forEach(item => {
@@ -55,28 +77,24 @@ document.addEventListener("DOMContentLoaded", () => {
       h3.textContent = item.name;
       textWrapper.appendChild(h3);
 
-      const p = document.createElement("p");
-      p.className = "text-sm text-gray-300";
-      p.textContent = item.desc;
-      textWrapper.appendChild(p);
-
       container.appendChild(textWrapper);
       gamesList.appendChild(container);
     });
+
+    catalogSection.scrollIntoView({ behavior: "smooth" });
   }
 
-  // Обработка кликов по пунктам меню
-  const menuItems = document.querySelectorAll(".menuItem");
   menuItems.forEach(button => {
     button.addEventListener("click", () => {
-      const catalog = button.dataset.catalog;
+      const catalogType = button.getAttribute("data-catalog");
       closeMenu();
 
-      if (catalog === "games") {
-        renderList(gamesData);
-      } else if (catalog === "apps") {
-        renderList(appsData);
+      if (catalogType === "games") {
+        renderList("🎮 Все игры", demoGames);
+      } else if (catalogType === "apps") {
+        renderList("📱 Все приложения", demoApps);
       }
     });
   });
+
 });
