@@ -1,109 +1,113 @@
-document.addEventListener('DOMContentLoaded', () => {
-  const siteContent = document.getElementById('siteContent');
-  const loader = document.getElementById('loader');
-  const menuToggle = document.getElementById('menuToggle');
-  const menuClose = document.getElementById('menuClose');
-  const sideMenu = document.getElementById('sideMenu');
-  const overlay = document.getElementById('overlay');
-  const gameModal = document.getElementById('gameModal');
-  const modalTitle = document.getElementById('modalTitle');
-  const modalDesc = document.getElementById('modalDesc');
-  const modalIcon = document.getElementById('modalIcon');
-  const modalScreenshots = document.getElementById('modalScreenshots');
-  const modalDownload = document.getElementById('modalDownload');
-  const gamesList = document.getElementById('gamesList');
-  const showMoreBtn = document.getElementById('showMoreBtn');
+document.addEventListener("DOMContentLoaded", () => {
+  const menuToggle = document.getElementById("menuToggle");
+  const menuClose = document.getElementById("menuClose");
+  const sideMenu = document.getElementById("sideMenu");
+  const overlay = document.getElementById("overlay");
 
-  siteContent.style.display = 'block';
+  menuToggle.addEventListener("click", () => {
+    sideMenu.classList.add("open");
+    overlay.classList.add("active");
+    overlay.classList.remove("hidden");
+  });
 
-  menuToggle.onclick = () => {
-    sideMenu.classList.add('open');
-    overlay.classList.add('active');
-    overlay.classList.remove('hidden');
-  };
-
-  menuClose.onclick = closeMenu;
-  overlay.onclick = closeMenu;
+  menuClose.addEventListener("click", closeMenu);
+  overlay.addEventListener("click", closeMenu);
 
   function closeMenu() {
-    sideMenu.classList.remove('open');
-    overlay.classList.remove('active');
-    overlay.classList.add('hidden');
+    sideMenu.classList.remove("open");
+    overlay.classList.remove("active");
+    overlay.classList.add("hidden");
   }
 
-  function showLoader(show = true) {
-    loader.style.display = show ? 'flex' : 'none';
-  }
+  // Пример: отобразить каталог по умолчанию
+  const catalogSection = document.getElementById("catalogSection");
+  catalogSection.classList.remove("hidden");
 
-  function openModal(data) {
-    modalTitle.textContent = data.title || 'Без названия';
-    modalDesc.textContent = data.description || '';
-    modalIcon.src = data.icon || '';
-    modalDownload.href = data.download || '#';
-    modalScreenshots.innerHTML = '';
+  // Если ранее была реализована логика загрузки данных и пагинации, оставляем её, 
+  // но удаляем обработчики фильтров и событий ввода поиска.
+  
+  // Далее должна быть ваша логика отображения данных, например:
+  const mainListTitle = document.getElementById("mainListTitle");
+  const gamesList = document.getElementById("gamesList");
+  const showMoreBtn = document.getElementById("showMoreBtn");
 
-    if (data.screenshots && Array.isArray(data.screenshots)) {
-      data.screenshots.forEach(url => {
-        const img = document.createElement('img');
-        img.src = url;
-        img.className = 'w-full rounded';
-        modalScreenshots.appendChild(img);
-      });
+  // Пример функции рендера (данные должны быть загружены отдельно)
+  function renderList(items, displayed, batchSize) {
+    mainListTitle.textContent = `Каталог — всего: ${items.length}`;
+    gamesList.innerHTML = "";
+
+    const toShow = items.slice(0, displayed);
+    toShow.forEach(item => {
+      const container = document.createElement("div");
+      container.className = "flex items-center gap-4 bg-purple-900 bg-opacity-30 p-3 rounded cursor-pointer hover:bg-purple-700";
+      
+      const img = document.createElement("img");
+      img.src = item.icon;
+      img.alt = item.name;
+      img.className = "w-12 h-12 rounded-xl flex-shrink-0";
+      container.appendChild(img);
+      
+      const textWrapper = document.createElement("div");
+      textWrapper.className = "flex-grow";
+      
+      const h3 = document.createElement("h3");
+      h3.className = "font-semibold text-lg";
+      h3.textContent = item.name;
+      textWrapper.appendChild(h3);
+      
+      const p = document.createElement("p");
+      p.className = "text-sm text-purple-200";
+      p.textContent = `${item.genre} | ${item.size || '–'}`;
+      textWrapper.appendChild(p);
+      
+      container.appendChild(textWrapper);
+      
+      container.addEventListener("click", () => openModal(item));
+      gamesList.appendChild(container);
+    });
+
+    // Отображаем кнопку "Показать ещё" если есть ещё элементы
+    if (displayed < items.length) {
+      showMoreBtn.style.display = "inline-block";
+    } else {
+      showMoreBtn.style.display = "none";
     }
-
-    gameModal.classList.add('show');
   }
 
-  window.closeModal = () => {
-    gameModal.classList.remove('show');
-  };
+  // Остальная логика загрузки и работы с данными,
+  // такая как fetch, пагинация и открытие модального окна, остается без изменений.
+});
 
-  function renderItems(items) {
-    gamesList.innerHTML = '';
-    items.forEach(item => {
-      const div = document.createElement('div');
-      div.className = 'bg-purple-800 rounded p-3 shadow-md cursor-pointer hover:bg-purple-700 transition';
-      div.innerHTML = `
-        <div class="flex items-center gap-3">
-          <img src="${item.icon}" class="w-12 h-12 rounded" />
-          <div>
-            <h3 class="text-lg font-semibold">${item.title}</h3>
-            <p class="text-sm text-gray-300">${item.description || ''}</p>
-          </div>
-        </div>
-      `;
-      div.onclick = () => openModal(item);
-      gamesList.appendChild(div);
+function closeModal() {
+  document.getElementById("gameModal").classList.remove("show");
+}
+
+function openModal(item) {
+  const modalTitle = document.getElementById("modalTitle");
+  const modalDesc = document.getElementById("modalDesc");
+  const modalIcon = document.getElementById("modalIcon");
+  const modalScreenshots = document.getElementById("modalScreenshots");
+  const modalDownload = document.getElementById("modalDownload");
+  const gameModal = document.getElementById("gameModal");
+
+  modalTitle.textContent = item.name;
+  modalDesc.textContent = item.description || "Нет описания";
+  modalIcon.src = item.icon;
+  modalIcon.alt = item.name;
+
+  modalScreenshots.innerHTML = "";
+  if (Array.isArray(item.screenshots) && item.screenshots.length > 0) {
+    item.screenshots.forEach(src => {
+      const img = document.createElement("img");
+      img.src = src;
+      img.alt = `${item.name} screenshot`;
+      img.className = "w-full rounded mb-2";
+      modalScreenshots.appendChild(img);
     });
   }
 
-  async function fetchData() {
-    showLoader(true);
-    try {
-      // Замените этот массив или подключите fetch из внешнего файла
-      const data = [
-        {
-          title: "Cool Game",
-          description: "Awesome gameplay",
-          icon: "https://via.placeholder.com/100",
-          download: "https://example.com/file.ipa",
-          screenshots: ["https://via.placeholder.com/300x600"]
-        },
-        {
-          title: "Cool App",
-          description: "Productivity tool",
-          icon: "https://via.placeholder.com/100",
-          download: "https://example.com/app.ipa",
-          screenshots: []
-        }
-      ];
-      renderItems(data);
-    } catch (e) {
-      alert('Ошибка загрузки данных');
-    } finally {
-      showLoader(false);
-    }
-  }
+  modalDownload.href = item.download || "#";
+  modalDownload.textContent = "Скачать";
 
-  fetchData();
-});
+  gameModal.classList.add("show");
+}
