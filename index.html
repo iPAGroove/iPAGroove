@@ -43,6 +43,12 @@
     }
 
     #overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 45;
+      display: none;
+      opacity: 0;
       transition: opacity 0.3s ease;
     }
     #overlay.active {
@@ -57,7 +63,7 @@
       backdrop-filter: blur(4px);
       z-index: 60;
       display: none;
-      align-items: flex-end;
+      align-items: center;
       justify-content: center;
       padding: 1rem;
     }
@@ -65,16 +71,57 @@
       display: flex;
     }
     #gameModal .modalContent {
-      transform: scale(1);
-      opacity: 1;
       background: rgba(40,0,90,0.95);
       border-radius: 1rem;
-      padding: 1rem;
+      padding: 1.5rem;
       width: 100%;
       max-width: 24rem;
       max-height: 90vh;
       overflow-y: auto;
-      transition: all 0.3s ease;
+      color: #e0d7ff;
+      text-align: center;
+      box-shadow: 0 0 15px #8b5cf6;
+    }
+
+    #gameModal img {
+      width: 80px;
+      height: 80px;
+      border-radius: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    #gameModal h3 {
+      font-size: 1.5rem;
+      margin-bottom: 0.3rem;
+    }
+    #gameModal p.version {
+      margin-bottom: 1rem;
+      font-weight: 500;
+      color: #bdb7ff;
+    }
+
+    #gameModal a#modalDownload {
+      display: inline-block;
+      background: #7c3aed;
+      color: white;
+      padding: 0.75rem 1.5rem;
+      border-radius: 0.75rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: background-color 0.3s ease;
+    }
+    #gameModal a#modalDownload:hover {
+      background: #5b21b6;
+    }
+
+    #gameModal button.closeBtn {
+      margin-top: 1rem;
+      background: transparent;
+      border: none;
+      color: #bbb7ff;
+      cursor: pointer;
+      font-size: 0.9rem;
+      text-decoration: underline;
     }
 
     @media (min-width: 640px) {
@@ -120,10 +167,9 @@
     </ul>
   </nav>
 
-  <div id="overlay" class="fixed inset-0 bg-black/50 z-45 hidden"></div>
+  <div id="overlay"></div>
 
   <main class="pt-14 pb-8 min-h-screen">
-    <!-- Убраны блоки с поиском и выбором жанра -->
     <div id="catalogSection">
       <h2 id="mainListTitle" class="text-xl font-bold mb-2"></h2>
       <div id="gamesList" class="space-y-4 mb-4"></div>
@@ -133,18 +179,13 @@
     </div>
   </main>
 
-  <div id="gameModal">
+  <div id="gameModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" aria-describedby="modalDesc">
     <div class="modalContent">
-      <div class="flex items-center gap-4 mb-4">
-        <img id="modalIcon" src="" alt="Icon" class="w-16 h-16 rounded-xl" />
-        <div>
-          <h3 id="modalTitle" class="text-xl font-bold"></h3>
-          <p id="modalDesc" class="text-sm text-gray-300"></p>
-        </div>
-      </div>
-      <div id="modalScreenshots" class="mb-4 space-y-2"></div>
-      <a id="modalDownload" href="#" target="_blank" class="block bg-purple-600 text-center py-2 rounded hover:bg-purple-800">Скачать</a>
-      <button onclick="closeModal()" class="mt-4 w-full text-sm text-gray-400">Закрыть</button>
+      <img id="modalIcon" src="" alt="Иконка игры" />
+      <h3 id="modalTitle"></h3>
+      <p class="version" id="modalVersion"></p>
+      <a id="modalDownload" href="#" target="_blank" rel="noopener noreferrer" download>Download</a>
+      <button class="closeBtn" onclick="closeModal()">Закрыть</button>
     </div>
   </div>
 
