@@ -1,37 +1,18 @@
 [
   {
-    "id": "a1",
-    "title": "PhotoMaster Pro",
-    "icon": "https://i.imgur.com/y6TcP7S.png",
-    "version": "6.7.2",
-    "downloadUrl": "https://example.com/download/photomasterpro.ipa"
+    "name": "Youtube",
+    "description": "Premium unlocked",
+    "icon": "https://is5-ssl.mzstatic.com/image/thumb/Purple126/v4/3a/e1/ae/3ae1ae25-0f02-5196-eebb-37d2717cbf4b/AppIcon-0-1x_U007emarketing-0-0-85-220.png/460x0w.webp",
+    "version": "20.21.6",
+    "download": "https://example.com/download-subway-surfers",
+    "genre": "Arcade"
   },
   {
-    "id": "a2",
-    "title": "MusicBox",
-    "icon": "https://i.imgur.com/IGzNTSQ.png",
-    "version": "3.2.0",
-    "downloadUrl": "https://example.com/download/musicbox.ipa"
-  },
-  {
-    "id": "a3",
-    "title": "FitnessPal",
-    "icon": "https://i.imgur.com/kDTIK0U.png",
-    "version": "4.8.6",
-    "downloadUrl": "https://example.com/download/fitnesspal.ipa"
-  },
-  {
-    "id": "a4",
-    "title": "Travel Guide",
-    "icon": "https://i.imgur.com/yQ0c6dz.png",
-    "version": "2.1.5",
-    "downloadUrl": "https://example.com/download/travelguide.ipa"
-  },
-  {
-    "id": "a5",
-    "title": "Notes Plus",
-    "icon": "https://i.imgur.com/8OrKl4R.png",
-    "version": "5.4.3",
-    "downloadUrl": "https://example.com/download/notesplus.ipa"
+    "name": "Monument Valley",
+    "description": "Головоломка с архитектур...",
+    "version": "2.4.5",
+    "download": "https://example.com/download-monument-valley",
+    "icon": "...",
+    "genre": "Puzzle"
   }
 ]
