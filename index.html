@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -27,7 +26,6 @@
       min-height: 100vh;
       font-family: 'Inter', sans-serif;
     }
-
     #loader {
       position: fixed;
       inset: 0;
@@ -38,18 +36,9 @@
       z-index: 9998;
       font-size: 1.2rem;
     }
-
-    #sideMenu {
-      transition: left 0.3s ease;
-    }
-
-    #sideMenu.open {
-      left: 0;
-    }
-
-    #gameModal.show {
-      display: flex;
-    }
+    #sideMenu { transition: left 0.3s ease; }
+    #sideMenu.open { left: 0; }
+    #gameModal.show { display: flex; }
   </style>
 </head>
 <body class="text-white font-sans max-w-screen-sm mx-auto p-0 relative">
@@ -69,12 +58,8 @@
     <button id="menuClose" class="text-white text-2xl mb-6">×</button>
     <h2 class="text-xl font-bold mb-4">Main</h2>
     <ul class="space-y-4">
-      <li>
-        <button data-catalog="games" class="menuItem w-full text-left py-2 px-3 rounded hover:bg-purple-700">🎮 All Games</button>
-      </li>
-      <li>
-        <button data-catalog="apps" class="menuItem w-full text-left py-2 px-3 rounded hover:bg-purple-700">📱 All Apps</button>
-      </li>
+      <li><button data-catalog="games" class="menuItem w-full text-left py-2 px-3 rounded hover:bg-purple-700">🎮 All Games</button></li>
+      <li><button data-catalog="apps" class="menuItem w-full text-left py-2 px-3 rounded hover:bg-purple-700">📱 All Apps</button></li>
     </ul>
   </nav>
 
@@ -83,12 +68,7 @@
   <main class="pt-16 pb-8 min-h-screen px-4">
     <div id="catalogSection">
       <h2 id="mainListTitle" class="text-xl font-bold mb-2"></h2>
-      <input
-        id="searchInput"
-        type="text"
-        placeholder="🔍 Search by name..."
-        class="w-full mb-4 px-4 py-2 rounded bg-[rgba(255,255,255,0.05)] text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-600 hidden"
-      />
+      <input id="searchInput" type="text" placeholder="🔍 Search by name..." class="w-full mb-4 px-4 py-2 rounded bg-[rgba(255,255,255,0.05)] text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-600 hidden" />
       <div id="gamesList" class="space-y-4 mb-4"></div>
       <div id="showMoreContainer" class="text-center">
         <button id="showMoreBtn" class="hidden px-4 py-2 bg-purple-700 rounded hover:bg-purple-900">Show More</button>
@@ -103,7 +83,7 @@
         <div>
           <h3 id="modalTitle" class="text-xl font-bold"></h3>
           <p id="modalDesc" class="text-sm text-gray-300"></p>
-<p id="modalDownloads" class="text-xs text-gray-400 mt-2">⬇️ Downloads: 0</p>
+          <p id="modalDownloads" class="text-xs text-gray-400 mt-1">⬇️ Downloads: 0</p>
         </div>
       </div>
       <a id="modalDownload" href="#" target="_blank" class="block bg-purple-600 text-center py-2 rounded hover:bg-purple-800">Download</a>
@@ -111,34 +91,8 @@
     </div>
   </div>
 
-  <!-- Chat Button -->
-  <button id="chatButton" class="fixed bottom-4 right-4 z-50 bg-purple-700 hover:bg-purple-900 text-white px-4 py-2 rounded-full shadow-lg">
-    💬 Chat
-  </button>
+  <button id="chatButton" class="fixed bottom-4 right-4 z-50 bg-purple-700 hover:bg-purple-900 text-white px-4 py-2 rounded-full shadow-lg">💬 Chat</button>
 
-  <!-- Chat Modal -->
-  <div id="chatModal" class="fixed bottom-20 right-4 bg-[rgba(40,0,90,0.95)] rounded-xl p-4 w-80 max-h-[70vh] overflow-y-auto text-white z-50 hidden shadow-lg">
-    <div id="nicknamePrompt">
-      <p class="mb-2">Enter nickname:</p>
-      <input id="nicknameInput" type="text" class="w-full mb-2 px-2 py-1 text-black rounded" placeholder="Your nickname" />
-      <button id="saveNickname" class="w-full bg-purple-600 hover:bg-purple-800 py-1 rounded">Save</button>
-    </div>
-    <div id="chatMain" class="hidden">
-      <div class="flex justify-between items-center text-sm text-purple-300 mb-2">
-        <span id="currentNickname"></span>
-        <button id="changeNickname" class="text-xs text-gray-400 hover:text-white">Change nickname</button>
-      </div>
-      <div id="chatMessages" class="mb-2 max-h-48 overflow-y-auto text-sm pr-2"></div>
-      <form id="chatForm" class="flex gap-2">
-        <input id="chatInput" type="text" placeholder="Message..." class="flex-1 px-2 py-1 text-black rounded" />
-        <button class="bg-purple-600 hover:bg-purple-800 px-3 rounded">→</button>
-      </form>
-      <div id="onlineCounter" class="mt-2 text-xs text-gray-400"></div>
-    </div>
-  </div>
-
-  <footer class="mt-8 text-center text-gray-400 text-sm pb-4">
-    &copy; 2025 iOS Game Zone
-  </footer>
+  <footer class="mt-8 text-center text-gray-400 text-sm pb-4">&copy; 2025 iOS Game Zone</footer>
 </body>
 </html>
