@@ -89,7 +89,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (modalTitle.textContent && downloadsData[modalTitle.textContent]) {
         const count = downloadsData[modalTitle.textContent];
-        modalDesc.innerHTML += `<br/><span class='text-purple-300 text-sm'>⬇️ Downloads: ${count}</span>`;
+        document.getElementById("modalDownloadCount").textContent = `⬇️ Downloads: ${count}`;
       }
     });
   }
