@@ -11,13 +11,11 @@ document.addEventListener("DOMContentLoaded", () => {
   const modalDownload = document.getElementById("modalDownload");
   const modalIcon = document.getElementById("modalIcon");
   const loader = document.getElementById("loader");
-  const searchInput = document.getElementById("searchInput");
 
   const menuItems = document.querySelectorAll(".menuItem");
 
   let gamesData = [];
   let appsData = [];
-  let currentItems = [];  // текущий массив для отображения (игры или приложения)
 
   async function loadJSON(url) {
     try {
@@ -43,7 +41,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function openModal(item) {
-    modalTitle.textContent = `${item.name}${item.version ? ` — Version ${item.version}` : ""}`;
+    modalTitle.textContent = ${item.name}${item.version ?  — Version ${item.version} : ""};
     modalDesc.textContent = item.description || "Нет описания";
     modalIcon.src = item.icon || "";
     modalIcon.alt = item.name || "";
@@ -70,20 +68,31 @@ document.addEventListener("DOMContentLoaded", () => {
     closeModal();
   });
 
-  // Отрисовка списка элементов
+  menuItems.forEach((btn) => {
+    btn.addEventListener("click", async () => {
+      closeMenu();
+      const type = btn.dataset.catalog;
+      const items = type === "games" ? gamesData : appsData;
+      mainListTitle.textContent = type === "games" ? "Games" : "Apps";
+      renderList(items);
+    });
+  });
+
+  function formatDate(isoString) {
+    if (!isoString) return "Дата не указана";
+    const date = new Date(isoString);
+    return Changed: ${date.toLocaleDateString()} ${date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })};
+  }
+
   function renderList(items) {
     gamesList.innerHTML = "";
-    if (items.length === 0) {
-      gamesList.innerHTML = '<p class="text-center text-gray-400">Ничего не найдено</p>';
-      return;
-    }
     items.forEach((item) => {
       const card = document.createElement("div");
       card.className = "bg-[rgba(255,255,255,0.05)] p-4 rounded shadow hover:bg-purple-800 cursor-pointer transition";
 
       const lastModifiedText = formatDate(item.lastModified);
 
-      card.innerHTML = `
+      card.innerHTML = 
         <div class="flex items-center gap-4">
           <img src="${item.icon}" alt="${item.name}" class="w-12 h-12 rounded" />
           <div>
@@ -91,61 +100,12 @@ document.addEventListener("DOMContentLoaded", () => {
             <p class="text-sm text-gray-300">${lastModifiedText}</p>
           </div>
         </div>
-      `;
+      ;
 
       card.addEventListener("click", () => openModal(item));
       gamesList.appendChild(card);
     });
   }
 
-  function formatDate(dateString) {
-    if (!dateString) return "";
-    const d = new Date(dateString);
-    return `Обновлено: ${d.toLocaleDateString("ru-RU", { day: "2-digit", month: "short", year: "numeric" })}`;
-  }
-
-  // Фильтрация текущего списка по поисковому запросу
-  function filterList(query) {
-    const q = query.trim().toLowerCase();
-    if (!q) {
-      renderList(currentItems);
-      return;
-    }
-    const filtered = currentItems.filter(item => item.name.toLowerCase().includes(q));
-    renderList(filtered);
-  }
-
-  // При выборе меню — загрузка нужных данных и показ поиска для games и apps
-  menuItems.forEach(btn => {
-    btn.addEventListener("click", () => {
-      const catalog = btn.dataset.catalog;
-      closeMenu();
-      searchInput.value = "";
-
-      if (catalog === "games") {
-        mainListTitle.textContent = "Все игры";
-        currentItems = gamesData;
-        searchInput.classList.remove("hidden");
-      } else if (catalog === "apps") {
-        mainListTitle.textContent = "Все приложения";
-        currentItems = appsData;
-        searchInput.classList.remove("hidden");
-      } else {
-        // Если другие разделы появятся, можно добавить сюда логику
-        mainListTitle.textContent = "";
-        currentItems = [];
-        searchInput.classList.add("hidden");
-      }
-
-      renderList(currentItems);
-    });
-  });
-
-  // Поиск по названию
-  searchInput.addEventListener("input", (e) => {
-    filterList(e.target.value);
-  });
-
-  // Загрузка данных при старте
   loadData();
 });
