@@ -1,5 +1,5 @@
 [
- {
+  {
     "name": "Spotify",
     "description": "No ads + region unlocked",
     "icon": "https://github.com/iPAGroove/iPAGroove/blob/main/Spotify.JPG?raw=true",
@@ -25,5 +25,5 @@
     "icon": "https://github.com/iPAGroove/iPAGroove/blob/main/ytmusic.JPG?raw=true",
     "genre": "Apps",
     "lastModified": "2025-06-06T00:00:00Z"
-  },
+  }
 ]
