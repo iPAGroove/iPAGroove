@@ -1,19 +1,20 @@
 [
   {
-  "name": "Good Pizza",
-  "description": "- Unlimited Cash\n- Unlimited Diamonds\n- Unlimited Pizza Pass Claim",
-  "icon": "https://github.com/iPAGroove/iPAGroove/blob/main/good%20pizza.jpeg?raw=true",
-  "version": "5.30.0",
-  "download": "https://vhistoretg.s3.eu-north-1.amazonaws.com/Good+Pizza+_5.30.0_1749157444.ipa",
-  "genre": "Games"
-  "lastModified": "2025-06-05T14:30:00Z"
-},
+    "name": "Good Pizza",
+    "description": "- Unlimited Cash\n- Unlimited Diamonds\n- Unlimited Pizza Pass Claim",
+    "icon": "https://github.com/iPAGroove/iPAGroove/blob/main/good%20pizza.jpeg?raw=true",
+    "version": "5.30.0",
+    "download": "https://vhistoretg.s3.eu-north-1.amazonaws.com/Good+Pizza+_5.30.0_1749157444.ipa",
+    "genre": "Games",
+    "lastModified": "2025-06-06T00:00:00Z"
+  },
   {
     "name": "Hunt Royale",
     "description": "- Dumb Enemies",
     "version": "3.8.0",
     "download": "https://vhistoretg.s3.eu-north-1.amazonaws.com/Hunt+Royale+_3.8.0_1749158095.ipa",
     "icon": "https://github.com/iPAGroove/iPAGroove/blob/main/Hunt%20Royale.JPG?raw=true",
-    "genre": "Games"
+    "genre": "Games",
+    "lastModified": "2025-06-06T00:00:00Z"
   }
 ]
