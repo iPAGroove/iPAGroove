@@ -1,132 +1,143 @@
 
-// Firebase SDK
-import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
-import {
-  getDatabase, ref, push, onChildAdded, set, onValue
-} from "https://www.gstatic.com/firebasejs/9.22.2/firebase-database.js";
-
-// Firebase config
-const firebaseConfig = {
-  apiKey: "AIzaSyBizq_3JJXWgUa-aaW8MKj6AV0Jt_-XYcI",
-  authDomain: "ipa-chat.firebaseapp.com",
-  databaseURL: "https://ipa-chat-default-rtdb.firebaseio.com",
-  projectId: "ipa-chat",
-  storageBucket: "ipa-chat.firebasestorage.app",
-  messagingSenderId: "534978415110",
-  appId: "1:534978415110:web:a40838ef597b6d0ff09187",
-  measurementId: "G-H2T6L8VZPG"
-};
-
-// Init Firebase
-const app = initializeApp(firebaseConfig);
-const db = getDatabase(app);
-
-// UI Elements
-const chatBtn = document.getElementById("chatButton");
-const chatModal = document.getElementById("chatModal");
-const chatMessages = document.getElementById("chatMessages");
-const chatForm = document.getElementById("chatForm");
-const chatInput = document.getElementById("chatInput");
-const nickInput = document.getElementById("nicknameInput");
-const saveNickBtn = document.getElementById("saveNickname");
-const currentNickLabel = document.getElementById("currentNickname");
-const changeNickBtn = document.getElementById("changeNickname");
-const onlineCounter = document.getElementById("onlineCounter");
-
-let nickname = localStorage.getItem("nickname");
-
-// Обновление ника в интерфейсе
-function updateNicknameUI() {
-  if (nickname) {
-    currentNickLabel.textContent = `Вы: ${nickname}`;
-  }
-}
-
-// Обновление присутствия в онлайне
-function updatePresence() {
-  if (!nickname) return;
-  const presenceRef = ref(db, `presence/${nickname}`);
-  set(presenceRef, { online: true, ts: Date.now() });
-
-  setInterval(() => {
-    set(presenceRef, { online: true, ts: Date.now() });
-  }, 15000);
-}
-
-// Проверка ника при загрузке страницы
-window.addEventListener("DOMContentLoaded", () => {
-  if (nickname) {
-    document.getElementById("nicknamePrompt").classList.add("hidden");
-    document.getElementById("chatMain").classList.remove("hidden");
-    updateNicknameUI();
-    updatePresence();
-  }
-});
-
-chatBtn.addEventListener("click", () => {
-  chatModal.classList.toggle("hidden");
-
-  if (!nickname) {
-    document.getElementById("nicknamePrompt").classList.remove("hidden");
-    document.getElementById("chatMain").classList.add("hidden");
-  } else {
-    document.getElementById("nicknamePrompt").classList.add("hidden");
-    document.getElementById("chatMain").classList.remove("hidden");
-    updateNicknameUI();
-    updatePresence();
-  }
-});
-
-saveNickBtn.addEventListener("click", () => {
-  const nick = nickInput.value.trim();
-  if (nick) {
-    nickname = nick;
-    localStorage.setItem("nickname", nickname);
-    document.getElementById("nicknamePrompt").classList.add("hidden");
-    document.getElementById("chatMain").classList.remove("hidden");
-    updateNicknameUI();
-    updatePresence();
-  }
-});
-
-changeNickBtn.addEventListener("click", () => {
-  localStorage.removeItem("nickname");
-  nickname = null;
-  document.getElementById("nicknamePrompt").classList.remove("hidden");
-  document.getElementById("chatMain").classList.add("hidden");
-});
-
-chatForm.addEventListener("submit", (e) => {
-  e.preventDefault();
-  const message = chatInput.value.trim();
-  if (message && nickname) {
-    push(ref(db, "messages"), {
-      name: nickname,
-      text: message,
-      time: Date.now()
-    });
-    chatInput.value = "";
-  }
-});
-
-onChildAdded(ref(db, "messages"), (data) => {
-  const msg = data.val();
-  const div = document.createElement("div");
-  div.className = "mb-2";
-  div.innerHTML = `<strong>${msg.name}:</strong> ${msg.text}`;
-  chatMessages.appendChild(div);
-  chatMessages.scrollTop = chatMessages.scrollHeight;
-});
-
-// Онлайн-счётчик
-onValue(ref(db, "presence"), (snapshot) => {
-  const users = snapshot.val();
-  const now = Date.now();
-  let onlineCount = 0;
-  for (const key in users) {
-    if (users[key].ts && now - users[key].ts < 30000) {
-      onlineCount++;
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>iOS Game & App Catalog — App Store Style</title>
+  <script defer src="script.js"></script>
+  <script type="module" src="chat.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#6e1cff',
+            dark: '#23004d',
+            overlay: 'rgba(0,0,0,0.7)'
+          },
+        }
+      }
+    };
+  </script>
+  <style>
+    body {
+      background: linear-gradient(135deg, #3b006d, #6e1cff, #23004d);
+      min-height: 100vh;
+      font-family: 'Inter', sans-serif;
     }
-  }
-  onlineCounter.textContent = `🟢 Онлайн: ${onlineCount}`;
-});
+
+    #loader {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.8);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 9998;
+      font-size: 1.2rem;
+    }
+
+    #sideMenu {
+      transition: left 0.3s ease;
+    }
+
+    #sideMenu.open {
+      left: 0;
+    }
+
+    #gameModal.show {
+      display: flex;
+    }
+  </style>
+</head>
+<body class="text-white font-sans max-w-screen-sm mx-auto p-0 relative">
+
+  <div id="loader" class="flex">Loading data...</div>
+
+  <header class="flex items-center justify-between px-4 py-2 fixed w-full top-0 left-0 z-40 backdrop-blur-md bg-[rgba(20,0,40,0.6)] border-b border-purple-500/30 shadow-md">
+    <button id="menuToggle" aria-label="Open menu" class="text-white text-2xl p-1">☰</button>
+    <h1 id="siteTitle" class="cursor-pointer text-lg font-extrabold text-white flex items-center gap-3 hover:text-purple-300 transition" style="text-shadow: 0 0 8px rgba(110,28,255,0.9);">
+      <img src="https://github.com/iPAGroove/iPAGroove/blob/main/IMG_5539.PNG?raw=true" alt="Logo" class="w-7 h-7 rounded shadow-md" />
+      iPA Groove
+    </h1>
+    <div style="width: 32px;"></div>
+  </header>
+
+  <nav id="sideMenu" class="fixed top-0 left-[-300px] h-full w-[280px] bg-[rgba(40,0,90,0.95)] p-6 z-50 overflow-y-auto">
+    <button id="menuClose" class="text-white text-2xl mb-6">×</button>
+    <h2 class="text-xl font-bold mb-4">Main</h2>
+    <ul class="space-y-4">
+      <li>
+        <button data-catalog="games" class="menuItem w-full text-left py-2 px-3 rounded hover:bg-purple-700">🎮 All Games</button>
+      </li>
+      <li>
+        <button data-catalog="apps" class="menuItem w-full text-left py-2 px-3 rounded hover:bg-purple-700">📱 All Apps</button>
+      </li>
+    </ul>
+  </nav>
+
+  <div id="overlay" class="fixed inset-0 bg-black/50 z-40 hidden"></div>
+
+  <main class="pt-16 pb-8 min-h-screen px-4">
+    <div id="catalogSection">
+      <h2 id="mainListTitle" class="text-xl font-bold mb-2"></h2>
+      <input
+        id="searchInput"
+        type="text"
+        placeholder="🔍 Найти по названию..."
+        class="w-full mb-4 px-4 py-2 rounded bg-[rgba(255,255,255,0.05)] text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-600 hidden"
+      />
+      <div id="gamesList" class="space-y-4 mb-4"></div>
+      <div id="showMoreContainer" class="text-center">
+        <button id="showMoreBtn" class="hidden px-4 py-2 bg-purple-700 rounded hover:bg-purple-900">Show More</button>
+      </div>
+    </div>
+  </main>
+
+  <div id="gameModal" class="fixed inset-0 hidden bg-overlay backdrop-blur-sm z-50 items-end justify-center p-4">
+    <div class="modalContent bg-[rgba(40,0,90,0.95)] rounded-xl p-4 w-full max-w-md max-h-[90vh] overflow-y-auto">
+      <div class="flex items-center gap-4 mb-4">
+        <img id="modalIcon" src="" alt="Icon" class="w-16 h-16 rounded-xl" />
+        <div>
+          <h3 id="modalTitle" class="text-xl font-bold"></h3>
+          <p id="modalDesc" class="text-sm text-gray-300"></p>
+        </div>
+      </div>
+      <a id="modalDownload" href="#" target="_blank" class="block bg-purple-600 text-center py-2 rounded hover:bg-purple-800">Download</a>
+      <button onclick="closeModal()" class="mt-4 w-full text-sm text-gray-400">Close</button>
+    </div>
+  </div>
+
+  <!-- Кнопка чата -->
+  <button id="chatButton" class="fixed bottom-4 right-4 z-50 bg-purple-700 hover:bg-purple-900 text-white px-4 py-2 rounded-full shadow-lg">
+    💬 Chat
+  </button>
+
+  <!-- Модальное окно чата -->
+  <div id="chatModal" class="fixed bottom-20 right-4 bg-[rgba(40,0,90,0.95)] rounded-xl p-4 w-80 max-h-[70vh] overflow-y-auto text-white z-50 hidden shadow-lg">
+    <div id="nicknamePrompt">
+      <p class="mb-2">Enter nickname:</p>
+      <input id="nicknameInput" type="text" class="w-full mb-2 px-2 py-1 text-black rounded" placeholder="Your nickname" />
+      <button id="saveNickname" class="w-full bg-purple-600 hover:bg-purple-800 py-1 rounded">Save</button>
+    </div>
+    <div id="chatMain" class="hidden">
+      <div class="flex justify-between items-center text-sm text-purple-300 mb-2">
+        <span id="currentNickname"></span>
+        <button id="changeNickname" class="text-xs text-gray-400 hover:text-white">Change nickname</button>
+      </div>
+      <div id="chatMessages" class="mb-2 max-h-48 overflow-y-auto text-sm pr-2"></div>
+      <form id="chatForm" class="flex gap-2">
+        <input id="chatInput" type="text" placeholder="Message..." class="flex-1 px-2 py-1 text-black rounded" />
+        <button class="bg-purple-600 hover:bg-purple-800 px-3 rounded">→</button>
+      </form>
+      <div id="onlineCounter" class="mt-2 text-xs text-gray-400"></div>
+    </div>
+  </div>
+
+  <footer class="mt-8 text-center text-gray-400 text-sm pb-4">
+    &copy; 2025 iOS Game Zone
+  </footer>
+</body>
+</html>
