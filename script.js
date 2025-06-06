@@ -1,3 +1,4 @@
+
 document.addEventListener("DOMContentLoaded", () => {
   const menuToggle = document.getElementById("menuToggle");
   const menuClose = document.getElementById("menuClose");
@@ -11,6 +12,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const modalDownload = document.getElementById("modalDownload");
   const modalIcon = document.getElementById("modalIcon");
   const loader = document.getElementById("loader");
+  const searchInput = document.getElementById("searchInput");
 
   const menuItems = document.querySelectorAll(".menuItem");
 
@@ -74,7 +76,15 @@ document.addEventListener("DOMContentLoaded", () => {
       const type = btn.dataset.catalog;
       const items = type === "games" ? gamesData : appsData;
       mainListTitle.textContent = type === "games" ? "Games" : "Apps";
+      searchInput.classList.remove("hidden");
+      searchInput.value = "";
       renderList(items);
+
+      searchInput.oninput = () => {
+        const keyword = searchInput.value.toLowerCase();
+        const filtered = items.filter(i => i.name.toLowerCase().includes(keyword));
+        renderList(filtered);
+      };
     });
   });
 
