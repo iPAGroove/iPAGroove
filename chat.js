@@ -1,7 +1,9 @@
 
 // Firebase SDK
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
-import { getDatabase, ref, push, onChildAdded } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-database.js";
+import {
+  getDatabase, ref, push, onChildAdded, set, onValue, serverTimestamp
+} from "https://www.gstatic.com/firebasejs/9.22.2/firebase-database.js";
 
 // Firebase config
 const firebaseConfig = {
@@ -15,11 +17,11 @@ const firebaseConfig = {
   measurementId: "G-H2T6L8VZPG"
 };
 
-// Инициализация Firebase
+// Init Firebase
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
-// Логика чата
+// UI Elements
 const chatBtn = document.getElementById("chatButton");
 const chatModal = document.getElementById("chatModal");
 const chatMessages = document.getElementById("chatMessages");
@@ -27,19 +29,39 @@ const chatForm = document.getElementById("chatForm");
 const chatInput = document.getElementById("chatInput");
 const nickInput = document.getElementById("nicknameInput");
 const saveNickBtn = document.getElementById("saveNickname");
+const currentNickLabel = document.getElementById("currentNickname");
+const changeNickBtn = document.getElementById("changeNickname");
+const onlineCounter = document.getElementById("onlineCounter");
 
 let nickname = localStorage.getItem("nickname");
+
+function updateNicknameUI() {
+  if (nickname) {
+    currentNickLabel.textContent = `Вы: ${nickname}`;
+  }
+}
+
+function updatePresence() {
+  if (!nickname) return;
+  const presenceRef = ref(db, `presence/${nickname}`);
+  set(presenceRef, { online: true, ts: Date.now() });
+
+  setInterval(() => {
+    set(presenceRef, { online: true, ts: Date.now() });
+  }, 15000);
+}
 
 chatBtn.addEventListener("click", () => {
   chatModal.classList.toggle("hidden");
 
-  // Показываем только один раз, если ника нет
   if (!nickname) {
     document.getElementById("nicknamePrompt").classList.remove("hidden");
     document.getElementById("chatMain").classList.add("hidden");
   } else {
     document.getElementById("nicknamePrompt").classList.add("hidden");
     document.getElementById("chatMain").classList.remove("hidden");
+    updateNicknameUI();
+    updatePresence();
   }
 });
 
@@ -50,7 +72,16 @@ saveNickBtn.addEventListener("click", () => {
     localStorage.setItem("nickname", nickname);
     document.getElementById("nicknamePrompt").classList.add("hidden");
     document.getElementById("chatMain").classList.remove("hidden");
+    updateNicknameUI();
+    updatePresence();
   }
+});
+
+changeNickBtn.addEventListener("click", () => {
+  localStorage.removeItem("nickname");
+  nickname = null;
+  document.getElementById("nicknamePrompt").classList.remove("hidden");
+  document.getElementById("chatMain").classList.add("hidden");
 });
 
 chatForm.addEventListener("submit", (e) => {
@@ -73,4 +104,17 @@ onChildAdded(ref(db, "messages"), (data) => {
   div.innerHTML = `<strong>${msg.name}:</strong> ${msg.text}`;
   chatMessages.appendChild(div);
   chatMessages.scrollTop = chatMessages.scrollHeight;
+});
+
+// Обновление онлайн-статуса
+onValue(ref(db, "presence"), (snapshot) => {
+  const users = snapshot.val();
+  const now = Date.now();
+  let onlineCount = 0;
+  for (const key in users) {
+    if (users[key].ts && now - users[key].ts < 30000) {
+      onlineCount++;
+    }
+  }
+  onlineCounter.textContent = `🟢 Онлайн: ${onlineCount}`;
 });
