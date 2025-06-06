@@ -81,7 +81,7 @@ document.addEventListener("DOMContentLoaded", () => {
   function formatDate(isoString) {
     if (!isoString) return "Дата не указана";
     const date = new Date(isoString);
-    return `Изменено: ${date.toLocaleDateString()} ${date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
+    return `Changed: ${date.toLocaleDateString()} ${date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
   }
 
   function renderList(items) {
