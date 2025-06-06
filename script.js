@@ -1,4 +1,23 @@
 
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
+import {
+  getDatabase, ref, onValue, runTransaction
+} from "https://www.gstatic.com/firebasejs/9.22.2/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBizq_3JJXWgUa-aaW8MKj6AV0Jt_-XYcI",
+  authDomain: "ipa-chat.firebaseapp.com",
+  databaseURL: "https://ipa-chat-default-rtdb.firebaseio.com",
+  projectId: "ipa-chat",
+  storageBucket: "ipa-chat.firebasestorage.app",
+  messagingSenderId: "534978415110",
+  appId: "1:534978415110:web:a40838ef597b6d0ff09187",
+  measurementId: "G-H2T6L8VZPG"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
 document.addEventListener("DOMContentLoaded", () => {
   const menuToggle = document.getElementById("menuToggle");
   const menuClose = document.getElementById("menuClose");
@@ -14,116 +33,128 @@ document.addEventListener("DOMContentLoaded", () => {
   const loader = document.getElementById("loader");
   const searchInput = document.getElementById("searchInput");
 
-  const menuItems = document.querySelectorAll(".menuItem");
-
   let gamesData = [];
   let appsData = [];
+  let currentCatalog = "games";
+  let downloadsData = {};
 
   async function loadJSON(url) {
-    try {
-      const response = await fetch(url);
-      if (!response.ok) throw new Error("Ошибка загрузки " + url);
-      return await response.json();
-    } catch (e) {
-      console.error(e);
-      return [];
-    }
+    const response = await fetch(url);
+    if (!response.ok) throw new Error("Load error: " + url);
+    return await response.json();
   }
 
-  async function loadData() {
-    loader.style.display = "flex";
-    gamesData = await loadJSON("games.json");
-    appsData = await loadJSON("apps.json");
-    loader.style.display = "none";
+  function renderList(data) {
+    gamesList.innerHTML = "";
+    data.forEach(item => {
+      const card = document.createElement("div");
+      card.className = "bg-[rgba(255,255,255,0.05)] rounded-lg p-4 flex gap-4 items-center";
+      card.innerHTML = `
+        <img src="${item.icon}" alt="${item.name}" class="w-16 h-16 rounded shadow" />
+        <div class="flex-1">
+          <h3 class="font-bold text-lg">${item.name}</h3>
+          <p class="text-sm text-gray-300">${item.version || ""}</p>
+          <p class="text-sm text-gray-400 downloads-count" data-title="${item.name}">⬇️ Downloads: ...</p>
+        </div>
+        <button class="bg-purple-600 hover:bg-purple-800 px-3 py-1 rounded" data-name="${item.name}" data-download="${item.download}" data-desc="${item.description}" data-icon="${item.icon}">Open</button>
+      `;
+      gamesList.appendChild(card);
+    });
+
+    updateDownloadCounts();
+
+    gamesList.querySelectorAll("button").forEach(btn => {
+      btn.addEventListener("click", () => {
+        modalTitle.textContent = btn.dataset.name;
+        modalDesc.textContent = btn.dataset.desc;
+        modalIcon.src = btn.dataset.icon;
+        modalDownload.href = btn.dataset.download;
+        gameModal.classList.add("show");
+
+        const itemName = btn.dataset.name;
+        incrementDownloadCount(itemName);
+      });
+    });
   }
 
-  function closeMenu() {
-    sideMenu.classList.remove("open");
-    overlay.classList.add("hidden");
+  async function updateDownloadCounts() {
+    const snapshotRef = ref(db, "downloads");
+    onValue(snapshotRef, (snapshot) => {
+      downloadsData = snapshot.val() || {};
+      document.querySelectorAll(".downloads-count").forEach(el => {
+        const title = el.dataset.title;
+        const count = downloadsData[title] || 0;
+        el.textContent = `⬇️ Downloads: ${count}`;
+      });
+
+      if (modalTitle.textContent && downloadsData[modalTitle.textContent]) {
+        const count = downloadsData[modalTitle.textContent];
+        modalDesc.innerHTML += `<br/><span class='text-purple-300 text-sm'>⬇️ Downloads: ${count}</span>`;
+      }
+    });
   }
 
-  function openModal(item) {
-    modalTitle.textContent = item.name + (item.version ? ` — Version ${item.version}` : "");
-    modalDesc.textContent = item.description || "Нет описания";
-    modalIcon.src = item.icon || "";
-    modalIcon.alt = item.name || "";
-    modalDownload.href = item.download || "#";
-    modalDownload.style.display = item.download ? "block" : "none";
-
-    gameModal.classList.add("show");
-    overlay.classList.remove("hidden");
+  function incrementDownloadCount(title) {
+    const countRef = ref(db, `downloads/${title}`);
+    runTransaction(countRef, (current) => (current || 0) + 1);
   }
 
-  window.closeModal = function () {
-    gameModal.classList.remove("show");
-    overlay.classList.add("hidden");
-  };
+  document.getElementById("siteTitle").addEventListener("click", () => location.reload());
 
   menuToggle.addEventListener("click", () => {
     sideMenu.classList.add("open");
     overlay.classList.remove("hidden");
   });
 
-  menuClose.addEventListener("click", closeMenu);
+  menuClose.addEventListener("click", () => {
+    sideMenu.classList.remove("open");
+    overlay.classList.add("hidden");
+  });
+
   overlay.addEventListener("click", () => {
-    closeMenu();
-    closeModal();
+    sideMenu.classList.remove("open");
+    overlay.classList.add("hidden");
   });
 
-  menuItems.forEach((btn) => {
+  document.querySelectorAll(".menuItem").forEach(btn => {
     btn.addEventListener("click", async () => {
-      closeMenu();
-      const type = btn.dataset.catalog;
-      const items = type === "games" ? gamesData : appsData;
-      mainListTitle.textContent = type === "games" ? "Games" : "Apps";
+      currentCatalog = btn.dataset.catalog;
+      mainListTitle.textContent = currentCatalog === "games" ? "All Games" : "All Apps";
       searchInput.classList.remove("hidden");
-      searchInput.value = "";
-      renderList(items);
+      loader.style.display = "flex";
 
-      searchInput.oninput = () => {
-        const keyword = searchInput.value.toLowerCase();
-        const filtered = items.filter(i => i.name.toLowerCase().includes(keyword));
-        renderList(filtered);
-      };
+      try {
+        const data = await loadJSON(currentCatalog + ".json");
+        if (currentCatalog === "games") {
+          gamesData = data;
+        } else {
+          appsData = data;
+        }
+        renderList(data);
+      } catch (err) {
+        gamesList.innerHTML = "<p class='text-red-500'>Error loading data</p>";
+      }
+
+      loader.style.display = "none";
+      sideMenu.classList.remove("open");
+      overlay.classList.add("hidden");
     });
   });
 
-  function formatDate(isoString) {
-    if (!isoString) return "Дата не указана";
-    const date = new Date(isoString);
-    return `Changed: ${date.toLocaleDateString()} ${date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
-  }
+  searchInput.addEventListener("input", () => {
+    const value = searchInput.value.toLowerCase();
+    const filtered = (currentCatalog === "games" ? gamesData : appsData).filter(item =>
+      item.name.toLowerCase().includes(value)
+    );
+    renderList(filtered);
+  });
 
-  function renderList(items) {
-    gamesList.innerHTML = "";
-    items.forEach((item) => {
-      const card = document.createElement("div");
-      card.className = "bg-[rgba(255,255,255,0.05)] p-4 rounded shadow hover:bg-purple-800 cursor-pointer transition";
+  document.getElementById("showMoreBtn").addEventListener("click", () => {
+    renderList(currentCatalog === "games" ? gamesData : appsData);
+  });
 
-      const lastModifiedText = formatDate(item.lastModified);
-
-      card.innerHTML = `
-        <div class="flex items-center gap-4">
-          <img src="${item.icon}" alt="${item.name}" class="w-12 h-12 rounded" />
-          <div>
-            <h3 class="text-lg font-bold">${item.name}</h3>
-            <p class="text-sm text-gray-300">${lastModifiedText}</p>
-          </div>
-        </div>
-      `;
-
-      card.addEventListener("click", () => openModal(item));
-      gamesList.appendChild(card);
-    });
-  }
-
-  // 👇 Перезагрузка сайта при клике на заголовок iPA Groove
-  const siteTitle = document.getElementById("siteTitle");
-  if (siteTitle) {
-    siteTitle.addEventListener("click", () => {
-      window.location.reload();
-    });
-  }
-
-  loadData();
+  window.closeModal = function () {
+    gameModal.classList.remove("show");
+  };
 });
+
