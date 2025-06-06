@@ -48,19 +48,51 @@
     #gameModal.show {
       display: flex;
     }
+
+    /* Поиск */
+    #searchInput {
+      width: 100%;
+      max-width: 320px;
+      padding: 6px 12px;
+      border-radius: 8px;
+      border: none;
+      outline: none;
+      font-size: 1rem;
+      background: rgba(255,255,255,0.1);
+      color: white;
+      box-shadow: 0 0 6px rgba(110,28,255,0.7);
+      transition: background-color 0.3s ease;
+    }
+
+    #searchInput::placeholder {
+      color: #ccc;
+    }
+
+    #searchInput:focus {
+      background: rgba(110,28,255,0.3);
+    }
   </style>
 </head>
 <body class="text-white font-sans max-w-screen-sm mx-auto p-0 relative">
 
   <div id="loader" class="flex">Загрузка данных...</div>
 
-  <header class="flex items-center justify-between px-4 py-2 fixed w-full top-0 left-0 z-40 backdrop-blur-md bg-[rgba(20,0,40,0.6)] border-b border-purple-500/30 shadow-md">
-    <button id="menuToggle" aria-label="Открыть меню" class="text-white text-2xl p-1">☰</button>
-    <h1 class="text-lg font-extrabold text-white flex items-center gap-3" style="text-shadow: 0 0 8px rgba(110,28,255,0.9);">
-  <img src="https://github.com/iPAGroove/iPAGroove/blob/main/IMG_5539.PNG?raw=true" alt="Logo" class="w-7 h-7 rounded shadow-md" />
-  iPA Groove
-    </h1>
-    <div style="width: 32px;"></div>
+  <header class="flex flex-col items-center justify-between px-4 py-2 fixed w-full top-0 left-0 z-40 backdrop-blur-md bg-[rgba(20,0,40,0.6)] border-b border-purple-500/30 shadow-md">
+    <div class="w-full flex items-center justify-between mb-2">
+      <button id="menuToggle" aria-label="Открыть меню" class="text-white text-2xl p-1">☰</button>
+      <h1 class="text-lg font-extrabold text-white flex items-center gap-3" style="text-shadow: 0 0 8px rgba(110,28,255,0.9);">
+        <img src="https://github.com/iPAGroove/iPAGroove/blob/main/IMG_5539.PNG?raw=true" alt="Logo" class="w-7 h-7 rounded shadow-md" />
+        iPA Groove
+      </h1>
+      <div style="width: 32px;"></div>
+    </div>
+    <input
+      type="search"
+      id="searchInput"
+      placeholder="Поиск игр и приложений..."
+      autocomplete="off"
+      aria-label="Поиск по играм и приложениям"
+    />
   </header>
 
   <nav id="sideMenu" class="fixed top-0 left-[-300px] h-full w-[280px] bg-[rgba(40,0,90,0.95)] p-6 z-50 overflow-y-auto">
@@ -78,7 +110,7 @@
 
   <div id="overlay" class="fixed inset-0 bg-black/50 z-40 hidden"></div>
 
-  <main class="pt-16 pb-8 min-h-screen px-4">
+  <main class="pt-[108px] pb-8 min-h-screen px-4"> <!-- padding top увеличен из-за двухстрочного header -->
     <div id="catalogSection">
       <h2 id="mainListTitle" class="text-xl font-bold mb-2"></h2>
       <div id="gamesList" class="space-y-4 mb-4"></div>
@@ -94,7 +126,7 @@
         <img id="modalIcon" src="" alt="Icon" class="w-16 h-16 rounded-xl" />
         <div>
           <h3 id="modalTitle" class="text-xl font-bold"></h3>
-          <p id="modalDesc" class="text-sm text-gray-300"></p>
+          <p id="modalDesc" class="text-sm text-gray-300 whitespace-pre-wrap"></p>
         </div>
       </div>
       <div id="modalScreenshots" class="mb-4 space-y-2"></div>
