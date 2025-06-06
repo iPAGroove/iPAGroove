@@ -158,3 +158,39 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 });
 
+
+
+document.addEventListener("DOMContentLoaded", () => {
+  function updateDownloadCount(appName) {
+    const countRef = ref(db, 'downloads/' + appName);
+    runTransaction(countRef, (currentValue) => {
+      return (currentValue || 0) + 1;
+    });
+  }
+
+  function loadDownloadCount(appName, element) {
+    const countRef = ref(db, 'downloads/' + appName);
+    onValue(countRef, (snapshot) => {
+      const count = snapshot.val() || 0;
+      element.textContent = `⬇️ Downloads: ${count}`;
+    });
+  }
+
+  // Пример: вызов при клике на кнопку (внутри модалки)
+  const modalDownload = document.getElementById("modalDownload");
+  const modalDownloads = document.getElementById("modalDownloads");
+
+  if (modalDownload && modalDownloads) {
+    modalDownload.addEventListener("click", () => {
+      const name = document.getElementById("modalTitle").textContent.trim();
+      updateDownloadCount(name);
+    });
+  }
+
+  // Пример: вызов отображения счётчика при открытии модалки (зависит от твоей логики)
+  window.showDownloadsForModal = function(name) {
+    if (modalDownloads) {
+      loadDownloadCount(name, modalDownloads);
+    }
+  }
+});
