@@ -17,8 +17,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   let gamesData = [];
   let appsData = [];
-  let currentCategory = null; // "games" или "apps"
-  let isSearching = false;
+  let currentItems = [];  // текущий массив для отображения (игры или приложения)
 
   async function loadJSON(url) {
     try {
@@ -71,131 +70,82 @@ document.addEventListener("DOMContentLoaded", () => {
     closeModal();
   });
 
-  menuItems.forEach((btn) => {
-    btn.addEventListener("click", async () => {
-      closeMenu();
-      isSearching = false;
-      searchInput.value = "";
-      const type = btn.dataset.catalog;
-      currentCategory = type;
-      const items = type === "games" ? gamesData : appsData;
-      mainListTitle.textContent = type === "games" ? "🎮 Все игры" : "📱 Все приложения";
-      renderList(items);
-    });
-  });
-
+  // Отрисовка списка элементов
   function renderList(items) {
     gamesList.innerHTML = "";
-    if (!items.length) {
-      gamesList.innerHTML = "<p class='text-center text-gray-400'>Пусто</p>";
+    if (items.length === 0) {
+      gamesList.innerHTML = '<p class="text-center text-gray-400">Ничего не найдено</p>';
       return;
     }
-    items.forEach((item, idx) => {
+    items.forEach((item) => {
       const card = document.createElement("div");
-      card.className = "flex gap-4 p-3 rounded-lg bg-[rgba(110,28,255,0.3)] cursor-pointer hover:bg-purple-700 transition";
-      card.setAttribute("tabindex", "0");
-      card.setAttribute("role", "button");
-      card.setAttribute("aria-pressed", "false");
+      card.className = "bg-[rgba(255,255,255,0.05)] p-4 rounded shadow hover:bg-purple-800 cursor-pointer transition";
+
+      const lastModifiedText = formatDate(item.lastModified);
 
       card.innerHTML = `
-        <img src="${item.icon}" alt="${item.name}" class="w-16 h-16 rounded-xl flex-shrink-0 object-cover" />
-        <div class="flex flex-col justify-between">
-          <h3 class="text-lg font-semibold">${item.name}${item.version ? ` — ${item.version}` : ""}</h3>
-          <p class="text-gray-300 text-sm line-clamp-2">${item.description || ""}</p>
+        <div class="flex items-center gap-4">
+          <img src="${item.icon}" alt="${item.name}" class="w-12 h-12 rounded" />
+          <div>
+            <h3 class="text-lg font-bold">${item.name}</h3>
+            <p class="text-sm text-gray-300">${lastModifiedText}</p>
+          </div>
         </div>
       `;
+
       card.addEventListener("click", () => openModal(item));
-      card.addEventListener("keydown", (e) => {
-        if (e.key === "Enter" || e.key === " ") {
-          e.preventDefault();
-          openModal(item);
-        }
-      });
       gamesList.appendChild(card);
     });
   }
 
-  // Функция поиска по обоим спискам
-  function searchItems(query) {
-    if (!query) {
-      if (currentCategory) {
-        renderList(currentCategory === "games" ? gamesData : appsData);
-        mainListTitle.textContent = currentCategory === "games" ? "🎮 Все игры" : "📱 Все приложения";
+  function formatDate(dateString) {
+    if (!dateString) return "";
+    const d = new Date(dateString);
+    return `Обновлено: ${d.toLocaleDateString("ru-RU", { day: "2-digit", month: "short", year: "numeric" })}`;
+  }
+
+  // Фильтрация текущего списка по поисковому запросу
+  function filterList(query) {
+    const q = query.trim().toLowerCase();
+    if (!q) {
+      renderList(currentItems);
+      return;
+    }
+    const filtered = currentItems.filter(item => item.name.toLowerCase().includes(q));
+    renderList(filtered);
+  }
+
+  // При выборе меню — загрузка нужных данных и показ поиска для games и apps
+  menuItems.forEach(btn => {
+    btn.addEventListener("click", () => {
+      const catalog = btn.dataset.catalog;
+      closeMenu();
+      searchInput.value = "";
+
+      if (catalog === "games") {
+        mainListTitle.textContent = "Все игры";
+        currentItems = gamesData;
+        searchInput.classList.remove("hidden");
+      } else if (catalog === "apps") {
+        mainListTitle.textContent = "Все приложения";
+        currentItems = appsData;
+        searchInput.classList.remove("hidden");
       } else {
-        gamesList.innerHTML = "<p class='text-center text-gray-400'>Пожалуйста, выберите категорию или введите поиск</p>";
+        // Если другие разделы появятся, можно добавить сюда логику
         mainListTitle.textContent = "";
+        currentItems = [];
+        searchInput.classList.add("hidden");
       }
-      return;
-    }
 
-    const q = query.toLowerCase();
-    // Ищем в играх и приложениях
-    const results = [];
-
-    gamesData.forEach(item => {
-      if (item.name.toLowerCase().includes(q)) results.push({...item, _type:"game"});
+      renderList(currentItems);
     });
-    appsData.forEach(item => {
-      if (item.name.toLowerCase().includes(q)) results.push({...item, _type:"app"});
-    });
+  });
 
-    if (results.length) {
-      mainListTitle.textContent = `Результаты поиска: ${results.length} найдено`;
-      renderSearchResults(results);
-    } else {
-      mainListTitle.textContent = `Результаты поиска: ничего не найдено`;
-      gamesList.innerHTML = "<p class='text-center text-gray-400'>Совпадений нет.</p>";
-    }
-  }
-
-  function renderSearchResults(results) {
-    gamesList.innerHTML = "";
-    results.forEach(item => {
-      const card = document.createElement("div");
-      card.className = "flex gap-4 p-3 rounded-lg bg-[rgba(110,28,255,0.3)] cursor-pointer hover:bg-purple-700 transition";
-      card.setAttribute("tabindex", "0");
-      card.setAttribute("role", "button");
-      card.setAttribute("aria-pressed", "false");
-
-      const labelEmoji = item._type === "game" ? "🎮" : "📱";
-
-      card.innerHTML = `
-        <img src="${item.icon}" alt="${item.name}" class="w-16 h-16 rounded-xl flex-shrink-0 object-cover" />
-        <div class="flex flex-col justify-between">
-          <h3 class="text-lg font-semibold">${labelEmoji} ${item.name}${item.version ? ` — ${item.version}` : ""}</h3>
-          <p class="text-gray-300 text-sm line-clamp-2">${item.description || ""}</p>
-        </div>
-      `;
-
-      card.addEventListener("click", () => openModal(item));
-      card.addEventListener("keydown", (e) => {
-        if (e.key === "Enter" || e.key === " ") {
-          e.preventDefault();
-          openModal(item);
-        }
-      });
-
-      gamesList.appendChild(card);
-    });
-  }
-
+  // Поиск по названию
   searchInput.addEventListener("input", (e) => {
-    const query = e.target.value.trim();
-    isSearching = !!query;
-    if (isSearching) {
-      // При поиске блокируем выбор категорий, чтобы не путать пользователя
-      menuItems.forEach(btn => btn.disabled = true);
-    } else {
-      menuItems.forEach(btn => btn.disabled = false);
-    }
-    searchItems(query);
+    filterList(e.target.value);
   });
 
-  // Начальная загрузка
-  loadData().then(() => {
-    // Для начала можем показать все игры по умолчанию
-    currentCategory = "games";
-    mainListTitle.textContent = "🎮 Все игры";
-    renderList(gamesData);
-  });
+  // Загрузка данных при старте
+  loadData();
 });
