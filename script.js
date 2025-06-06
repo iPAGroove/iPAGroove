@@ -117,5 +117,13 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  // 👇 Перезагрузка сайта при клике на заголовок iPA Groove
+  const siteTitle = document.getElementById("siteTitle");
+  if (siteTitle) {
+    siteTitle.addEventListener("click", () => {
+      window.location.reload();
+    });
+  }
+
   loadData();
 });
