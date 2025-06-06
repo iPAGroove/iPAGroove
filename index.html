@@ -1,6 +1,6 @@
 
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -54,10 +54,10 @@
 </head>
 <body class="text-white font-sans max-w-screen-sm mx-auto p-0 relative">
 
-  <div id="loader" class="flex">Загрузка данных...</div>
+  <div id="loader" class="flex">Loading data...</div>
 
   <header class="flex items-center justify-between px-4 py-2 fixed w-full top-0 left-0 z-40 backdrop-blur-md bg-[rgba(20,0,40,0.6)] border-b border-purple-500/30 shadow-md">
-    <button id="menuToggle" aria-label="Открыть меню" class="text-white text-2xl p-1">☰</button>
+    <button id="menuToggle" aria-label="Open menu" class="text-white text-2xl p-1">☰</button>
     <h1 id="siteTitle" class="cursor-pointer text-lg font-extrabold text-white flex items-center gap-3 hover:text-purple-300 transition" style="text-shadow: 0 0 8px rgba(110,28,255,0.9);">
       <img src="https://github.com/iPAGroove/iPAGroove/blob/main/IMG_5539.PNG?raw=true" alt="Logo" class="w-7 h-7 rounded shadow-md" />
       iPA Groove
@@ -86,12 +86,12 @@
       <input
         id="searchInput"
         type="text"
-        placeholder="🔍 Найти по названию..."
+        placeholder="🔍 Search by name..."
         class="w-full mb-4 px-4 py-2 rounded bg-[rgba(255,255,255,0.05)] text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-600 hidden"
       />
       <div id="gamesList" class="space-y-4 mb-4"></div>
       <div id="showMoreContainer" class="text-center">
-        <button id="showMoreBtn" class="hidden px-4 py-2 bg-purple-700 rounded hover:bg-purple-900">Показать ещё</button>
+        <button id="showMoreBtn" class="hidden px-4 py-2 bg-purple-700 rounded hover:bg-purple-900">Show More</button>
       </div>
     </div>
   </main>
@@ -110,26 +110,26 @@
     </div>
   </div>
 
-  <!-- Кнопка чата -->
+  <!-- Chat Button -->
   <button id="chatButton" class="fixed bottom-4 right-4 z-50 bg-purple-700 hover:bg-purple-900 text-white px-4 py-2 rounded-full shadow-lg">
     💬 Chat
   </button>
 
-  <!-- Модальное окно чата -->
+  <!-- Chat Modal -->
   <div id="chatModal" class="fixed bottom-20 right-4 bg-[rgba(40,0,90,0.95)] rounded-xl p-4 w-80 max-h-[70vh] overflow-y-auto text-white z-50 hidden shadow-lg">
     <div id="nicknamePrompt">
-      <p class="mb-2">Введите ник:</p>
-      <input id="nicknameInput" type="text" class="w-full mb-2 px-2 py-1 text-black rounded" placeholder="Ваш ник" />
-      <button id="saveNickname" class="w-full bg-purple-600 hover:bg-purple-800 py-1 rounded">Сохранить</button>
+      <p class="mb-2">Enter nickname:</p>
+      <input id="nicknameInput" type="text" class="w-full mb-2 px-2 py-1 text-black rounded" placeholder="Your nickname" />
+      <button id="saveNickname" class="w-full bg-purple-600 hover:bg-purple-800 py-1 rounded">Save</button>
     </div>
     <div id="chatMain" class="hidden">
       <div class="flex justify-between items-center text-sm text-purple-300 mb-2">
         <span id="currentNickname"></span>
-        <button id="changeNickname" class="text-xs text-gray-400 hover:text-white">Сменить ник</button>
+        <button id="changeNickname" class="text-xs text-gray-400 hover:text-white">Change nickname</button>
       </div>
       <div id="chatMessages" class="mb-2 max-h-48 overflow-y-auto text-sm pr-2"></div>
       <form id="chatForm" class="flex gap-2">
-        <input id="chatInput" type="text" placeholder="Сообщение..." class="flex-1 px-2 py-1 text-black rounded" />
+        <input id="chatInput" type="text" placeholder="Message..." class="flex-1 px-2 py-1 text-black rounded" />
         <button class="bg-purple-600 hover:bg-purple-800 px-3 rounded">→</button>
       </form>
       <div id="onlineCounter" class="mt-2 text-xs text-gray-400"></div>
