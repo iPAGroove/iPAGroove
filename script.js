@@ -158,3 +158,21 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 });
 
+
+
+
+function updateDownloadCounter(name) {
+  const countRef = ref(db, 'downloads/' + name);
+  get(countRef).then(snapshot => {
+    const current = snapshot.exists() ? snapshot.val() : 0;
+    update(countRef, { '.sv': { 'increment': 1 } });
+  });
+}
+
+function showDownloads(name, element) {
+  const countRef = ref(db, 'downloads/' + name);
+  get(countRef).then(snapshot => {
+    const count = snapshot.exists() ? snapshot.val() : 0;
+    element.textContent = `⬇️ Downloads: ${count}`;
+  });
+}
