@@ -2,7 +2,7 @@
 // Firebase SDK
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
 import {
-  getDatabase, ref, push, onChildAdded, set, onValue, serverTimestamp
+  getDatabase, ref, push, onChildAdded, set, onValue
 } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-database.js";
 
 // Firebase config
@@ -35,12 +35,14 @@ const onlineCounter = document.getElementById("onlineCounter");
 
 let nickname = localStorage.getItem("nickname");
 
+// Обновление ника в интерфейсе
 function updateNicknameUI() {
   if (nickname) {
     currentNickLabel.textContent = `Вы: ${nickname}`;
   }
 }
 
+// Обновление присутствия в онлайне
 function updatePresence() {
   if (!nickname) return;
   const presenceRef = ref(db, `presence/${nickname}`);
@@ -50,6 +52,16 @@ function updatePresence() {
     set(presenceRef, { online: true, ts: Date.now() });
   }, 15000);
 }
+
+// Проверка ника при загрузке страницы
+window.addEventListener("DOMContentLoaded", () => {
+  if (nickname) {
+    document.getElementById("nicknamePrompt").classList.add("hidden");
+    document.getElementById("chatMain").classList.remove("hidden");
+    updateNicknameUI();
+    updatePresence();
+  }
+});
 
 chatBtn.addEventListener("click", () => {
   chatModal.classList.toggle("hidden");
@@ -106,7 +118,7 @@ onChildAdded(ref(db, "messages"), (data) => {
   chatMessages.scrollTop = chatMessages.scrollHeight;
 });
 
-// Обновление онлайн-статуса
+// Онлайн-счётчик
 onValue(ref(db, "presence"), (snapshot) => {
   const users = snapshot.val();
   const now = Date.now();
