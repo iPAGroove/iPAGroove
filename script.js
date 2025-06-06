@@ -42,7 +42,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function openModal(item) {
     modalTitle.textContent = `${item.name}${item.version ? ` — Version ${item.version}` : ""}`;
-    modalDesc.textContent = item.description || "";
+    modalDesc.textContent = item.description || "Нет описания";
     modalIcon.src = item.icon || "";
     modalIcon.alt = item.name || "";
     modalDownload.href = item.download || "#";
@@ -78,20 +78,30 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
+  function formatDate(isoString) {
+    if (!isoString) return "Дата не указана";
+    const date = new Date(isoString);
+    return `Изменено: ${date.toLocaleDateString()} ${date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
+  }
+
   function renderList(items) {
     gamesList.innerHTML = "";
     items.forEach((item) => {
       const card = document.createElement("div");
       card.className = "bg-[rgba(255,255,255,0.05)] p-4 rounded shadow hover:bg-purple-800 cursor-pointer transition";
+
+      const lastModifiedText = formatDate(item.lastModified);
+
       card.innerHTML = `
         <div class="flex items-center gap-4">
           <img src="${item.icon}" alt="${item.name}" class="w-12 h-12 rounded" />
           <div>
             <h3 class="text-lg font-bold">${item.name}</h3>
-            <p class="text-sm text-gray-300">${item.description || ""}</p>
+            <p class="text-sm text-gray-300">${lastModifiedText}</p>
           </div>
         </div>
       `;
+
       card.addEventListener("click", () => openModal(item));
       gamesList.appendChild(card);
     });
