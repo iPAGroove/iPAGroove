@@ -32,9 +32,13 @@ let nickname = localStorage.getItem("nickname");
 
 chatBtn.addEventListener("click", () => {
   chatModal.classList.toggle("hidden");
+
+  // Показываем только один раз, если ника нет
   if (!nickname) {
     document.getElementById("nicknamePrompt").classList.remove("hidden");
+    document.getElementById("chatMain").classList.add("hidden");
   } else {
+    document.getElementById("nicknamePrompt").classList.add("hidden");
     document.getElementById("chatMain").classList.remove("hidden");
   }
 });
