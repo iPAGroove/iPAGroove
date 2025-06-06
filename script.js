@@ -1,13 +1,22 @@
 
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
 import {
+  getDatabase, ref, onValue, runTransaction
+} from "https://www.gstatic.com/firebasejs/9.22.2/firebase-database.js";
 
+const firebaseConfig = {
   apiKey: "AIzaSyBizq_3JJXWgUa-aaW8MKj6AV0Jt_-XYcI",
+  authDomain: "ipa-chat.firebaseapp.com",
+  databaseURL: "https://ipa-chat-default-rtdb.firebaseio.com",
   projectId: "ipa-chat",
+  storageBucket: "ipa-chat.firebasestorage.app",
   messagingSenderId: "534978415110",
   appId: "1:534978415110:web:a40838ef597b6d0ff09187",
   measurementId: "G-H2T6L8VZPG"
 };
 
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
 
 document.addEventListener("DOMContentLoaded", () => {
   const menuToggle = document.getElementById("menuToggle");
@@ -69,6 +78,8 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   async function updateDownloadCounts() {
+    const snapshotRef = ref(db, "downloads");
+    onValue(snapshotRef, (snapshot) => {
       downloadsData = snapshot.val() || {};
       document.querySelectorAll(".downloads-count").forEach(el => {
         const title = el.dataset.title;
@@ -84,6 +95,8 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function incrementDownloadCount(title) {
+    const countRef = ref(db, `downloads/${title}`);
+    runTransaction(countRef, (current) => (current || 0) + 1);
   }
 
   document.getElementById("siteTitle").addEventListener("click", () => location.reload());
@@ -144,3 +157,4 @@ document.addEventListener("DOMContentLoaded", () => {
     gameModal.classList.remove("show");
   };
 });
+
