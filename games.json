@@ -1,5 +1,14 @@
 [
   {
+    "name": "Beach Buggy Racing",
+    "description": "Use iGG (i4)",
+    "icon": "https://github.com/iPAGroove/iPAGroove/blob/main/IMG_5598.jpeg?raw=true",
+    "version": "2024.01.04",
+    "download": "https://vhistoretg.s3.eu-north-1.amazonaws.com/BB+Racing_2024.01.04_1749283102.ipa",
+    "genre": "Games",
+    "lastModified": "2025-06-06T00:00:00Z"
+  },
+  {
     "name": "Township",
     "description": "Freeze Currencies",
     "icon": "https://github.com/iPAGroove/iPAGroove/blob/main/IMG_5594.png?raw=true",
