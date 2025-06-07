@@ -76,45 +76,51 @@
 
   <main class="pt-16 pb-8 min-h-screen px-4">
     <!-- Certificate Info Section -->
-    <section id="certificateInfo" class="bg-[rgba(255,255,255,0.05)] rounded-xl p-4 mt-4 mb-6 mx-2 text-white shadow-md space-y-3">
-      <h2 class="text-xl font-bold text-purple-400">📋 Installation Certificates</h2>
-      <p class="text-sm">🔐 A personal certificate is required to install cracked .ipa files.</p>
-      <div class="text-sm text-gray-300 space-y-2">
-        <div>
-          🔨 <span class="font-semibold text-green-300">Standard Certificate</span> — <span class="font-semibold">$6</span><br>
-          🕐 Delivered within <strong>72 hours</strong>
+    <section id="certificateInfo" class="relative bg-[rgba(255,255,255,0.05)] rounded-xl p-5 mt-4 mb-6 mx-2 text-white shadow-lg border border-purple-500/30 ring-1 ring-purple-600/20 backdrop-blur-sm overflow-hidden">
+      <h2 class="text-xl font-bold text-purple-400 drop-shadow-[0_0_6px_rgba(110,28,255,0.6)] mb-3">📋 Installation Certificates
+      </h2>
+      <p class="text-sm text-gray-300 mb-2">🔐 A personal certificate is required to install cracked .ipa files.</p>
+      <div class="space-y-4 text-sm text-gray-300">
+        <div class="flex items-start gap-2">
+          <span class="text-green-300 text-lg">🛡️</span>
+          <div>
+            <span class="font-semibold text-green-300">Standard Certificate</span> — <span class="font-semibold">$6</span><br>
+            Delivered within <strong>72 hours</strong>
+          </div>
         </div>
-        <div>
-          🔨 <span class="font-semibold text-yellow-300">Instant Certificate</span> — <span class="font-semibold">$12</span><br>
-          ⚡️ Delivered within <strong>5 minutes</strong> after payment
+        <div class="flex items-start gap-2">
+          <span class="text-yellow-300 text-lg">⚡</span>
+          <div>
+            <span class="font-semibold text-yellow-300">Instant Certificate</span> — <span class="font-semibold">$12</span><br>
+            Delivered within <strong>5 minutes</strong> after payment
+          </div>
         </div>
       </div>
-      <p class="text-sm text-gray-400 mt-2">💳 Payments accepted from most countries worldwide</p>
+      <p class="text-sm text-gray-400 mt-3">💳 Payments accepted from most countries worldwide</p>
       <p class="text-sm text-gray-400">📄 All certificates come with a <strong>1-year warranty</strong> ✅</p>
 
-      <!-- Installer Icons Row -->
       <div class="flex justify-between items-center gap-3 mt-6">
         <div class="flex flex-col items-center">
-          <img src="https://github.com/iPAGroove/iPAGroove/blob/main/scarlet.JPG?raw=true" class="w-12 h-12 rounded-xl" alt="Scarlet" />
-          <span class="text-xs mt-1">Scarlet</span>
+          <img src="https://github.com/iPAGroove/iPAGroove/blob/main/scarlet.JPG?raw=true" class="w-12 h-12 rounded-xl shadow-md" alt="Scarlet" />
+          <span class="text-xs mt-1 font-semibold text-purple-300">Scarlet</span>
         </div>
         <div class="flex flex-col items-center">
-          <img src="https://github.com/iPAGroove/iPAGroove/blob/main/esign.JPG?raw=true" class="w-12 h-12 rounded-xl" alt="ESign" />
-          <span class="text-xs mt-1">ESign</span>
+          <img src="https://github.com/iPAGroove/iPAGroove/blob/main/esign.JPG?raw=true" class="w-12 h-12 rounded-xl shadow-md" alt="ESign" />
+          <span class="text-xs mt-1 font-semibold text-purple-300">ESign</span>
         </div>
         <div class="flex flex-col items-center">
-          <img src="https://github.com/iPAGroove/iPAGroove/blob/main/gbox.JPG?raw=true" class="w-12 h-12 rounded-xl" alt="GBox" />
-          <span class="text-xs mt-1">GBox</span>
+          <img src="https://github.com/iPAGroove/iPAGroove/blob/main/gbox.JPG?raw=true" class="w-12 h-12 rounded-xl shadow-md" alt="GBox" />
+          <span class="text-xs mt-1 font-semibold text-purple-300">GBox</span>
         </div>
         <div class="flex flex-col items-center">
-          <img src="https://github.com/iPAGroove/iPAGroove/blob/main/fether.JPG?raw=true" class="w-12 h-12 rounded-xl" alt="Feather" />
-          <span class="text-xs mt-1">Feather</span>
+          <img src="https://github.com/iPAGroove/iPAGroove/blob/main/fether.JPG?raw=true" class="w-12 h-12 rounded-xl shadow-md" alt="Feather" />
+          <span class="text-xs mt-1 font-semibold text-purple-300">Feather</span>
         </div>
       </div>
 
-      <a href="#" id="buyCertBtn" class="block mt-4">
-        <button class="w-full bg-purple-600 hover:bg-purple-800 text-white py-2 rounded-lg font-bold text-sm">
-          Buy
+      <a href="#" id="buyCertBtn" class="block mt-6">
+        <button class="w-full bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white py-2 rounded-xl font-bold text-sm transition duration-300 shadow-md">
+          💳 Buy Certificate
         </button>
       </a>
     </section>
