@@ -76,7 +76,57 @@
 
   <main class="pt-16 pb-8 min-h-screen px-4">
     <!-- Certificate Info Section -->
-    ... (короче для визуального примера)
+    <section id="certificateInfo" class="bg-[rgba(255,255,255,0.05)] rounded-xl p-4 mt-4 mb-6 mx-2 text-white shadow-md space-y-3">
+      <h2 class="text-xl font-bold text-purple-400">📋 Installation Certificates</h2>
+      <p class="text-sm">🔐 A personal certificate is required to install cracked .ipa files.</p>
+      <div class="text-sm text-gray-300 space-y-2">
+        <div>
+          🔨 <span class="font-semibold text-green-300">Standard Certificate</span> — <span class="font-semibold">$6</span><br>
+          🕐 Delivered within <strong>72 hours</strong>
+        </div>
+        <div>
+          🔨 <span class="font-semibold text-yellow-300">Instant Certificate</span> — <span class="font-semibold">$12</span><br>
+          ⚡️ Delivered within <strong>5 minutes</strong> after payment
+        </div>
+      </div>
+      <p class="text-sm text-gray-400 mt-2">💳 Payments accepted from most countries worldwide</p>
+      <p class="text-sm text-gray-400">📄 All certificates come with a <strong>1-year warranty</strong> ✅</p>
+
+      <!-- Installer Icons Row -->
+      <div class="flex justify-between items-center gap-3 mt-6">
+        <div class="flex flex-col items-center">
+          <img src="https://github.com/iPAGroove/iPAGroove/blob/main/scarlet.JPG?raw=true" class="w-12 h-12 rounded-xl" alt="Scarlet" />
+          <span class="text-xs mt-1">Scarlet</span>
+        </div>
+        <div class="flex flex-col items-center">
+          <img src="https://github.com/iPAGroove/iPAGroove/blob/main/esign.JPG?raw=true" class="w-12 h-12 rounded-xl" alt="ESign" />
+          <span class="text-xs mt-1">ESign</span>
+        </div>
+        <div class="flex flex-col items-center">
+          <img src="https://github.com/iPAGroove/iPAGroove/blob/main/gbox.JPG?raw=true" class="w-12 h-12 rounded-xl" alt="GBox" />
+          <span class="text-xs mt-1">GBox</span>
+        </div>
+        <div class="flex flex-col items-center">
+          <img src="https://github.com/iPAGroove/iPAGroove/blob/main/fether.JPG?raw=true" class="w-12 h-12 rounded-xl" alt="Feather" />
+          <span class="text-xs mt-1">Feather</span>
+        </div>
+      </div>
+
+      <a href="#" id="buyCertBtn" class="block mt-4">
+        <button class="w-full bg-purple-600 hover:bg-purple-800 text-white py-2 rounded-lg font-bold text-sm">
+          Buy
+        </button>
+      </a>
+    </section>
+
+    <div id="catalogSection">
+      <h2 id="mainListTitle" class="text-xl font-bold mb-2"></h2>
+      <input id="searchInput" type="text" placeholder="🔍 Search by name..." class="w-full mb-4 px-4 py-2 rounded bg-[rgba(255,255,255,0.05)] text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-600 hidden" />
+      <div id="gamesList" class="space-y-4 mb-4"></div>
+      <div id="showMoreContainer" class="text-center">
+        <button id="showMoreBtn" class="hidden px-4 py-2 bg-purple-700 rounded hover:bg-purple-900">Show More</button>
+      </div>
+    </div>
   </main>
 
   <!-- Chat Button -->
@@ -86,7 +136,23 @@
 
   <!-- Chat Modal -->
   <div id="chatModal" class="fixed bottom-20 right-4 bg-[rgba(40,0,90,0.95)] rounded-xl p-4 w-80 max-h-[70vh] overflow-y-auto text-white z-50 hidden shadow-lg">
-    ...
+    <div id="nicknamePrompt">
+      <p class="mb-2">Enter nickname:</p>
+      <input id="nicknameInput" type="text" class="w-full mb-2 px-2 py-1 text-black rounded" placeholder="Your nickname" />
+      <button id="saveNickname" class="w-full bg-purple-600 hover:bg-purple-800 py-1 rounded">Save</button>
+    </div>
+    <div id="chatMain" class="hidden">
+      <div class="flex justify-between items-center text-sm text-purple-300 mb-2">
+        <span id="currentNickname"></span>
+        <button id="changeNickname" class="text-xs text-gray-400 hover:text-white">Change nickname</button>
+      </div>
+      <div id="chatMessages" class="mb-2 max-h-48 overflow-y-auto text-sm pr-2"></div>
+      <form id="chatForm" class="flex gap-2">
+        <input id="chatInput" type="text" placeholder="Message..." class="flex-1 px-2 py-1 text-black rounded" />
+        <button class="bg-purple-600 hover:bg-purple-800 px-3 rounded">→</button>
+      </form>
+      <div id="onlineCounter" class="mt-2 text-xs text-gray-400"></div>
+    </div>
   </div>
 
   <!-- Footer -->
