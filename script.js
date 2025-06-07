@@ -31,7 +31,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const modalIcon = document.getElementById("modalIcon");
   const loader = document.getElementById("loader");
   const searchInput = document.getElementById("searchInput");
-  const certificateInfo = document.getElementById("certificateInfo");
 
   let gamesData = [];
   let appsData = [];
@@ -89,8 +88,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (modalTitle.textContent && downloadsData[modalTitle.textContent]) {
         const count = downloadsData[modalTitle.textContent];
-        const modalCounter = document.getElementById("modalDownloadCount");
-        if (modalCounter) modalCounter.textContent = `⬇️ Downloads: ${count}`;
+        document.getElementById("modalDownloadCount")?.textContent = `⬇️ Downloads: ${count}`;
       }
     });
   }
@@ -124,11 +122,6 @@ document.addEventListener("DOMContentLoaded", () => {
       searchInput.classList.remove("hidden");
       loader.style.display = "flex";
 
-      // скрыть окно сертификатов при переходе
-      if (certificateInfo) {
-        certificateInfo.style.display = "none";
-      }
-
       try {
         const data = await loadJSON(currentCatalog + ".json");
         if (currentCatalog === "games") {
@@ -147,11 +140,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  // показать сертификаты при первой загрузке
-  if (certificateInfo) {
-    certificateInfo.style.display = "block";
-  }
-
   searchInput.addEventListener("input", () => {
     const value = searchInput.value.toLowerCase();
     const filtered = (currentCatalog === "games" ? gamesData : appsData).filter(item =>
@@ -167,4 +155,25 @@ document.addEventListener("DOMContentLoaded", () => {
   window.closeModal = function () {
     gameModal.classList.remove("show");
   };
+
+  // Stripe сертификаты
+  document.getElementById("buyCertBtn")?.addEventListener("click", async (e) => {
+    e.preventDefault();
+    const stripeRes = await fetch("https://9b8c441b-2ade-4693-a4fc-a8992f2956dc-00-6whnly4neon0.spock.replit.dev/create-checkout-session", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        priceId: "price_1RXKaJ08Gjl0YPOata2ufkK4"
+      })
+    });
+
+    const { url } = await stripeRes.json();
+    if (url) {
+      window.location.href = url;
+    } else {
+      alert("Ошибка при создании Stripe-сессии");
+    }
+  });
 });
