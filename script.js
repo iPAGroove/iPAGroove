@@ -124,9 +124,7 @@ document.addEventListener("DOMContentLoaded", () => {
       searchInput.classList.remove("hidden");
       loader.style.display = "flex";
 
-      if (certificateInfo) {
-        certificateInfo.style.display = "none";
-      }
+      if (certificateInfo) certificateInfo.style.display = "none";
 
       try {
         const data = await loadJSON(currentCatalog + ".json");
@@ -146,7 +144,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  // показать сертификаты при первой загрузке
+  // показать сертификаты при загрузке
   if (certificateInfo) {
     certificateInfo.style.display = "block";
   }
@@ -167,24 +165,31 @@ document.addEventListener("DOMContentLoaded", () => {
     gameModal.classList.remove("show");
   };
 
-  // обработка Stripe кнопки
+  // Stripe Buy Certificate
   const certBtn = document.getElementById("buyCertBtn");
   if (certBtn) {
     certBtn.addEventListener("click", async (e) => {
       e.preventDefault();
-      const res = await fetch("https://9b8c441b-2ade-4693-a4fc-a8992f2956dc-00-6whnly4neon0.spock.replit.dev/create-checkout-session", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          priceId: "price_1RXKaJ08Gjl0YPOata2ufkK4"
-        })
-      });
+      try {
+        const res = await fetch("https://9b8c441b-2ade-4693-a4fc-a8992f2956dc-00-6whnly4neon0.spock.replit.dev/create-checkout-session", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            priceId: "price_1RXKaJ08Gjl0YPOata2ufkK4" // $6 Standard Certificate
+          })
+        });
 
-      const data = await res.json();
-      if (data.url) {
-        window.location.href = data.url;
-      } else {
-        alert("Error creating Stripe session");
+        const { url } = await res.json();
+        if (url) {
+          window.location.href = url;
+        } else {
+          alert("Ошибка при создании Stripe-сессии");
+        }
+      } catch (err) {
+        console.error(err);
+        alert("Сервер Stripe недоступен");
       }
     });
   }
