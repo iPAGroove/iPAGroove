@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -27,7 +26,6 @@
       min-height: 100vh;
       font-family: 'Inter', sans-serif;
     }
-
     #loader {
       position: fixed;
       inset: 0;
@@ -38,22 +36,18 @@
       z-index: 9998;
       font-size: 1.2rem;
     }
-
     #sideMenu {
       transition: left 0.3s ease;
     }
-
     #sideMenu.open {
       left: 0;
     }
-
     #gameModal.show {
       display: flex;
     }
   </style>
 </head>
 <body class="text-white font-sans max-w-screen-sm mx-auto p-0 relative">
-
   <div id="loader" class="flex">Loading data...</div>
 
   <header class="flex items-center justify-between px-4 py-2 fixed w-full top-0 left-0 z-40 backdrop-blur-md bg-[rgba(20,0,40,0.6)] border-b border-purple-500/30 shadow-md">
@@ -81,14 +75,32 @@
   <div id="overlay" class="fixed inset-0 bg-black/50 z-40 hidden"></div>
 
   <main class="pt-16 pb-8 min-h-screen px-4">
+    <!-- Информация о сертификатах -->
+    <section id="certificateInfo" class="bg-[rgba(255,255,255,0.05)] rounded-xl p-4 mt-4 mb-6 mx-2 text-white shadow-md space-y-3">
+      <h2 class="text-xl font-bold text-purple-400">📋 Сертификаты для установки</h2>
+      <p class="text-sm">🔐 Для использования взломанных .ipa файлов требуется персональный сертификат.</p>
+      <div class="text-sm text-gray-300 space-y-2">
+        <div>
+          🔨 <span class="font-semibold text-green-300">Стандартный сертификат</span> — <span class="font-semibold">$6</span><br>
+          🕐 Выдача в течение <strong>72 часов</strong>
+        </div>
+        <div>
+          🔨 <span class="font-semibold text-yellow-300">Мгновенный сертификат</span> — <span class="font-semibold">$12</span><br>
+          ⚡️ Доставка в течение <strong>5 минут</strong> после оплаты
+        </div>
+      </div>
+      <p class="text-sm text-gray-400 mt-2">💳 Принимаем оплату из большинства стран мира</p>
+      <p class="text-sm text-gray-400">📄 Все сертификаты действительны <strong>1 год</strong> ✅</p>
+      <a href="#" id="buyCertBtn" class="block mt-4">
+        <button class="w-full bg-purple-600 hover:bg-purple-800 text-white py-2 rounded-lg font-bold text-sm">
+          Получить сертификат
+        </button>
+      </a>
+    </section>
+
     <div id="catalogSection">
       <h2 id="mainListTitle" class="text-xl font-bold mb-2"></h2>
-      <input
-        id="searchInput"
-        type="text"
-        placeholder="🔍 Search by name..."
-        class="w-full mb-4 px-4 py-2 rounded bg-[rgba(255,255,255,0.05)] text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-600 hidden"
-      />
+      <input id="searchInput" type="text" placeholder="🔍 Search by name..." class="w-full mb-4 px-4 py-2 rounded bg-[rgba(255,255,255,0.05)] text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-600 hidden" />
       <div id="gamesList" class="space-y-4 mb-4"></div>
       <div id="showMoreContainer" class="text-center">
         <button id="showMoreBtn" class="hidden px-4 py-2 bg-purple-700 rounded hover:bg-purple-900">Show More</button>
@@ -103,7 +115,7 @@
         <div>
           <h3 id="modalTitle" class="text-xl font-bold"></h3>
           <p id="modalDesc" class="text-sm text-gray-300"></p>
-<p id="modalDownloadCount" class="text-purple-300 text-sm mt-2"></p>
+          <p id="modalDownloadCount" class="text-purple-300 text-sm mt-2"></p>
         </div>
       </div>
       <a id="modalDownload" href="#" target="_blank" class="block bg-purple-600 text-center py-2 rounded hover:bg-purple-800">Download</a>
@@ -111,12 +123,10 @@
     </div>
   </div>
 
-  <!-- Chat Button -->
   <button id="chatButton" class="fixed bottom-4 right-4 z-50 bg-purple-700 hover:bg-purple-900 text-white px-4 py-2 rounded-full shadow-lg">
     💬 Chat
   </button>
 
-  <!-- Chat Modal -->
   <div id="chatModal" class="fixed bottom-20 right-4 bg-[rgba(40,0,90,0.95)] rounded-xl p-4 w-80 max-h-[70vh] overflow-y-auto text-white z-50 hidden shadow-lg">
     <div id="nicknamePrompt">
       <p class="mb-2">Enter nickname:</p>
