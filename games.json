@@ -1,5 +1,14 @@
 [
   {
+    "name": "Car Parking",
+    "description": "Free IAP",
+    "icon": "https://github.com/iPAGroove/iPAGroove/blob/main/IMG_5596.jpeg?raw=true",
+    "version": "2.6.2",
+    "download": "https://vhistoretg.s3.eu-north-1.amazonaws.com/Car+Parking_4.9.2_1749285974.ipa",
+    "genre": "Games",
+    "lastModified": "2025-06-06T00:00:00Z"
+  },
+  {
     "name": "Beach Buggy Racing",
     "description": "Use iGG (i4)",
     "icon": "https://github.com/iPAGroove/iPAGroove/blob/main/IMG_5598.jpeg?raw=true",
