@@ -1,5 +1,14 @@
 [
   {
+    "name": "Hooked Inc: Fishing Games",
+    "description": "Freeze Currencies",
+    "icon": "https://github.com/iPAGroove/iPAGroove/blob/main/IMG_5639.jpeg?raw=true",
+    "version": "2.31.5",
+    "download": "https://vhistoretg.s3.eu-north-1.amazonaws.com/Hooked+Inc+_2.31.5_1749368550.ipa",
+    "genre": "Games",
+    "lastModified": "2025-06-06T00:00:00Z"
+  },
+  {
     "name": "Car Parking",
     "description": "Free IAP",
     "icon": "https://github.com/iPAGroove/iPAGroove/blob/main/IMG_5596.jpeg?raw=true",
