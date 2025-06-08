@@ -65,33 +65,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
     gamesList.querySelectorAll("button").forEach(btn => {
       btn.addEventListener("click", () => {
-  const itemName = btn.dataset.name;
-  const dataList = currentCatalog === "games" ? gamesData : appsData;
-  const item = dataList.find(i => i.name === itemName);
-  if (!item) return;
-
-  modalTitle.textContent = item.name;
-  modalIcon.src = item.icon;
-  modalDownload.href = item.download;
-
-  document.getElementById("modalGenre").textContent = `🎯 Genre: ${item.genre || "—"}`;
-  document.getElementById("modalVersion").textContent = `📦 Version: ${item.version || "—"}`;
-  if (item.lastModified) {
-    const date = new Date(item.lastModified).toLocaleDateString();
-    document.getElementById("modalUpdated").textContent = `🕒 Updated: ${date}`;
-  } else {
-    document.getElementById("modalUpdated").textContent = "";
-  }
-
-  document.getElementById("modalDesc").innerHTML = (item.description || "")
-    .split("
-")
-    .map(line => `<li>${line}</li>`)
-    .join("");
-
-  gameModal.classList.add("show");
-  incrementDownloadCount(item.name);
-});
+        modalTitle.textContent = btn.dataset.name;
+        modalDesc.textContent = btn.dataset.desc;
+        modalIcon.src = btn.dataset.icon;
+        modalDownload.href = btn.dataset.download;
+        gameModal.classList.add("show");
 
         const itemName = btn.dataset.name;
         incrementDownloadCount(itemName);
