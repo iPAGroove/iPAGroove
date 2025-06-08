@@ -77,23 +77,16 @@
   <main class="pt-16 pb-8 min-h-screen px-4">
     <!-- Certificate Info Section -->
     <section id="certificateInfo" class="relative bg-[rgba(255,255,255,0.05)] rounded-xl p-5 mt-4 mb-6 mx-2 text-white shadow-lg border border-purple-500/30 ring-1 ring-purple-600/20 backdrop-blur-sm overflow-hidden">
-      <h2 class="text-xl font-bold text-purple-400 drop-shadow-[0_0_6px_rgba(110,28,255,0.6)] mb-3">📋 Installation Certificates
-      </h2>
+      <h2 class="text-xl font-bold text-purple-400 drop-shadow-[0_0_6px_rgba(110,28,255,0.6)] mb-3">📋 Installation Certificates</h2>
       <p class="text-sm text-gray-300 mb-2">🔐 A personal certificate is required to install cracked .ipa files.</p>
       <div class="space-y-4 text-sm text-gray-300">
         <div class="flex items-start gap-2">
           <span class="text-green-300 text-lg">🛡️</span>
-          <div>
-            <span class="font-semibold text-green-300">Standard Certificate</span> — <span class="font-semibold">$6</span><br>
-            Delivered within <strong>72 hours</strong>
-          </div>
+          <div><span class="font-semibold text-green-300">Standard Certificate</span> — <span class="font-semibold">$6</span><br>Delivered within <strong>72 hours</strong></div>
         </div>
         <div class="flex items-start gap-2">
           <span class="text-yellow-300 text-lg">⚡</span>
-          <div>
-            <span class="font-semibold text-yellow-300">Instant Certificate</span> — <span class="font-semibold">$12</span><br>
-            Delivered within <strong>5 minutes</strong> after payment
-          </div>
+          <div><span class="font-semibold text-yellow-300">Instant Certificate</span> — <span class="font-semibold">$12</span><br>Delivered within <strong>5 minutes</strong> after payment</div>
         </div>
       </div>
       <p class="text-sm text-gray-400 mt-3">💳 Payments accepted from most countries worldwide</p>
@@ -158,6 +151,24 @@
         <button class="bg-purple-600 hover:bg-purple-800 px-3 rounded">→</button>
       </form>
       <div id="onlineCounter" class="mt-2 text-xs text-gray-400"></div>
+    </div>
+  </div>
+
+  <!-- Game Modal -->
+  <div id="gameModal" class="fixed inset-0 bg-black bg-opacity-70 hidden z-50 items-center justify-center">
+    <div class="bg-[rgba(40,0,90,0.95)] rounded-xl p-6 max-w-sm w-full mx-4 text-white shadow-lg relative">
+      <button onclick="closeModal()" class="absolute top-2 right-2 text-white text-xl hover:text-purple-300">&times;</button>
+      <div class="flex gap-4 items-center mb-4">
+        <img id="modalIcon" src="" alt="App Icon" class="w-16 h-16 rounded shadow-md" />
+        <div>
+          <h3 id="modalTitle" class="text-xl font-bold"></h3>
+          <p id="modalDownloadCount" class="text-sm text-gray-400">⬇️ Downloads: ...</p>
+        </div>
+      </div>
+      <p id="modalDesc" class="text-sm text-gray-300 whitespace-pre-line mb-4"></p>
+      <a id="modalDownload" href="#" target="_blank" class="block">
+        <button class="w-full bg-purple-600 hover:bg-purple-800 py-2 rounded text-white font-bold">⬇️ Download</button>
+      </a>
     </div>
   </div>
 
