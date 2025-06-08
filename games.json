@@ -1,11 +1,7 @@
 [
   {
     "name": "Hero Blitz",
-    "description": "- Damage Multiplier
-- Defense Multiplier
-- Currencies Multiplier
-- Freeze Currencies
-- Unlimited Ads Skip",
+    "description": "- Damage Multiplier\n- Defense Multiplier\n- Currencies Multiplier\n- Freeze Currencies\n- Unlimited Ads Skip",
     "icon": "https://github.com/iPAGroove/iPAGroove/blob/main/IMG_5641.jpeg?raw=true",
     "version": "1.6.0",
     "download": "https://vhistoretg.s3.eu-north-1.amazonaws.com/Hero+Blitz+_1.6.0_1749374293.ipa",
