@@ -1,5 +1,19 @@
 [
   {
+    "name": "Hero Blitz",
+    "description": "Hack Features:
+- Damage Multiplier
+- Defense Multiplier
+- Currencies Multiplier
+- Freeze Currencies
+- Unlimited Ads Skip",
+    "icon": "https://github.com/iPAGroove/iPAGroove/blob/main/IMG_5641.jpeg?raw=true",
+    "version": "2.31.5",
+    "download": "https://vhistoretg.s3.eu-north-1.amazonaws.com/Hero+Blitz+_1.6.0_1749374293.ipa",
+    "genre": "Games",
+    "lastModified": "2025-06-06T00:00:00Z"
+  },
+  {
     "name": "Hooked Inc: Fishing Games",
     "description": "Freeze Currencies",
     "icon": "https://github.com/iPAGroove/iPAGroove/blob/main/IMG_5639.jpeg?raw=true",
