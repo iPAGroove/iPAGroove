@@ -32,6 +32,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   let nickname = localStorage.getItem("nickname");
   let unreadCount = 0;
+  let lastSeen = parseInt(localStorage.getItem("lastSeen") || "0");
   const unreadBadge = document.createElement("span");
   unreadBadge.id = "chatUnread";
   unreadBadge.className = "ml-1 text-xs text-red-400 font-bold hidden";
@@ -77,7 +78,8 @@ document.addEventListener("DOMContentLoaded", () => {
       updatePresence();
     }
 
-    // сброс непрочитанных
+        lastSeen = Date.now();
+    localStorage.setItem("lastSeen", lastSeen);
     unreadCount = 0;
     unreadBadge.textContent = "";
   });
@@ -129,15 +131,10 @@ document.addEventListener("DOMContentLoaded", () => {
     chatMessages.scrollTop = chatMessages.scrollHeight;
 
     // Увеличиваем счётчик, если чат закрыт
-    if (chatModal.classList.contains("hidden")) {
+    if (chatModal.classList.contains("hidden") && msg.time > lastSeen) {
       unreadCount++;
-      if (unreadCount > 0) {
-  unreadBadge.textContent = `${unreadCount}`;
-  unreadBadge.classList.remove("hidden");
-} else {
-  unreadBadge.textContent = "";
-  unreadBadge.classList.add("hidden");
-}
+      unreadBadge.textContent = `${unreadCount}`;
+      unreadBadge.classList.remove("hidden");
     }
   });
 
