@@ -9,9 +9,10 @@ document.addEventListener("DOMContentLoaded", () => {
   let userRef = null;
 
   function setOnline() {
-    userRef = push(onlineUsersRef);
-    userRef.set(true);
-    userRef.onDisconnect().remove();
+  if (userRef) userRef.remove();
+  userRef = push(onlineUsersRef);
+  userRef.set(true);
+  userRef.onDisconnect().remove();
   }
 
   function setOffline() {
@@ -44,9 +45,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const onlineCounter = document.getElementById("onlineCounter");
   const navChat = document.getElementById("navChat");
   const chatSendButton = chatForm.querySelector("button");
-  const chatInlineOnline = document.createElement("span");
-  chatInlineOnline.className = "ml-2 text-green-400 text-xs font-bold";
-  chatSendButton.parentNode.insertBefore(chatInlineOnline, chatSendButton.nextSibling);
+  
 
   function getColorForName(name) {
     let hash = 0;
@@ -146,7 +145,6 @@ document.addEventListener("DOMContentLoaded", () => {
       const users = snapshot.val() || {};
       const count = Object.keys(users).length;
       onlineCounter.textContent = `🟢 Online: ${count}`;
-      chatInlineOnline.textContent = `🟢 Online: ${count}`;
     });
   }
 
