@@ -18,11 +18,7 @@ const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
 document.addEventListener("DOMContentLoaded", () => {
-  const menuToggle = document.getElementById("menuToggle");
-  const menuClose = document.getElementById("menuClose");
-  const sideMenu = document.getElementById("sideMenu");
-  const overlay = document.getElementById("overlay");
-  const mainListTitle = document.getElementById("mainListTitle");
+    const mainListTitle = document.getElementById("mainListTitle");
   const gamesList = document.getElementById("gamesList");
   const gameModal = document.getElementById("gameModal");
   const modalTitle = document.getElementById("modalTitle");
@@ -102,47 +98,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   document.getElementById("siteTitle").addEventListener("click", () => location.reload());
 
-  menuToggle.addEventListener("click", () => {
-    sideMenu.classList.add("open");
-    overlay.classList.remove("hidden");
-  });
-
-  menuClose.addEventListener("click", () => {
-    sideMenu.classList.remove("open");
-    overlay.classList.add("hidden");
-  });
-
-  overlay.addEventListener("click", () => {
-    sideMenu.classList.remove("open");
-    overlay.classList.add("hidden");
-  });
-
-  document.querySelectorAll(".menuItem").forEach(btn => {
-    btn.addEventListener("click", async () => {
-      currentCatalog = btn.dataset.catalog;
-      mainListTitle.textContent = currentCatalog === "games" ? "All Games" : "All Apps";
-      searchInput.classList.remove("hidden");
-      loader.style.display = "flex";
-
-      if (certificateInfo) certificateInfo.style.display = "none";
-
-      try {
-        const data = await loadJSON(currentCatalog + ".json");
-        if (currentCatalog === "games") {
-          gamesData = data;
-        } else {
-          appsData = data;
-        }
-        renderList(data);
-      } catch (err) {
-        gamesList.innerHTML = "<p class='text-red-500'>Error loading data</p>";
-      }
-
-      loader.style.display = "none";
-      sideMenu.classList.remove("open");
-      overlay.classList.add("hidden");
-    });
-  });
+      });
 
   // показать сертификаты при загрузке
   if (certificateInfo) {
@@ -162,12 +118,37 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   
-  document.getElementById("navGames").addEventListener("click", () => {
-    document.querySelector('[data-catalog="games"]').click();
+  
+  document.getElementById("navGames").addEventListener("click", async () => {
+    currentCatalog = "games";
+    mainListTitle.textContent = "All Games";
+    searchInput.classList.remove("hidden");
+    loader.style.display = "flex";
+    if (certificateInfo) certificateInfo.style.display = "none";
+    try {
+      gamesData = await loadJSON("games.json");
+      renderList(gamesData);
+    } catch {
+      gamesList.innerHTML = "<p class='text-red-500'>Error loading games</p>";
+    }
+    loader.style.display = "none";
   });
-  document.getElementById("navApps").addEventListener("click", () => {
-    document.querySelector('[data-catalog="apps"]').click();
+
+  document.getElementById("navApps").addEventListener("click", async () => {
+    currentCatalog = "apps";
+    mainListTitle.textContent = "All Apps";
+    searchInput.classList.remove("hidden");
+    loader.style.display = "flex";
+    if (certificateInfo) certificateInfo.style.display = "none";
+    try {
+      appsData = await loadJSON("apps.json");
+      renderList(appsData);
+    } catch {
+      gamesList.innerHTML = "<p class='text-red-500'>Error loading apps</p>";
+    }
+    loader.style.display = "none";
   });
+
   document.getElementById("navChat").addEventListener("click", () => {
     const chatModal = document.getElementById("chatModal");
     chatModal.classList.toggle("hidden");
