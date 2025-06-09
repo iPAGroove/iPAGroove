@@ -59,7 +59,45 @@ function renderPagination(totalItems) {
     btn.addEventListener("click", () => {
       currentPage = i;
       renderList(filteredData);
-    });
+    
+  // Обработка нижнего меню
+  document.getElementById("navGames").addEventListener("click", async () => {
+    currentCatalog = "games";
+    mainListTitle.textContent = "All Games";
+    searchInput.classList.remove("hidden");
+    loader.style.display = "flex";
+    try {
+      const data = await loadJSON("games.json");
+      gamesData = data;
+      currentPage = 1;
+      renderList(gamesData);
+    } catch (err) {
+      gamesList.innerHTML = "<p class='text-red-500'>Error loading games</p>";
+    }
+    loader.style.display = "none";
+  });
+
+  document.getElementById("navApps").addEventListener("click", async () => {
+    currentCatalog = "apps";
+    mainListTitle.textContent = "All Apps";
+    searchInput.classList.remove("hidden");
+    loader.style.display = "flex";
+    try {
+      const data = await loadJSON("apps.json");
+      appsData = data;
+      currentPage = 1;
+      renderList(appsData);
+    } catch (err) {
+      gamesList.innerHTML = "<p class='text-red-500'>Error loading apps</p>";
+    }
+    loader.style.display = "none";
+  });
+
+  document.getElementById("navMore").addEventListener("click", () => {
+    document.getElementById("moreModal").classList.remove("hidden");
+  });
+
+});
 
     container.appendChild(btn);
   }
@@ -93,7 +131,45 @@ function renderList(data) {
       <button class="bg-purple-600 hover:bg-purple-800 px-3 py-1 rounded" data-name="${item.name}" data-download="${item.download}" data-desc="${item.description}" data-icon="${item.icon}">Open</button>
     `;
     gamesList.appendChild(card);
+  
+  // Обработка нижнего меню
+  document.getElementById("navGames").addEventListener("click", async () => {
+    currentCatalog = "games";
+    mainListTitle.textContent = "All Games";
+    searchInput.classList.remove("hidden");
+    loader.style.display = "flex";
+    try {
+      const data = await loadJSON("games.json");
+      gamesData = data;
+      currentPage = 1;
+      renderList(gamesData);
+    } catch (err) {
+      gamesList.innerHTML = "<p class='text-red-500'>Error loading games</p>";
+    }
+    loader.style.display = "none";
   });
+
+  document.getElementById("navApps").addEventListener("click", async () => {
+    currentCatalog = "apps";
+    mainListTitle.textContent = "All Apps";
+    searchInput.classList.remove("hidden");
+    loader.style.display = "flex";
+    try {
+      const data = await loadJSON("apps.json");
+      appsData = data;
+      currentPage = 1;
+      renderList(appsData);
+    } catch (err) {
+      gamesList.innerHTML = "<p class='text-red-500'>Error loading apps</p>";
+    }
+    loader.style.display = "none";
+  });
+
+  document.getElementById("navMore").addEventListener("click", () => {
+    document.getElementById("moreModal").classList.remove("hidden");
+  });
+
+});
 
   renderPagination(data.length);
   updateDownloadCounts();
@@ -108,8 +184,84 @@ function renderList(data) {
 
       const itemName = btn.dataset.name;
       incrementDownloadCount(itemName);
-    });
+    
+  // Обработка нижнего меню
+  document.getElementById("navGames").addEventListener("click", async () => {
+    currentCatalog = "games";
+    mainListTitle.textContent = "All Games";
+    searchInput.classList.remove("hidden");
+    loader.style.display = "flex";
+    try {
+      const data = await loadJSON("games.json");
+      gamesData = data;
+      currentPage = 1;
+      renderList(gamesData);
+    } catch (err) {
+      gamesList.innerHTML = "<p class='text-red-500'>Error loading games</p>";
+    }
+    loader.style.display = "none";
   });
+
+  document.getElementById("navApps").addEventListener("click", async () => {
+    currentCatalog = "apps";
+    mainListTitle.textContent = "All Apps";
+    searchInput.classList.remove("hidden");
+    loader.style.display = "flex";
+    try {
+      const data = await loadJSON("apps.json");
+      appsData = data;
+      currentPage = 1;
+      renderList(appsData);
+    } catch (err) {
+      gamesList.innerHTML = "<p class='text-red-500'>Error loading apps</p>";
+    }
+    loader.style.display = "none";
+  });
+
+  document.getElementById("navMore").addEventListener("click", () => {
+    document.getElementById("moreModal").classList.remove("hidden");
+  });
+
+});
+  
+  // Обработка нижнего меню
+  document.getElementById("navGames").addEventListener("click", async () => {
+    currentCatalog = "games";
+    mainListTitle.textContent = "All Games";
+    searchInput.classList.remove("hidden");
+    loader.style.display = "flex";
+    try {
+      const data = await loadJSON("games.json");
+      gamesData = data;
+      currentPage = 1;
+      renderList(gamesData);
+    } catch (err) {
+      gamesList.innerHTML = "<p class='text-red-500'>Error loading games</p>";
+    }
+    loader.style.display = "none";
+  });
+
+  document.getElementById("navApps").addEventListener("click", async () => {
+    currentCatalog = "apps";
+    mainListTitle.textContent = "All Apps";
+    searchInput.classList.remove("hidden");
+    loader.style.display = "flex";
+    try {
+      const data = await loadJSON("apps.json");
+      appsData = data;
+      currentPage = 1;
+      renderList(appsData);
+    } catch (err) {
+      gamesList.innerHTML = "<p class='text-red-500'>Error loading apps</p>";
+    }
+    loader.style.display = "none";
+  });
+
+  document.getElementById("navMore").addEventListener("click", () => {
+    document.getElementById("moreModal").classList.remove("hidden");
+  });
+
+});
 }
 " alt="${item.name}" class="w-16 h-16 rounded shadow" />
         <div class="flex-1">
@@ -120,7 +272,45 @@ function renderList(data) {
         <button class="bg-purple-600 hover:bg-purple-800 px-3 py-1 rounded" data-name="${item.name}" data-download="${item.download}" data-desc="${item.description}" data-icon="${item.icon}">Open</button>
       `;
       gamesList.appendChild(card);
-    });
+    
+  // Обработка нижнего меню
+  document.getElementById("navGames").addEventListener("click", async () => {
+    currentCatalog = "games";
+    mainListTitle.textContent = "All Games";
+    searchInput.classList.remove("hidden");
+    loader.style.display = "flex";
+    try {
+      const data = await loadJSON("games.json");
+      gamesData = data;
+      currentPage = 1;
+      renderList(gamesData);
+    } catch (err) {
+      gamesList.innerHTML = "<p class='text-red-500'>Error loading games</p>";
+    }
+    loader.style.display = "none";
+  });
+
+  document.getElementById("navApps").addEventListener("click", async () => {
+    currentCatalog = "apps";
+    mainListTitle.textContent = "All Apps";
+    searchInput.classList.remove("hidden");
+    loader.style.display = "flex";
+    try {
+      const data = await loadJSON("apps.json");
+      appsData = data;
+      currentPage = 1;
+      renderList(appsData);
+    } catch (err) {
+      gamesList.innerHTML = "<p class='text-red-500'>Error loading apps</p>";
+    }
+    loader.style.display = "none";
+  });
+
+  document.getElementById("navMore").addEventListener("click", () => {
+    document.getElementById("moreModal").classList.remove("hidden");
+  });
+
+});
 
     updateDownloadCounts();
 
@@ -134,8 +324,84 @@ function renderList(data) {
 
         const itemName = btn.dataset.name;
         incrementDownloadCount(itemName);
-      });
-    });
+      
+  // Обработка нижнего меню
+  document.getElementById("navGames").addEventListener("click", async () => {
+    currentCatalog = "games";
+    mainListTitle.textContent = "All Games";
+    searchInput.classList.remove("hidden");
+    loader.style.display = "flex";
+    try {
+      const data = await loadJSON("games.json");
+      gamesData = data;
+      currentPage = 1;
+      renderList(gamesData);
+    } catch (err) {
+      gamesList.innerHTML = "<p class='text-red-500'>Error loading games</p>";
+    }
+    loader.style.display = "none";
+  });
+
+  document.getElementById("navApps").addEventListener("click", async () => {
+    currentCatalog = "apps";
+    mainListTitle.textContent = "All Apps";
+    searchInput.classList.remove("hidden");
+    loader.style.display = "flex";
+    try {
+      const data = await loadJSON("apps.json");
+      appsData = data;
+      currentPage = 1;
+      renderList(appsData);
+    } catch (err) {
+      gamesList.innerHTML = "<p class='text-red-500'>Error loading apps</p>";
+    }
+    loader.style.display = "none";
+  });
+
+  document.getElementById("navMore").addEventListener("click", () => {
+    document.getElementById("moreModal").classList.remove("hidden");
+  });
+
+});
+    
+  // Обработка нижнего меню
+  document.getElementById("navGames").addEventListener("click", async () => {
+    currentCatalog = "games";
+    mainListTitle.textContent = "All Games";
+    searchInput.classList.remove("hidden");
+    loader.style.display = "flex";
+    try {
+      const data = await loadJSON("games.json");
+      gamesData = data;
+      currentPage = 1;
+      renderList(gamesData);
+    } catch (err) {
+      gamesList.innerHTML = "<p class='text-red-500'>Error loading games</p>";
+    }
+    loader.style.display = "none";
+  });
+
+  document.getElementById("navApps").addEventListener("click", async () => {
+    currentCatalog = "apps";
+    mainListTitle.textContent = "All Apps";
+    searchInput.classList.remove("hidden");
+    loader.style.display = "flex";
+    try {
+      const data = await loadJSON("apps.json");
+      appsData = data;
+      currentPage = 1;
+      renderList(appsData);
+    } catch (err) {
+      gamesList.innerHTML = "<p class='text-red-500'>Error loading apps</p>";
+    }
+    loader.style.display = "none";
+  });
+
+  document.getElementById("navMore").addEventListener("click", () => {
+    document.getElementById("moreModal").classList.remove("hidden");
+  });
+
+});
   }
 
   async function updateDownloadCounts() {
@@ -146,14 +412,90 @@ function renderList(data) {
         const title = el.dataset.title;
         const count = downloadsData[title] || 0;
         el.textContent = `⬇️ Downloads: ${count}`;
-      });
+      
+  // Обработка нижнего меню
+  document.getElementById("navGames").addEventListener("click", async () => {
+    currentCatalog = "games";
+    mainListTitle.textContent = "All Games";
+    searchInput.classList.remove("hidden");
+    loader.style.display = "flex";
+    try {
+      const data = await loadJSON("games.json");
+      gamesData = data;
+      currentPage = 1;
+      renderList(gamesData);
+    } catch (err) {
+      gamesList.innerHTML = "<p class='text-red-500'>Error loading games</p>";
+    }
+    loader.style.display = "none";
+  });
+
+  document.getElementById("navApps").addEventListener("click", async () => {
+    currentCatalog = "apps";
+    mainListTitle.textContent = "All Apps";
+    searchInput.classList.remove("hidden");
+    loader.style.display = "flex";
+    try {
+      const data = await loadJSON("apps.json");
+      appsData = data;
+      currentPage = 1;
+      renderList(appsData);
+    } catch (err) {
+      gamesList.innerHTML = "<p class='text-red-500'>Error loading apps</p>";
+    }
+    loader.style.display = "none";
+  });
+
+  document.getElementById("navMore").addEventListener("click", () => {
+    document.getElementById("moreModal").classList.remove("hidden");
+  });
+
+});
 
       if (modalTitle.textContent && downloadsData[modalTitle.textContent]) {
         const count = downloadsData[modalTitle.textContent];
         const modalCounter = document.getElementById("modalDownloadCount");
         if (modalCounter) modalCounter.textContent = `⬇️ Downloads: ${count}`;
       }
-    });
+    
+  // Обработка нижнего меню
+  document.getElementById("navGames").addEventListener("click", async () => {
+    currentCatalog = "games";
+    mainListTitle.textContent = "All Games";
+    searchInput.classList.remove("hidden");
+    loader.style.display = "flex";
+    try {
+      const data = await loadJSON("games.json");
+      gamesData = data;
+      currentPage = 1;
+      renderList(gamesData);
+    } catch (err) {
+      gamesList.innerHTML = "<p class='text-red-500'>Error loading games</p>";
+    }
+    loader.style.display = "none";
+  });
+
+  document.getElementById("navApps").addEventListener("click", async () => {
+    currentCatalog = "apps";
+    mainListTitle.textContent = "All Apps";
+    searchInput.classList.remove("hidden");
+    loader.style.display = "flex";
+    try {
+      const data = await loadJSON("apps.json");
+      appsData = data;
+      currentPage = 1;
+      renderList(appsData);
+    } catch (err) {
+      gamesList.innerHTML = "<p class='text-red-500'>Error loading apps</p>";
+    }
+    loader.style.display = "none";
+  });
+
+  document.getElementById("navMore").addEventListener("click", () => {
+    document.getElementById("moreModal").classList.remove("hidden");
+  });
+
+});
   }
 
   function incrementDownloadCount(title) {
@@ -166,17 +508,131 @@ function renderList(data) {
   menuToggle.addEventListener("click", () => {
     sideMenu.classList.add("open");
     overlay.classList.remove("hidden");
+  
+  // Обработка нижнего меню
+  document.getElementById("navGames").addEventListener("click", async () => {
+    currentCatalog = "games";
+    mainListTitle.textContent = "All Games";
+    searchInput.classList.remove("hidden");
+    loader.style.display = "flex";
+    try {
+      const data = await loadJSON("games.json");
+      gamesData = data;
+      currentPage = 1;
+      renderList(gamesData);
+    } catch (err) {
+      gamesList.innerHTML = "<p class='text-red-500'>Error loading games</p>";
+    }
+    loader.style.display = "none";
   });
+
+  document.getElementById("navApps").addEventListener("click", async () => {
+    currentCatalog = "apps";
+    mainListTitle.textContent = "All Apps";
+    searchInput.classList.remove("hidden");
+    loader.style.display = "flex";
+    try {
+      const data = await loadJSON("apps.json");
+      appsData = data;
+      currentPage = 1;
+      renderList(appsData);
+    } catch (err) {
+      gamesList.innerHTML = "<p class='text-red-500'>Error loading apps</p>";
+    }
+    loader.style.display = "none";
+  });
+
+  document.getElementById("navMore").addEventListener("click", () => {
+    document.getElementById("moreModal").classList.remove("hidden");
+  });
+
+});
 
   menuClose.addEventListener("click", () => {
     sideMenu.classList.remove("open");
     overlay.classList.add("hidden");
+  
+  // Обработка нижнего меню
+  document.getElementById("navGames").addEventListener("click", async () => {
+    currentCatalog = "games";
+    mainListTitle.textContent = "All Games";
+    searchInput.classList.remove("hidden");
+    loader.style.display = "flex";
+    try {
+      const data = await loadJSON("games.json");
+      gamesData = data;
+      currentPage = 1;
+      renderList(gamesData);
+    } catch (err) {
+      gamesList.innerHTML = "<p class='text-red-500'>Error loading games</p>";
+    }
+    loader.style.display = "none";
   });
+
+  document.getElementById("navApps").addEventListener("click", async () => {
+    currentCatalog = "apps";
+    mainListTitle.textContent = "All Apps";
+    searchInput.classList.remove("hidden");
+    loader.style.display = "flex";
+    try {
+      const data = await loadJSON("apps.json");
+      appsData = data;
+      currentPage = 1;
+      renderList(appsData);
+    } catch (err) {
+      gamesList.innerHTML = "<p class='text-red-500'>Error loading apps</p>";
+    }
+    loader.style.display = "none";
+  });
+
+  document.getElementById("navMore").addEventListener("click", () => {
+    document.getElementById("moreModal").classList.remove("hidden");
+  });
+
+});
 
   overlay.addEventListener("click", () => {
     sideMenu.classList.remove("open");
     overlay.classList.add("hidden");
+  
+  // Обработка нижнего меню
+  document.getElementById("navGames").addEventListener("click", async () => {
+    currentCatalog = "games";
+    mainListTitle.textContent = "All Games";
+    searchInput.classList.remove("hidden");
+    loader.style.display = "flex";
+    try {
+      const data = await loadJSON("games.json");
+      gamesData = data;
+      currentPage = 1;
+      renderList(gamesData);
+    } catch (err) {
+      gamesList.innerHTML = "<p class='text-red-500'>Error loading games</p>";
+    }
+    loader.style.display = "none";
   });
+
+  document.getElementById("navApps").addEventListener("click", async () => {
+    currentCatalog = "apps";
+    mainListTitle.textContent = "All Apps";
+    searchInput.classList.remove("hidden");
+    loader.style.display = "flex";
+    try {
+      const data = await loadJSON("apps.json");
+      appsData = data;
+      currentPage = 1;
+      renderList(appsData);
+    } catch (err) {
+      gamesList.innerHTML = "<p class='text-red-500'>Error loading apps</p>";
+    }
+    loader.style.display = "none";
+  });
+
+  document.getElementById("navMore").addEventListener("click", () => {
+    document.getElementById("moreModal").classList.remove("hidden");
+  });
+
+});
 
   document.querySelectorAll(".menuItem").forEach(btn => {
     btn.addEventListener("click", async () => {
@@ -202,8 +658,84 @@ function renderList(data) {
       loader.style.display = "none";
       sideMenu.classList.remove("open");
       overlay.classList.add("hidden");
-    });
+    
+  // Обработка нижнего меню
+  document.getElementById("navGames").addEventListener("click", async () => {
+    currentCatalog = "games";
+    mainListTitle.textContent = "All Games";
+    searchInput.classList.remove("hidden");
+    loader.style.display = "flex";
+    try {
+      const data = await loadJSON("games.json");
+      gamesData = data;
+      currentPage = 1;
+      renderList(gamesData);
+    } catch (err) {
+      gamesList.innerHTML = "<p class='text-red-500'>Error loading games</p>";
+    }
+    loader.style.display = "none";
   });
+
+  document.getElementById("navApps").addEventListener("click", async () => {
+    currentCatalog = "apps";
+    mainListTitle.textContent = "All Apps";
+    searchInput.classList.remove("hidden");
+    loader.style.display = "flex";
+    try {
+      const data = await loadJSON("apps.json");
+      appsData = data;
+      currentPage = 1;
+      renderList(appsData);
+    } catch (err) {
+      gamesList.innerHTML = "<p class='text-red-500'>Error loading apps</p>";
+    }
+    loader.style.display = "none";
+  });
+
+  document.getElementById("navMore").addEventListener("click", () => {
+    document.getElementById("moreModal").classList.remove("hidden");
+  });
+
+});
+  
+  // Обработка нижнего меню
+  document.getElementById("navGames").addEventListener("click", async () => {
+    currentCatalog = "games";
+    mainListTitle.textContent = "All Games";
+    searchInput.classList.remove("hidden");
+    loader.style.display = "flex";
+    try {
+      const data = await loadJSON("games.json");
+      gamesData = data;
+      currentPage = 1;
+      renderList(gamesData);
+    } catch (err) {
+      gamesList.innerHTML = "<p class='text-red-500'>Error loading games</p>";
+    }
+    loader.style.display = "none";
+  });
+
+  document.getElementById("navApps").addEventListener("click", async () => {
+    currentCatalog = "apps";
+    mainListTitle.textContent = "All Apps";
+    searchInput.classList.remove("hidden");
+    loader.style.display = "flex";
+    try {
+      const data = await loadJSON("apps.json");
+      appsData = data;
+      currentPage = 1;
+      renderList(appsData);
+    } catch (err) {
+      gamesList.innerHTML = "<p class='text-red-500'>Error loading apps</p>";
+    }
+    loader.style.display = "none";
+  });
+
+  document.getElementById("navMore").addEventListener("click", () => {
+    document.getElementById("moreModal").classList.remove("hidden");
+  });
+
+});
 
   // показать сертификаты при загрузке
   if (certificateInfo) {
@@ -216,11 +748,87 @@ function renderList(data) {
       item.name.toLowerCase().includes(value)
     );
     renderList(filtered);
+  
+  // Обработка нижнего меню
+  document.getElementById("navGames").addEventListener("click", async () => {
+    currentCatalog = "games";
+    mainListTitle.textContent = "All Games";
+    searchInput.classList.remove("hidden");
+    loader.style.display = "flex";
+    try {
+      const data = await loadJSON("games.json");
+      gamesData = data;
+      currentPage = 1;
+      renderList(gamesData);
+    } catch (err) {
+      gamesList.innerHTML = "<p class='text-red-500'>Error loading games</p>";
+    }
+    loader.style.display = "none";
   });
+
+  document.getElementById("navApps").addEventListener("click", async () => {
+    currentCatalog = "apps";
+    mainListTitle.textContent = "All Apps";
+    searchInput.classList.remove("hidden");
+    loader.style.display = "flex";
+    try {
+      const data = await loadJSON("apps.json");
+      appsData = data;
+      currentPage = 1;
+      renderList(appsData);
+    } catch (err) {
+      gamesList.innerHTML = "<p class='text-red-500'>Error loading apps</p>";
+    }
+    loader.style.display = "none";
+  });
+
+  document.getElementById("navMore").addEventListener("click", () => {
+    document.getElementById("moreModal").classList.remove("hidden");
+  });
+
+});
 
   document.getElementById("showMoreBtn").addEventListener("click", () => {
     renderList(currentCatalog === "games" ? gamesData : appsData);
+  
+  // Обработка нижнего меню
+  document.getElementById("navGames").addEventListener("click", async () => {
+    currentCatalog = "games";
+    mainListTitle.textContent = "All Games";
+    searchInput.classList.remove("hidden");
+    loader.style.display = "flex";
+    try {
+      const data = await loadJSON("games.json");
+      gamesData = data;
+      currentPage = 1;
+      renderList(gamesData);
+    } catch (err) {
+      gamesList.innerHTML = "<p class='text-red-500'>Error loading games</p>";
+    }
+    loader.style.display = "none";
   });
+
+  document.getElementById("navApps").addEventListener("click", async () => {
+    currentCatalog = "apps";
+    mainListTitle.textContent = "All Apps";
+    searchInput.classList.remove("hidden");
+    loader.style.display = "flex";
+    try {
+      const data = await loadJSON("apps.json");
+      appsData = data;
+      currentPage = 1;
+      renderList(appsData);
+    } catch (err) {
+      gamesList.innerHTML = "<p class='text-red-500'>Error loading apps</p>";
+    }
+    loader.style.display = "none";
+  });
+
+  document.getElementById("navMore").addEventListener("click", () => {
+    document.getElementById("moreModal").classList.remove("hidden");
+  });
+
+});
 
   window.closeModal = function () {
     gameModal.classList.remove("show");
@@ -240,7 +848,45 @@ function renderList(data) {
           body: JSON.stringify({
             priceId: "price_1RXKaJ08Gjl0YPOata2ufkK4" // $6 Standard Certificate
           })
-        });
+        
+  // Обработка нижнего меню
+  document.getElementById("navGames").addEventListener("click", async () => {
+    currentCatalog = "games";
+    mainListTitle.textContent = "All Games";
+    searchInput.classList.remove("hidden");
+    loader.style.display = "flex";
+    try {
+      const data = await loadJSON("games.json");
+      gamesData = data;
+      currentPage = 1;
+      renderList(gamesData);
+    } catch (err) {
+      gamesList.innerHTML = "<p class='text-red-500'>Error loading games</p>";
+    }
+    loader.style.display = "none";
+  });
+
+  document.getElementById("navApps").addEventListener("click", async () => {
+    currentCatalog = "apps";
+    mainListTitle.textContent = "All Apps";
+    searchInput.classList.remove("hidden");
+    loader.style.display = "flex";
+    try {
+      const data = await loadJSON("apps.json");
+      appsData = data;
+      currentPage = 1;
+      renderList(appsData);
+    } catch (err) {
+      gamesList.innerHTML = "<p class='text-red-500'>Error loading apps</p>";
+    }
+    loader.style.display = "none";
+  });
+
+  document.getElementById("navMore").addEventListener("click", () => {
+    document.getElementById("moreModal").classList.remove("hidden");
+  });
+
+});
 
         const { url } = await res.json();
         if (url) {
@@ -252,6 +898,82 @@ function renderList(data) {
         console.error(err);
         alert("Сервер Stripe недоступен");
       }
-    });
+    
+  // Обработка нижнего меню
+  document.getElementById("navGames").addEventListener("click", async () => {
+    currentCatalog = "games";
+    mainListTitle.textContent = "All Games";
+    searchInput.classList.remove("hidden");
+    loader.style.display = "flex";
+    try {
+      const data = await loadJSON("games.json");
+      gamesData = data;
+      currentPage = 1;
+      renderList(gamesData);
+    } catch (err) {
+      gamesList.innerHTML = "<p class='text-red-500'>Error loading games</p>";
+    }
+    loader.style.display = "none";
+  });
+
+  document.getElementById("navApps").addEventListener("click", async () => {
+    currentCatalog = "apps";
+    mainListTitle.textContent = "All Apps";
+    searchInput.classList.remove("hidden");
+    loader.style.display = "flex";
+    try {
+      const data = await loadJSON("apps.json");
+      appsData = data;
+      currentPage = 1;
+      renderList(appsData);
+    } catch (err) {
+      gamesList.innerHTML = "<p class='text-red-500'>Error loading apps</p>";
+    }
+    loader.style.display = "none";
+  });
+
+  document.getElementById("navMore").addEventListener("click", () => {
+    document.getElementById("moreModal").classList.remove("hidden");
+  });
+
+});
   }
+
+  // Обработка нижнего меню
+  document.getElementById("navGames").addEventListener("click", async () => {
+    currentCatalog = "games";
+    mainListTitle.textContent = "All Games";
+    searchInput.classList.remove("hidden");
+    loader.style.display = "flex";
+    try {
+      const data = await loadJSON("games.json");
+      gamesData = data;
+      currentPage = 1;
+      renderList(gamesData);
+    } catch (err) {
+      gamesList.innerHTML = "<p class='text-red-500'>Error loading games</p>";
+    }
+    loader.style.display = "none";
+  });
+
+  document.getElementById("navApps").addEventListener("click", async () => {
+    currentCatalog = "apps";
+    mainListTitle.textContent = "All Apps";
+    searchInput.classList.remove("hidden");
+    loader.style.display = "flex";
+    try {
+      const data = await loadJSON("apps.json");
+      appsData = data;
+      currentPage = 1;
+      renderList(appsData);
+    } catch (err) {
+      gamesList.innerHTML = "<p class='text-red-500'>Error loading apps</p>";
+    }
+    loader.style.display = "none";
+  });
+
+  document.getElementById("navMore").addEventListener("click", () => {
+    document.getElementById("moreModal").classList.remove("hidden");
+  });
+
 });
