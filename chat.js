@@ -37,7 +37,9 @@ document.addEventListener("DOMContentLoaded", () => {
   unreadBadge.className = "ml-1 text-xs text-red-400 font-bold";
   unreadBadge.textContent = "";
 
-  chatBtn.querySelector("span").appendChild(unreadBadge);
+  if (chatBtn && chatBtn.querySelector("span")) {
+    chatBtn.querySelector("span").appendChild(unreadBadge);
+  }
 
   function updateNicknameUI() {
     if (nickname) {
@@ -112,8 +114,14 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  onChildAdded(ref(db, "messages"), (data) => {
+  const messagesRef = ref(db, "messages");
+  onChildAdded(messagesRef, (data) => {
     const msg = data.val();
+    if (!msg || !chatMessages) {
+      console.warn("Сообщение пустое или chatMessages не найдено", msg);
+      return;
+    }
+
     const div = document.createElement("div");
     div.className = "mb-2";
     div.innerHTML = `<strong>${msg.name}:</strong> ${msg.text}`;
