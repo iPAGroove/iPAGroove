@@ -22,6 +22,16 @@ const changeNicknameBtn = document.getElementById("changeNickname");
 const onlineCounter = document.getElementById("onlineCounter");
 const navChat = document.getElementById("navChat");
 
+// 🔊 Звук уведомления
+const notifySound = new Audio("https://notificationsounds.com/storage/sounds/file-sounds-1155-pristine.mp3");
+notifySound.volume = 0.5;
+
+// 🎨 Цвет ника по хешу
+function getColorForName(name) {
+  const hash = [...name].reduce((acc, char) => char.charCodeAt(0) + ((acc << 5) - acc), 0);
+  return `hsl(${hash % 360}, 70%, 60%)`;
+}
+
 function showUnreadBadge(count) {
   let badge = navChat.querySelector(".badge");
   if (!badge) {
@@ -36,7 +46,8 @@ function showUnreadBadge(count) {
 function renderMessage(data) {
   const p = document.createElement("p");
   p.className = "mb-1";
-  p.innerHTML = `<strong class="text-purple-400">${data.name}:</strong> ${data.text}`;
+  const color = getColorForName(data.name);
+  p.innerHTML = `<strong style="color:${color}">${data.name}:</strong> ${data.text}`;
   chatMessages.appendChild(p);
   chatMessages.scrollTop = chatMessages.scrollHeight;
 }
@@ -52,6 +63,12 @@ onValue(chatMessagesRef, (snapshot) => {
   chatMessages.innerHTML = "";
   messages.forEach(renderMessage);
   updateUnread(messages);
+
+  // 🔔 Воспроизведение звука при новых сообщениях
+  const latest = messages[messages.length - 1];
+  if (latest && latest.timestamp > lastSeenTimestamp && chatModal.classList.contains("hidden")) {
+    notifySound.play();
+  }
 });
 
 chatForm.addEventListener("submit", (e) => {
@@ -98,7 +115,6 @@ function init() {
     currentNickname.textContent = `👤 ${nickname}`;
   }
 
-  // Подсчёт онлайн-участников
   const userRef = push(onlineUsersRef);
   userRef.set(true);
   userRef.onDisconnect().remove();
