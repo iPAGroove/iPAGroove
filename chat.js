@@ -102,9 +102,7 @@ document.addEventListener("DOMContentLoaded", () => {
   navChat.addEventListener("click", () => {
 
     setTimeout(() => {
-      if (!chatModal.classList.contains("hidden")) {
-        chatMessages.scrollTop = chatMessages.scrollHeight;
-      }
+      chatMessages.scrollTop = chatMessages.scrollHeight;
     }, 0);
     const isOpening = chatModal.classList.contains("hidden");
     chatModal.classList.toggle("hidden");
