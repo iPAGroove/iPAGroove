@@ -124,8 +124,6 @@ document.addEventListener("DOMContentLoaded", () => {
     div.className = "mb-2";
     div.innerHTML = `<strong>${msg.name}:</strong> ${msg.text}`;
     chatMessages.appendChild(div);
-    chatMessages.scrollTop = chatMessages.scrollHeight;
-
     // Увеличиваем счётчик, если чат закрыт
     if (chatModal.classList.contains("hidden")) {
       unreadCount++;
