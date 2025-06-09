@@ -5,15 +5,16 @@ document.addEventListener("DOMContentLoaded", () => {
   const db = getDatabase();
   const chatMessagesRef = ref(db, "messages");
   const onlineUsersRef = ref(db, "onlineUsers");
+  const userId = localStorage.getItem("sessionID") || `session_${Date.now()}_${Math.floor(Math.random() * 10000)}`;
+  localStorage.setItem("sessionID", userId);
+  const userRef = ref(db, `onlineUsers/${userId}`);
 
-  let userRef = null;
+  // userRef удалён, заменено на userId и ref(db, `onlineUsers/${userId}`)
 
   function setOnline() {
-  if (userRef) userRef.remove();
-  userRef = push(onlineUsersRef);
-  userRef.set(true);
-  userRef.onDisconnect().remove();
-  }
+  set(ref(db, `onlineUsers/${userId}`), true);
+  onDisconnect(ref(db, `onlineUsers/${userId}`)).remove();
+}
 
   function setOffline() {
     if (userRef) userRef.remove();
