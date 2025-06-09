@@ -30,7 +30,10 @@ document.addEventListener("DOMContentLoaded", () => {
   const changeNicknameBtn = document.getElementById("changeNickname");
   const onlineCounter = document.getElementById("onlineCounter");
   const navChat = document.getElementById("navChat");
-  const onlineBadge = navChat.querySelector(".online-indicator");
+  const chatSendButton = chatForm.querySelector("button");
+  const chatInlineOnline = document.createElement("span");
+  chatInlineOnline.className = "ml-2 text-green-400 text-xs font-bold";
+  chatSendButton.parentNode.insertBefore(chatInlineOnline, chatSendButton.nextSibling);
 
   function getColorForName(name) {
     let hash = 0;
@@ -124,7 +127,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const users = snapshot.val() || {};
       const count = Object.keys(users).length;
       onlineCounter.textContent = `🟢 Online: ${count}`;
-      if (onlineBadge) onlineBadge.textContent = `🟢 ${count}`;
+      chatInlineOnline.textContent = `🟢 Online: ${count}`;
     });
   }
 
