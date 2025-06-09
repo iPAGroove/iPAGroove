@@ -1,5 +1,5 @@
 
-import { getDatabase, ref, onValue, push, serverTimestamp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-database.js";
+import { getDatabase, ref, push, onChildAdded, onValue } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-database.js";
 
 const db = getDatabase();
 const chatMessagesRef = ref(db, "messages");
@@ -8,6 +8,14 @@ const onlineUsersRef = ref(db, "onlineUsers");
 let nickname = localStorage.getItem("nickname") || "";
 let lastSeenTimestamp = parseInt(localStorage.getItem("lastSeen") || "0");
 let unreadCount = 0;
+
+let notifySound;
+document.addEventListener("click", () => {
+  if (!notifySound) {
+    notifySound = new Audio("https://assets.mixkit.co/sfx/preview/mixkit-message-pop-alert-2354.mp3");
+    notifySound.volume = 0.4;
+  }
+});
 
 const nicknamePrompt = document.getElementById("nicknamePrompt");
 const chatMain = document.getElementById("chatMain");
@@ -22,14 +30,13 @@ const changeNicknameBtn = document.getElementById("changeNickname");
 const onlineCounter = document.getElementById("onlineCounter");
 const navChat = document.getElementById("navChat");
 
-// 🔊 Звук уведомления
-const notifySound = new Audio("https://notificationsounds.com/storage/sounds/file-sounds-1155-pristine.mp3");
-notifySound.volume = 0.5;
-
-// 🎨 Цвет ника по хешу
 function getColorForName(name) {
-  const hash = [...name].reduce((acc, char) => char.charCodeAt(0) + ((acc << 5) - acc), 0);
-  return `hsl(${hash % 360}, 70%, 60%)`;
+  let hash = 0;
+  for (let i = 0; i < name.length; i++) {
+    hash = name.charCodeAt(i) + ((hash << 5) - hash);
+  }
+  const hue = hash % 360;
+  return `hsl(${hue}, 60%, 60%)`;
 }
 
 function showUnreadBadge(count) {
@@ -52,22 +59,14 @@ function renderMessage(data) {
   chatMessages.scrollTop = chatMessages.scrollHeight;
 }
 
-function updateUnread(messages) {
-  unreadCount = messages.filter(msg => msg.timestamp > lastSeenTimestamp).length;
-  showUnreadBadge(unreadCount);
-}
+onChildAdded(chatMessagesRef, (snapshot) => {
+  const msg = snapshot.val();
+  renderMessage(msg);
 
-onValue(chatMessagesRef, (snapshot) => {
-  const data = snapshot.val() || {};
-  const messages = Object.values(data).sort((a, b) => a.timestamp - b.timestamp);
-  chatMessages.innerHTML = "";
-  messages.forEach(renderMessage);
-  updateUnread(messages);
-
-  // 🔔 Воспроизведение звука при новых сообщениях
-  const latest = messages[messages.length - 1];
-  if (latest && latest.timestamp > lastSeenTimestamp && chatModal.classList.contains("hidden")) {
-    notifySound.play();
+  if (msg.timestamp > lastSeenTimestamp && chatModal.classList.contains("hidden")) {
+    unreadCount++;
+    showUnreadBadge(unreadCount);
+    if (notifySound) notifySound.play().catch(() => {});
   }
 });
 
