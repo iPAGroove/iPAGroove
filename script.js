@@ -119,7 +119,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   
   
-  document.getElementById("navGames").addEventListener("click", async () => {
+  const navGames = document.getElementById("navGames");
+  if (navGames) navGames.addEventListener("click", async () => {
     currentCatalog = "games";
     mainListTitle.textContent = "All Games";
     searchInput.classList.remove("hidden");
@@ -134,7 +135,8 @@ document.addEventListener("DOMContentLoaded", () => {
     loader.style.display = "none";
   });
 
-  document.getElementById("navApps").addEventListener("click", async () => {
+  const navApps = document.getElementById("navApps");
+  if (navApps) navApps.addEventListener("click", async () => {
     currentCatalog = "apps";
     mainListTitle.textContent = "All Apps";
     searchInput.classList.remove("hidden");
@@ -149,7 +151,8 @@ document.addEventListener("DOMContentLoaded", () => {
     loader.style.display = "none";
   });
 
-  document.getElementById("navChat").addEventListener("click", () => {
+  const navChat = document.getElementById("navChat");
+  if (navChat) navChat.addEventListener("click", () => {
     const chatModal = document.getElementById("chatModal");
     chatModal.classList.toggle("hidden");
 
@@ -161,7 +164,8 @@ document.addEventListener("DOMContentLoaded", () => {
       document.getElementById("currentNickname").textContent = `You: ${nickname}`;
     }
   });
-  document.getElementById("navMore").addEventListener("click", () => {
+  const navMore = document.getElementById("navMore");
+  if (navMore) navMore.addEventListener("click", () => {
     document.getElementById("moreModal").classList.remove("hidden");
   });
 
