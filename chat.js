@@ -1,11 +1,9 @@
 
-// Firebase SDK
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
 import {
   getDatabase, ref, push, onChildAdded, set, onValue
 } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-database.js";
 
-// Firebase config
 const firebaseConfig = {
   apiKey: "AIzaSyBizq_3JJXWgUa-aaW8MKj6AV0Jt_-XYcI",
   authDomain: "ipa-chat.firebaseapp.com",
@@ -17,12 +15,11 @@ const firebaseConfig = {
   measurementId: "G-H2T6L8VZPG"
 };
 
-// Init Firebase
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
-window.addEventListener("DOMContentLoaded", () => {
-  const chatBtn = document.getElementById("chatButton");
+document.addEventListener("DOMContentLoaded", () => {
+  const chatBtn = document.getElementById("navChat");
   const chatModal = document.getElementById("chatModal");
   const chatMessages = document.getElementById("chatMessages");
   const chatForm = document.getElementById("chatForm");
@@ -34,6 +31,13 @@ window.addEventListener("DOMContentLoaded", () => {
   const onlineCounter = document.getElementById("onlineCounter");
 
   let nickname = localStorage.getItem("nickname");
+  let unreadCount = 0;
+  const unreadBadge = document.createElement("span");
+  unreadBadge.id = "chatUnread";
+  unreadBadge.className = "ml-1 text-xs text-red-400 font-bold";
+  unreadBadge.textContent = "";
+
+  chatBtn.querySelector("span").appendChild(unreadBadge);
 
   function updateNicknameUI() {
     if (nickname) {
@@ -70,6 +74,10 @@ window.addEventListener("DOMContentLoaded", () => {
       updateNicknameUI();
       updatePresence();
     }
+
+    // сброс непрочитанных
+    unreadCount = 0;
+    unreadBadge.textContent = "";
   });
 
   saveNickBtn.addEventListener("click", () => {
@@ -111,6 +119,12 @@ window.addEventListener("DOMContentLoaded", () => {
     div.innerHTML = `<strong>${msg.name}:</strong> ${msg.text}`;
     chatMessages.appendChild(div);
     chatMessages.scrollTop = chatMessages.scrollHeight;
+
+    // Увеличиваем счётчик, если чат закрыт
+    if (chatModal.classList.contains("hidden")) {
+      unreadCount++;
+      unreadBadge.textContent = `(${unreadCount})`;
+    }
   });
 
   onValue(ref(db, "presence"), (snapshot) => {
