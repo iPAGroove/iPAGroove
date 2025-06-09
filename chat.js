@@ -1,152 +1,112 @@
 
-import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
-import {
-  getDatabase, ref, push, onChildAdded, set, onValue
-} from "https://www.gstatic.com/firebasejs/9.22.2/firebase-database.js";
+import { getDatabase, ref, onValue, push, serverTimestamp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-database.js";
 
-const firebaseConfig = {
-  apiKey: "AIzaSyBizq_3JJXWgUa-aaW8MKj6AV0Jt_-XYcI",
-  authDomain: "ipa-chat.firebaseapp.com",
-  databaseURL: "https://ipa-chat-default-rtdb.firebaseio.com",
-  projectId: "ipa-chat",
-  storageBucket: "ipa-chat.firebasestorage.app",
-  messagingSenderId: "534978415110",
-  appId: "1:534978415110:web:a40838ef597b6d0ff09187",
-  measurementId: "G-H2T6L8VZPG"
-};
+const db = getDatabase();
+const chatMessagesRef = ref(db, "messages");
+const onlineUsersRef = ref(db, "onlineUsers");
 
-const app = initializeApp(firebaseConfig);
-const db = getDatabase(app);
+let nickname = localStorage.getItem("nickname") || "";
+let lastSeenTimestamp = parseInt(localStorage.getItem("lastSeen") || "0");
+let unreadCount = 0;
 
-document.addEventListener("DOMContentLoaded", () => {
-  const chatBtn = document.getElementById("navChat");
-  const chatModal = document.getElementById("chatModal");
-  const chatMessages = document.getElementById("chatMessages");
-  const chatForm = document.getElementById("chatForm");
-  const chatInput = document.getElementById("chatInput");
-  const nickInput = document.getElementById("nicknameInput");
-  const saveNickBtn = document.getElementById("saveNickname");
-  const currentNickLabel = document.getElementById("currentNickname");
-  const changeNickBtn = document.getElementById("changeNickname");
-  const onlineCounter = document.getElementById("onlineCounter");
+const nicknamePrompt = document.getElementById("nicknamePrompt");
+const chatMain = document.getElementById("chatMain");
+const chatModal = document.getElementById("chatModal");
+const chatMessages = document.getElementById("chatMessages");
+const chatForm = document.getElementById("chatForm");
+const chatInput = document.getElementById("chatInput");
+const nicknameInput = document.getElementById("nicknameInput");
+const saveNicknameBtn = document.getElementById("saveNickname");
+const currentNickname = document.getElementById("currentNickname");
+const changeNicknameBtn = document.getElementById("changeNickname");
+const onlineCounter = document.getElementById("onlineCounter");
+const navChat = document.getElementById("navChat");
 
-  let nickname = localStorage.getItem("nickname");
-  let unreadCount = 0;
-  let lastSeen = parseInt(localStorage.getItem("lastSeen") || "0");
-  const unreadBadge = document.createElement("span");
-  unreadBadge.id = "chatUnread";
-  unreadBadge.className = "ml-1 text-xs text-red-400 font-bold hidden";
-  unreadBadge.textContent = "";
-
-  if (chatBtn && chatBtn.querySelector("span")) {
-    chatBtn.querySelector("span").appendChild(unreadBadge);
+function showUnreadBadge(count) {
+  let badge = navChat.querySelector(".badge");
+  if (!badge) {
+    badge = document.createElement("span");
+    badge.className = "badge absolute top-0 right-0 bg-red-500 text-white text-xs rounded-full px-1";
+    navChat.appendChild(badge);
   }
+  badge.textContent = count;
+  badge.style.display = count > 0 ? "block" : "none";
+}
 
-  function updateNicknameUI() {
-    if (nickname) {
-      currentNickLabel.textContent = `You: ${nickname}`;
-    }
-  }
+function renderMessage(data) {
+  const p = document.createElement("p");
+  p.className = "mb-1";
+  p.innerHTML = `<strong class="text-purple-400">${data.name}:</strong> ${data.text}`;
+  chatMessages.appendChild(p);
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+}
 
-  function updatePresence() {
-    if (!nickname) return;
-    const presenceRef = ref(db, `presence/${nickname}`);
-    set(presenceRef, { online: true, ts: Date.now() });
+function updateUnread(messages) {
+  unreadCount = messages.filter(msg => msg.timestamp > lastSeenTimestamp).length;
+  showUnreadBadge(unreadCount);
+}
 
-    setInterval(() => {
-      set(presenceRef, { online: true, ts: Date.now() });
-    }, 15000);
-  }
-
-  if (nickname) {
-    document.getElementById("nicknamePrompt").classList.add("hidden");
-    document.getElementById("chatMain").classList.remove("hidden");
-    updateNicknameUI();
-    updatePresence();
-  }
-
-  chatBtn.addEventListener("click", () => {
-    chatModal.classList.toggle("hidden");
-
-    if (!nickname) {
-      document.getElementById("nicknamePrompt").classList.remove("hidden");
-      document.getElementById("chatMain").classList.add("hidden");
-    } else {
-      document.getElementById("nicknamePrompt").classList.add("hidden");
-      document.getElementById("chatMain").classList.remove("hidden");
-      updateNicknameUI();
-      updatePresence();
-    }
-
-        lastSeen = Date.now();
-    localStorage.setItem("lastSeen", lastSeen);
-    unreadCount = 0;
-    unreadBadge.textContent = "";
-  });
-
-  saveNickBtn.addEventListener("click", () => {
-    const nick = nickInput.value.trim();
-    if (nick) {
-      nickname = nick;
-      localStorage.setItem("nickname", nickname);
-      document.getElementById("nicknamePrompt").classList.add("hidden");
-      document.getElementById("chatMain").classList.remove("hidden");
-      updateNicknameUI();
-      updatePresence();
-    }
-  });
-
-  changeNickBtn.addEventListener("click", () => {
-    localStorage.removeItem("nickname");
-    nickname = null;
-    document.getElementById("nicknamePrompt").classList.remove("hidden");
-    document.getElementById("chatMain").classList.add("hidden");
-  });
-
-  chatForm.addEventListener("submit", (e) => {
-    e.preventDefault();
-    const message = chatInput.value.trim();
-    if (message && nickname) {
-      push(ref(db, "messages"), {
-        name: nickname,
-        text: message,
-        time: Date.now()
-      });
-      chatInput.value = "";
-    }
-  });
-
-  const messagesRef = ref(db, "messages");
-  onChildAdded(messagesRef, (data) => {
-    const msg = data.val();
-    if (!msg || !chatMessages) {
-      console.warn("Сообщение пустое или chatMessages не найдено", msg);
-      return;
-    }
-
-    const div = document.createElement("div");
-    div.className = "mb-2";
-    div.innerHTML = `<strong>${msg.name}:</strong> ${msg.text}`;
-    chatMessages.appendChild(div);
-    chatMessages.scrollTop = chatMessages.scrollHeight;
-
-    // Увеличиваем счётчик, если чат закрыт
-    if (chatModal.classList.contains("hidden") && msg.time > lastSeen) {
-      unreadCount++;
-      unreadBadge.textContent = `${unreadCount}`;
-      unreadBadge.classList.remove("hidden");
-    }
-  });
-
-  onValue(ref(db, "presence"), (snapshot) => {
-    const users = snapshot.val();
-    const now = Date.now();
-    let onlineCount = 0;
-    for (const key in users) {
-      if (users[key].ts && now - users[key].ts < 30000) {
-        onlineCount++;
-      }
-    }
-    onlineCounter.textContent = `🟢 Online: ${onlineCount}`;
-  });
+onValue(chatMessagesRef, (snapshot) => {
+  const data = snapshot.val() || {};
+  const messages = Object.values(data).sort((a, b) => a.timestamp - b.timestamp);
+  chatMessages.innerHTML = "";
+  messages.forEach(renderMessage);
+  updateUnread(messages);
 });
+
+chatForm.addEventListener("submit", (e) => {
+  e.preventDefault();
+  const text = chatInput.value.trim();
+  if (!text || !nickname) return;
+  push(chatMessagesRef, {
+    name: nickname,
+    text,
+    timestamp: Date.now()
+  });
+  chatInput.value = "";
+});
+
+saveNicknameBtn.addEventListener("click", () => {
+  const name = nicknameInput.value.trim();
+  if (!name) return;
+  nickname = name;
+  localStorage.setItem("nickname", nickname);
+  nicknamePrompt.classList.add("hidden");
+  chatMain.classList.remove("hidden");
+  currentNickname.textContent = `👤 ${nickname}`;
+});
+
+changeNicknameBtn.addEventListener("click", () => {
+  nicknamePrompt.classList.remove("hidden");
+  chatMain.classList.add("hidden");
+});
+
+navChat.addEventListener("click", () => {
+  chatModal.classList.toggle("hidden");
+
+  if (!chatModal.classList.contains("hidden")) {
+    lastSeenTimestamp = Date.now();
+    localStorage.setItem("lastSeen", lastSeenTimestamp.toString());
+    showUnreadBadge(0);
+  }
+});
+
+function init() {
+  if (nickname) {
+    nicknamePrompt.classList.add("hidden");
+    chatMain.classList.remove("hidden");
+    currentNickname.textContent = `👤 ${nickname}`;
+  }
+
+  // Подсчёт онлайн-участников
+  const userRef = push(onlineUsersRef);
+  userRef.set(true);
+  userRef.onDisconnect().remove();
+
+  onValue(onlineUsersRef, (snapshot) => {
+    const users = snapshot.val() || {};
+    onlineCounter.textContent = `🟢 Online: ${Object.keys(users).length}`;
+  });
+}
+
+init();
