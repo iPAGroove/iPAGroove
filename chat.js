@@ -1,29 +1,8 @@
-
-import { getDatabase, ref, push, onChildAdded, onValue } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-database.js";
+import { getDatabase, ref, push, onChildAdded, onValue, set } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-database.js";
 
 document.addEventListener("DOMContentLoaded", () => {
   const db = getDatabase();
   const chatMessagesRef = ref(db, "messages");
-  const presenceRefRoot = ref(db, "presence");
-
-  // userRef удалён, заменено на userId и ref(db, `onlineUsers/${userId}`)
-
-  `), true);
-  onDisconnect(ref(db, `onlineUsers/${userId}`)).remove();
-}
-
-  let nickname = localStorage.getItem("nickname") || "";
-  let lastSeenTimestamp = parseInt(localStorage.getItem("lastSeen") || "0");
-  let unreadCount = 0;
-
-  let notifySound;
-  document.addEventListener("click", () => {
-    if (!notifySound) {
-      notifySound = new Audio("https://assets.mixkit.co/sfx/preview/mixkit-message-pop-alert-2354.mp3");
-      notifySound.volume = 0.4;
-    }
-  });
-
   const nicknamePrompt = document.getElementById("nicknamePrompt");
   const chatMain = document.getElementById("chatMain");
   const chatModal = document.getElementById("chatModal");
@@ -37,7 +16,18 @@ document.addEventListener("DOMContentLoaded", () => {
   const onlineCounter = document.getElementById("onlineCounter");
   const navChat = document.getElementById("navChat");
   const chatSendButton = chatForm.querySelector("button");
-  
+
+  let nickname = localStorage.getItem("nickname") || "";
+  let lastSeenTimestamp = parseInt(localStorage.getItem("lastSeen") || "0");
+  let unreadCount = 0;
+
+  let notifySound;
+  document.addEventListener("click", () => {
+    if (!notifySound) {
+      notifySound = new Audio("https://assets.mixkit.co/sfx/preview/mixkit-message-pop-alert-2354.mp3");
+      notifySound.volume = 0.4;
+    }
+  });
 
   function getColorForName(name) {
     let hash = 0;
@@ -99,61 +89,63 @@ document.addEventListener("DOMContentLoaded", () => {
     nicknamePrompt.classList.add("hidden");
     chatMain.classList.remove("hidden");
     currentNickname.textContent = `👤 ${nickname}`;
+    updatePresence();
   });
 
   changeNicknameBtn.addEventListener("click", () => {
     nicknamePrompt.classList.remove("hidden");
     chatMain.classList.add("hidden");
+    localStorage.removeItem("nickname");
+    nickname = "";
   });
 
   navChat.addEventListener("click", () => {
-  const isOpening = chatModal.classList.contains("hidden");
-  chatModal.classList.toggle("hidden");
+    const isOpening = chatModal.classList.contains("hidden");
+    chatModal.classList.toggle("hidden");
 
-  if (!chatModal.classList.contains("hidden")) {
-    lastSeenTimestamp = Date.now();
-    localStorage.setItem("lastSeen", lastSeenTimestamp.toString());
-    unreadCount = 0;
-    showUnreadBadge(0);
-  }
-
-  if (isOpening) {
-    setOnline();
-    lastSeenTimestamp = Date.now();
-    localStorage.setItem("lastSeen", lastSeenTimestamp.toString());
-    showUnreadBadge(0);
-  } else {
-    setOffline();
-  }
-
-  if (!chatModal.classList.contains("hidden")) {
+    if (!chatModal.classList.contains("hidden")) {
       lastSeenTimestamp = Date.now();
       localStorage.setItem("lastSeen", lastSeenTimestamp.toString());
+      unreadCount = 0;
       showUnreadBadge(0);
+      requestAnimationFrame(() => showUnreadBadge(0));
+    }
+
+    if (nickname) {
+      updatePresence();
+    }
+  });
+
+  function updatePresence() {
+    if (!nickname) return;
+    const presenceRef = ref(db, `presence/${nickname}`);
+    set(presenceRef, { online: true, ts: Date.now() });
+  }
+
+  setInterval(updatePresence, 15000);
+
+  onValue(ref(db, "presence"), (snapshot) => {
+    const users = snapshot.val() || {};
+    const now = Date.now();
+    let onlineCount = 0;
+    for (const key in users) {
+      if (users[key].ts && now - users[key].ts < 30000) {
+        onlineCount++;
+      }
+    }
+    const onlineCountEl = document.getElementById("onlineCount");
+    if (onlineCountEl) {
+      onlineCountEl.textContent = `Online: ${onlineCount}`;
     }
   });
 
   function init() {
-  if (nickname) {
-    nicknamePrompt.classList.add("hidden");
-    chatMain.classList.remove("hidden");
-    currentNickname.textContent = `👤 ${nickname}`;
-  }
-
-  onValue(ref(db, "presence"), (snapshot) => {
-  const users = snapshot.val() || {};
-  const now = Date.now();
-  let onlineCount = 0;
-  for (const key in users) {
-    if (users[key].ts && now - users[key].ts < 30000) {
-      onlineCount++;
+    if (nickname) {
+      nicknamePrompt.classList.add("hidden");
+      chatMain.classList.remove("hidden");
+      currentNickname.textContent = `👤 ${nickname}`;
+      updatePresence();
     }
-  }
-  const onlineCountEl = document.getElementById("onlineCount");
-  if (onlineCountEl) {
-    onlineCountEl.textContent = `Online: ${onlineCount}`;
-  }
-});
   }
 
   init();
