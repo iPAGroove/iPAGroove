@@ -158,6 +158,4 @@ document.addEventListener("DOMContentLoaded", () => {
   window.closeModal = function () {
     gameModal.classList.remove("show");
   };
-
-  loadCatalog("games");
 });
