@@ -1,3 +1,15 @@
+// Управление адаптивной высотой для мобильных
+function setVh() {
+  const vh = window.innerHeight * 0.01;
+  document.documentElement.style.setProperty('--vh', `${vh * 100}px`);
+}
+
+window.addEventListener('resize', setVh);
+window.addEventListener('load', setVh);
+
+setVh();
+
+// Блокируем прокрутку при загрузке
 document.body.classList.add('locked');
 
 window.addEventListener("load", () => {
