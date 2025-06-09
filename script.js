@@ -169,7 +169,16 @@ document.addEventListener("DOMContentLoaded", () => {
     document.querySelector('[data-catalog="apps"]').click();
   });
   document.getElementById("navChat").addEventListener("click", () => {
-    document.getElementById("chatButton").click();
+    const chatModal = document.getElementById("chatModal");
+    chatModal.classList.toggle("hidden");
+
+    const nickname = localStorage.getItem("nickname");
+    document.getElementById("nicknamePrompt").classList.toggle("hidden", !!nickname);
+    document.getElementById("chatMain").classList.toggle("hidden", !nickname);
+
+    if (nickname) {
+      document.getElementById("currentNickname").textContent = `You: ${nickname}`;
+    }
   });
   document.getElementById("navMore").addEventListener("click", () => {
     document.getElementById("moreModal").classList.remove("hidden");
