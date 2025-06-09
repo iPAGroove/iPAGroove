@@ -34,7 +34,7 @@ document.addEventListener("DOMContentLoaded", () => {
   let unreadCount = 0;
   const unreadBadge = document.createElement("span");
   unreadBadge.id = "chatUnread";
-  unreadBadge.className = "ml-1 text-xs text-red-400 font-bold";
+  unreadBadge.className = "ml-1 text-xs text-red-400 font-bold hidden";
   unreadBadge.textContent = "";
 
   if (chatBtn && chatBtn.querySelector("span")) {
@@ -131,7 +131,13 @@ document.addEventListener("DOMContentLoaded", () => {
     // Увеличиваем счётчик, если чат закрыт
     if (chatModal.classList.contains("hidden")) {
       unreadCount++;
-      unreadBadge.textContent = `(${unreadCount})`;
+      if (unreadCount > 0) {
+  unreadBadge.textContent = `${unreadCount}`;
+  unreadBadge.classList.remove("hidden");
+} else {
+  unreadBadge.textContent = "";
+  unreadBadge.classList.add("hidden");
+}
     }
   });
 
