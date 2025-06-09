@@ -173,11 +173,23 @@
   <button id="navApps" class="flex flex-col items-center text-sm">
     📱<span class="text-xs mt-1">Apps</span>
   </button>
-  
-<span class="badge absolute -top-1 left-1/2 -translate-x-1/2 bg-red-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full hidden z-50">1</span>
-<button id="navChat" class="flex flex-col items-center text-sm">
+  <button id="navChat" class="flex flex-col items-center text-sm">
     💬<span class="text-xs mt-1">Chat</span>
-  </button>
+  
+<span class="badge absolute" style="
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: red;
+  color: white;
+  font-size: 10px;
+  padding: 2px 5px;
+  border-radius: 9999px;
+  font-weight: bold;
+  display: none;
+  z-index: 999;
+">1</span>
+</button>
   <button id="navMore" class="flex flex-col items-center text-sm">
     ⋯<span class="text-xs mt-1">More</span>
   </button>
@@ -190,6 +202,9 @@
     <p class="text-center text-sm text-gray-300">🚧 More options coming soon...</p>
   </div>
 </div>
+
+</body>
+</html>
 
 </body>
 </html>
