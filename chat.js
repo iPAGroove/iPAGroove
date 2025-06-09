@@ -21,12 +21,10 @@ document.addEventListener("DOMContentLoaded", () => {
   let lastSeenTimestamp = parseInt(localStorage.getItem("lastSeen") || "0");
   let unreadCount = 0;
 
-  let notifySound;
-document.addEventListener("click", () => {
+  document.addEventListener("click", () => {
   if (!notifySound) {
-    // Заменил на звонкий звук beep_short
-    notifySound = new Audio("https://actions.google.com/sounds/v1/alarms/beep_short.ogg");
-    notifySound.volume = 0.4;
+    notifySound = new Audio("https://raw.githubusercontent.com/iPAGroove/iPAGroove/main/ding-126626.mp3");
+    notifySound.volume = 0.9;
   }
 });
 
