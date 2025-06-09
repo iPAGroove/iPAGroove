@@ -6,6 +6,19 @@ document.addEventListener("DOMContentLoaded", () => {
   const chatMessagesRef = ref(db, "messages");
   const onlineUsersRef = ref(db, "onlineUsers");
 
+  let userRef = null;
+
+  function setOnline() {
+    userRef = push(onlineUsersRef);
+    userRef.set(true);
+    userRef.onDisconnect().remove();
+  }
+
+  function setOffline() {
+    if (userRef) userRef.remove();
+  }
+
+
   let nickname = localStorage.getItem("nickname") || "";
   let lastSeenTimestamp = parseInt(localStorage.getItem("lastSeen") || "0");
   let unreadCount = 0;
@@ -103,9 +116,19 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   navChat.addEventListener("click", () => {
-    chatModal.classList.toggle("hidden");
+  const isOpening = chatModal.classList.contains("hidden");
+  chatModal.classList.toggle("hidden");
 
-    if (!chatModal.classList.contains("hidden")) {
+  if (isOpening) {
+    setOnline();
+    lastSeenTimestamp = Date.now();
+    localStorage.setItem("lastSeen", lastSeenTimestamp.toString());
+    showUnreadBadge(0);
+  } else {
+    setOffline();
+  }
+
+  if (!chatModal.classList.contains("hidden")) {
       lastSeenTimestamp = Date.now();
       localStorage.setItem("lastSeen", lastSeenTimestamp.toString());
       showUnreadBadge(0);
@@ -113,17 +136,13 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   function init() {
-    if (nickname) {
-      nicknamePrompt.classList.add("hidden");
-      chatMain.classList.remove("hidden");
-      currentNickname.textContent = `👤 ${nickname}`;
-    }
+  if (nickname) {
+    nicknamePrompt.classList.add("hidden");
+    chatMain.classList.remove("hidden");
+    currentNickname.textContent = `👤 ${nickname}`;
+  }
 
-    const userRef = push(onlineUsersRef);
-    userRef.set(true);
-    userRef.onDisconnect().remove();
-
-    onValue(onlineUsersRef, (snapshot) => {
+  onValue(onlineUsersRef, (snapshot) => {
       const users = snapshot.val() || {};
       const count = Object.keys(users).length;
       onlineCounter.textContent = `🟢 Online: ${count}`;
