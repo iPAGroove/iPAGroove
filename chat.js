@@ -100,25 +100,27 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   navChat.addEventListener("click", () => {
+  const isOpening = chatModal.classList.contains("hidden");
+  chatModal.classList.toggle("hidden");
 
+  if (!chatModal.classList.contains("hidden")) {
+    lastSeenTimestamp = Date.now();
+    localStorage.setItem("lastSeen", lastSeenTimestamp.toString());
+    unreadCount = 0;
+    showUnreadBadge(0);
+
+    // ✅ Ждём отрисовку и прокручиваем вниз
     setTimeout(() => {
-      chatMessages.scrollTop = chatMessages.scrollHeight;
-    }, 0);
-    const isOpening = chatModal.classList.contains("hidden");
-    chatModal.classList.toggle("hidden");
+      requestAnimationFrame(() => {
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+      });
+    }, 100);
+  }
 
-    if (!chatModal.classList.contains("hidden")) {
-      lastSeenTimestamp = Date.now();
-      localStorage.setItem("lastSeen", lastSeenTimestamp.toString());
-      unreadCount = 0;
-      showUnreadBadge(0);
-      requestAnimationFrame(() => showUnreadBadge(0));
-    }
-
-    if (nickname) {
-      updatePresence();
-    }
-  });
+  if (nickname) {
+    updatePresence();
+  }
+});
 
   function updatePresence() {
     if (!nickname) return;
