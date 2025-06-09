@@ -1,13 +1,14 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>iOS Game & App Catalog — App Store Style</title>
-  <script type="module" src="script.js"></script>
-  <script type="module" src="chat.js"></script>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>iOS Game &amp; App Catalog — App Store Style</title>
+<script src="script.js" type="module"></script>
+<script src="chat.js" type="module"></script>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
     tailwind.config = {
       theme: {
         extend: {
@@ -20,7 +21,7 @@
       }
     };
   </script>
-  <style>
+<style>
     body {
       background: linear-gradient(135deg, #3b006d, #6e1cff, #23004d);
       min-height: 100vh;
@@ -47,151 +48,122 @@
     }
   </style>
 </head>
-<body class="text-white font-sans max-w-screen-sm mx-auto p-0 relative">
-  <div id="loader" class="flex">Loading data...</div>
-
-  
+<body class="text-white font-sans max-w-screen-sm mx-auto p-0 relative" style="height: 100vh; overflow: hidden;">
+<div class="flex" id="loader">Loading data...</div>
 <header class="flex justify-center items-center relative px-4 py-2 fixed w-full top-0 left-0 z-40 backdrop-blur-md bg-[rgba(20,0,40,0.6)] border-b border-purple-500/30 shadow-md">
-  <h1 id="siteTitle" class="cursor-pointer text-lg font-extrabold text-white flex items-center gap-3 hover:text-purple-300 transition text-center" style="text-shadow: 0 0 8px rgba(110,28,255,0.9);">
-    <img src="https://github.com/iPAGroove/iPAGroove/blob/main/IMG_5539.PNG?raw=true" alt="Logo" class="w-7 h-7 rounded shadow-md" />
+<h1 class="cursor-pointer text-lg font-extrabold text-white flex items-center gap-3 hover:text-purple-300 transition text-center" id="siteTitle" style="text-shadow: 0 0 8px rgba(110,28,255,0.9);">
+<img alt="Logo" class="w-7 h-7 rounded shadow-md" src="https://github.com/iPAGroove/iPAGroove/blob/main/IMG_5539.PNG?raw=true"/>
     iPA Groove
   </h1>
 </header>
-
-
-  
-
-  
-
-  <main class="pt-16 pb-8 min-h-screen px-4">
-    <!-- Certificate Info Section -->
-    <section id="certificateInfo" class="relative bg-[rgba(30,0,60,0.6)] rounded-2xl p-6 mt-4 mb-6 mx-2 text-white shadow-xl border border-purple-600/30 ring-2 ring-purple-500/30 backdrop-blur-lg overflow-hidden transition-all duration-300">
-  <h2 class="text-2xl font-bold text-purple-300 drop-shadow-[0_0_6px_rgba(110,28,255,0.6)] mb-4 tracking-wide flex items-center gap-2">
-    📋 Installation Certificates
-  </h2>
-  <p class="text-sm text-gray-300 mb-3">🔐 A personal certificate is required to install cracked .ipa files.</p>
-
-  <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
-    <div class="bg-[rgba(255,255,255,0.05)] rounded-xl p-4 border border-purple-400/20 hover:ring-2 hover:ring-purple-500 transition-all">
-      <div class="flex items-center gap-3 mb-2">
-        <span class="text-green-300 text-2xl">🛡️</span>
-        <span class="font-semibold text-green-300 text-lg">Standard Certificate</span>
-      </div>
-      <p class="text-sm text-gray-300 leading-relaxed">💲 <strong>$6</strong> — Delivered within <strong>72 hours</strong></p>
-    </div>
-    
-    <div class="bg-[rgba(255,255,255,0.05)] rounded-xl p-4 border border-yellow-400/20 hover:ring-2 hover:ring-yellow-300 transition-all">
-      <div class="flex items-center gap-3 mb-2">
-        <span class="text-yellow-300 text-2xl">⚡</span>
-        <span class="font-semibold text-yellow-300 text-lg">Instant Certificate</span>
-      </div>
-      <p class="text-sm text-gray-300 leading-relaxed">💲 <strong>$12</strong> — Delivered within <strong>5 minutes</strong> after payment</p>
-    </div>
-  </div>
-
-  <div class="mt-4 text-sm text-gray-400">
-    <p>💳 Payments accepted from most countries worldwide</p>
-    <p class="mt-1">📄 All certificates come with a <strong>1-year warranty</strong> ✅</p>
-  </div>
-
-  <div class="flex justify-between items-center gap-4 mt-6">
-    <div class="flex flex-col items-center">
-      <img src="https://github.com/iPAGroove/iPAGroove/blob/main/scarlet.JPG?raw=true" class="w-14 h-14 rounded-xl shadow-lg border border-purple-300" alt="Scarlet" />
-      <span class="text-xs mt-1 font-semibold text-purple-300">Scarlet</span>
-    </div>
-    <div class="flex flex-col items-center">
-      <img src="https://github.com/iPAGroove/iPAGroove/blob/main/esign.JPG?raw=true" class="w-14 h-14 rounded-xl shadow-lg border border-purple-300" alt="ESign" />
-      <span class="text-xs mt-1 font-semibold text-purple-300">ESign</span>
-    </div>
-    <div class="flex flex-col items-center">
-      <img src="https://github.com/iPAGroove/iPAGroove/blob/main/gbox.JPG?raw=true" class="w-14 h-14 rounded-xl shadow-lg border border-purple-300" alt="GBox" />
-      <span class="text-xs mt-1 font-semibold text-purple-300">GBox</span>
-    </div>
-    <div class="flex flex-col items-center">
-      <img src="https://github.com/iPAGroove/iPAGroove/blob/main/fether.JPG?raw=true" class="w-14 h-14 rounded-xl shadow-lg border border-purple-300" alt="Feather" />
-      <span class="text-xs mt-1 font-semibold text-purple-300">Feather</span>
-    </div>
-  </div>
-
-  <a href="#" id="buyCertBtn" class="block mt-6">
-    <button class="w-full bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white py-2 rounded-xl font-bold text-sm transition duration-300 shadow-lg">
-      💳 Buy Certificate
-    </button>
-  </a>
+<main class="pt-16 pb-8 px-4 h-full overflow-y-auto">
+<!-- Certificate Info Section -->
+<section class="relative bg-[rgba(255,255,255,0.05)] rounded-xl p-5 mt-4 mb-6 mx-2 text-white shadow-lg border border-purple-500/30 ring-1 ring-purple-600/20 backdrop-blur-sm overflow-hidden" id="certificateInfo">
+<h2 class="text-xl font-bold text-purple-400 drop-shadow-[0_0_6px_rgba(110,28,255,0.6)] mb-3">📋 Installation Certificates</h2>
+<p class="text-sm text-gray-300 mb-2">🔐 A personal certificate is required to install cracked .ipa files.</p>
+<div class="space-y-4 text-sm text-gray-300">
+<div class="flex items-start gap-2">
+<span class="text-green-300 text-lg">🛡️</span>
+<div><span class="font-semibold text-green-300">Standard Certificate</span> — <span class="font-semibold">$6</span><br/>Delivered within <strong>72 hours</strong></div>
+</div>
+<div class="flex items-start gap-2">
+<span class="text-yellow-300 text-lg">⚡</span>
+<div><span class="font-semibold text-yellow-300">Instant Certificate</span> — <span class="font-semibold">$12</span><br/>Delivered within <strong>5 minutes</strong> after payment</div>
+</div>
+</div>
+<p class="text-sm text-gray-400 mt-3">💳 Payments accepted from most countries worldwide</p>
+<p class="text-sm text-gray-400">📄 All certificates come with a <strong>1-year warranty</strong> ✅</p>
+<div class="flex justify-between items-center gap-3 mt-6">
+<div class="flex flex-col items-center">
+<img alt="Scarlet" class="w-12 h-12 rounded-xl shadow-md" src="https://github.com/iPAGroove/iPAGroove/blob/main/scarlet.JPG?raw=true"/>
+<span class="text-xs mt-1 font-semibold text-purple-300">Scarlet</span>
+</div>
+<div class="flex flex-col items-center">
+<img alt="ESign" class="w-12 h-12 rounded-xl shadow-md" src="https://github.com/iPAGroove/iPAGroove/blob/main/esign.JPG?raw=true"/>
+<span class="text-xs mt-1 font-semibold text-purple-300">ESign</span>
+</div>
+<div class="flex flex-col items-center">
+<img alt="GBox" class="w-12 h-12 rounded-xl shadow-md" src="https://github.com/iPAGroove/iPAGroove/blob/main/gbox.JPG?raw=true"/>
+<span class="text-xs mt-1 font-semibold text-purple-300">GBox</span>
+</div>
+<div class="flex flex-col items-center">
+<img alt="Feather" class="w-12 h-12 rounded-xl shadow-md" src="https://github.com/iPAGroove/iPAGroove/blob/main/fether.JPG?raw=true"/>
+<span class="text-xs mt-1 font-semibold text-purple-300">Feather</span>
+</div>
+</div>
+<a class="block mt-6" href="#" id="buyCertBtn">
+<button class="w-full bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white py-2 rounded-xl font-bold text-sm transition duration-300 shadow-md">
+          💳 Buy Certificate
+        </button>
+</a>
 </section>
-
-    <div id="catalogSection">
-      <h2 id="mainListTitle" class="text-xl font-bold mb-2"></h2>
-      <input id="searchInput" type="text" placeholder="🔍 Search by name..." class="w-full mb-4 px-4 py-2 rounded bg-[rgba(255,255,255,0.05)] text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-600 hidden" />
-      <div id="gamesList" class="space-y-4 mb-4"></div>
-      <div id="showMoreContainer" class="text-center">
-        <button id="showMoreBtn" class="hidden px-4 py-2 bg-purple-700 rounded hover:bg-purple-900">Show More</button>
-      </div>
-    </div>
-  </main>
-
-  <!-- Chat Button -->
-  <!-- Chat Modal -->
-  <div id="chatModal" class="fixed bottom-20 right-4 bg-[rgba(40,0,90,0.95)] rounded-xl p-4 w-80 max-h-[70vh] overflow-y-auto text-white z-50 hidden shadow-lg">
-    <div id="nicknamePrompt">
-      <p class="mb-2">Enter nickname:</p>
-      <input id="nicknameInput" type="text" class="w-full mb-2 px-2 py-1 text-black rounded" placeholder="Your nickname" />
-      <button id="saveNickname" class="w-full bg-purple-600 hover:bg-purple-800 py-1 rounded">Save</button>
-    </div>
-    <div id="chatMain" class="hidden">
-      <div class="flex justify-between items-center text-sm text-purple-300 mb-2">
-        <span id="currentNickname"></span>
-        <button id="changeNickname" class="text-xs text-gray-400 hover:text-white">Change nickname</button>
-      </div>
-      <div id="chatMessages" class="mb-2 max-h-48 overflow-y-auto text-sm pr-2"></div>
-      <form id="chatForm" class="flex gap-2">
-        <input id="chatInput" type="text" placeholder="Message..." class="flex-1 px-2 py-1 text-black rounded" />
-        <button class="bg-purple-600 hover:bg-purple-800 px-3 rounded">→</button>
-      </form>
-      <div id="onlineCounter" class="mt-2 text-xs text-gray-400"></div>
-    </div>
-  </div>
-
-  <!-- Game Modal -->
-  <div id="gameModal" class="fixed inset-0 bg-black bg-opacity-70 hidden z-50 items-center justify-center">
-    <div class="bg-[rgba(40,0,90,0.95)] rounded-xl p-6 max-w-sm w-full mx-4 text-white shadow-lg relative">
-      <button onclick="closeModal()" class="absolute top-2 right-2 text-white text-xl hover:text-purple-300">&times;</button>
-      <div class="flex gap-4 items-center mb-4">
-        <img id="modalIcon" src="" alt="App Icon" class="w-16 h-16 rounded shadow-md" />
-        <div>
-          <h3 id="modalTitle" class="text-xl font-bold"></h3>
-<p id="modalGenre" class="text-sm text-gray-400 mb-1"></p>
-<p id="modalVersion" class="text-sm text-gray-400 mb-1"></p>
-<p id="modalUpdated" class="text-sm text-gray-400 mb-3"></p>
-          <p id="modalDownloadCount" class="text-sm text-gray-400">⬇️ Downloads: ...</p>
-        </div>
-      </div>
-      <ul id="modalDesc" class="text-sm text-gray-300 whitespace-pre-line mb-4 list-disc ml-5"></ul>
-      <a id="modalDownload" href="#" target="_blank" class="block">
-        <button class="w-full bg-purple-600 hover:bg-purple-800 py-2 rounded text-white font-bold">⬇️ Download</button>
-      </a>
-    </div>
-  </div>
-
-  <!-- Footer -->
-  <footer class="mt-8 text-center text-gray-400 text-sm pb-4">
-    &copy; 2025 iOS Game Zone
+<div id="catalogSection">
+<h2 class="text-xl font-bold mb-2" id="mainListTitle"></h2>
+<input class="w-full mb-4 px-4 py-2 rounded bg-[rgba(255,255,255,0.05)] text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-600 hidden" id="searchInput" placeholder="🔍 Search by name..." type="text"/>
+<div class="space-y-4 mb-4" id="gamesList"></div>
+<div class="text-center" id="showMoreContainer">
+<button class="hidden px-4 py-2 bg-purple-700 rounded hover:bg-purple-900" id="showMoreBtn">Show More</button>
+</div>
+</div>
+</main>
+<!-- Chat Button -->
+<!-- Chat Modal -->
+<div class="fixed bottom-20 right-4 bg-[rgba(40,0,90,0.95)] rounded-xl p-4 w-80 max-h-[70vh] overflow-y-auto text-white z-50 hidden shadow-lg" id="chatModal">
+<div id="nicknamePrompt">
+<p class="mb-2">Enter nickname:</p>
+<input class="w-full mb-2 px-2 py-1 text-black rounded" id="nicknameInput" placeholder="Your nickname" type="text"/>
+<button class="w-full bg-purple-600 hover:bg-purple-800 py-1 rounded" id="saveNickname">Save</button>
+</div>
+<div class="hidden" id="chatMain">
+<div class="flex justify-between items-center text-sm text-purple-300 mb-2">
+<span id="currentNickname"></span>
+<button class="text-xs text-gray-400 hover:text-white" id="changeNickname">Change nickname</button>
+</div>
+<div class="mb-2 max-h-48 overflow-y-auto text-sm pr-2" id="chatMessages"></div>
+<form class="flex gap-2" id="chatForm">
+<input class="flex-1 px-2 py-1 text-black rounded" id="chatInput" placeholder="Message..." type="text"/>
+<button class="bg-purple-600 hover:bg-purple-800 px-3 rounded">→</button>
+</form>
+<div class="mt-2 text-xs text-gray-400" id="onlineCounter"></div>
+</div>
+</div>
+<!-- Game Modal -->
+<div class="fixed inset-0 bg-black bg-opacity-70 hidden z-50 items-center justify-center" id="gameModal">
+<div class="bg-[rgba(40,0,90,0.95)] rounded-xl p-6 max-w-sm w-full mx-4 text-white shadow-lg relative">
+<button class="absolute top-2 right-2 text-white text-xl hover:text-purple-300" onclick="closeModal()">×</button>
+<div class="flex gap-4 items-center mb-4">
+<img alt="App Icon" class="w-16 h-16 rounded shadow-md" id="modalIcon" src=""/>
+<div>
+<h3 class="text-xl font-bold" id="modalTitle"></h3>
+<p class="text-sm text-gray-400 mb-1" id="modalGenre"></p>
+<p class="text-sm text-gray-400 mb-1" id="modalVersion"></p>
+<p class="text-sm text-gray-400 mb-3" id="modalUpdated"></p>
+<p class="text-sm text-gray-400" id="modalDownloadCount">⬇️ Downloads: ...</p>
+</div>
+</div>
+<ul class="text-sm text-gray-300 whitespace-pre-line mb-4 list-disc ml-5" id="modalDesc"></ul>
+<a class="block" href="#" id="modalDownload" target="_blank">
+<button class="w-full bg-purple-600 hover:bg-purple-800 py-2 rounded text-white font-bold">⬇️ Download</button>
+</a>
+</div>
+</div>
+<!-- Footer -->
+<footer class="mt-8 text-center text-gray-400 text-sm pb-4">
+    © 2025 iOS Game Zone
   </footer>
-
 <!-- Bottom Navigation -->
 <nav class="fixed bottom-0 left-0 w-full bg-[rgba(20,0,40,0.9)] text-white border-t border-purple-500/30 z-50 flex justify-around py-2">
-  <button id="navGames" class="flex flex-col items-center text-sm">
+<button class="flex flex-col items-center text-sm" id="navGames">
     🎮<span class="text-xs mt-1">Games</span>
-  </button>
-  <button id="navApps" class="flex flex-col items-center text-sm">
+</button>
+<button class="flex flex-col items-center text-sm" id="navApps">
     📱<span class="text-xs mt-1">Apps</span>
-  </button>
-  <button id="navChat" class="flex flex-col items-center text-sm">
+</button>
+<button class="flex flex-col items-center text-sm" id="navChat">
     💬<span class="text-xs mt-1">Chat</span>
-  
 <span class="badge absolute" style="
-  top: -1px;
-  left: 69%;
+  top: -12px;
+  left: 50%;
   transform: translateX(-50%);
   background-color: red;
   color: white;
@@ -203,21 +175,16 @@
   z-index: 999;
 ">1</span>
 </button>
-  <button id="navMore" class="flex flex-col items-center text-sm">
+<button class="flex flex-col items-center text-sm" id="navMore">
     ⋯<span class="text-xs mt-1">More</span>
-  </button>
+</button>
 </nav>
-
 <!-- More Modal -->
-<div id="moreModal" class="fixed inset-0 bg-black bg-opacity-70 hidden z-50 items-center justify-center">
-  <div class="bg-[rgba(40,0,90,0.95)] rounded-xl p-6 max-w-sm w-full mx-4 text-white shadow-lg relative">
-    <button onclick="document.getElementById('moreModal').classList.add('hidden')" class="absolute top-2 right-2 text-white text-xl hover:text-purple-300">&times;</button>
-    <p class="text-center text-sm text-gray-300">🚧 More options coming soon...</p>
-  </div>
+<div class="fixed inset-0 bg-black bg-opacity-70 hidden z-50 items-center justify-center" id="moreModal">
+<div class="bg-[rgba(40,0,90,0.95)] rounded-xl p-6 max-w-sm w-full mx-4 text-white shadow-lg relative">
+<button class="absolute top-2 right-2 text-white text-xl hover:text-purple-300" onclick="document.getElementById('moreModal').classList.add('hidden')">×</button>
+<p class="text-center text-sm text-gray-300">🚧 More options coming soon...</p>
 </div>
-
-</body>
-</html>
-
+</div>
 </body>
 </html>
