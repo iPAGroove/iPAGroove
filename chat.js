@@ -35,17 +35,13 @@ function getColorForName(name) {
   for (let i = 0; i < name.length; i++) {
     hash = name.charCodeAt(i) + ((hash << 5) - hash);
   }
-  const hue = hash % 360;
+  const hue = ((hash % 360) + 360) % 360;
   return `hsl(${hue}, 60%, 60%)`;
 }
 
 function showUnreadBadge(count) {
-  let badge = navChat.querySelector(".badge");
-  if (!badge) {
-    badge = document.createElement("span");
-    badge.className = "badge absolute top-0 right-0 bg-red-500 text-white text-xs rounded-full px-1";
-    navChat.appendChild(badge);
-  }
+  const badge = navChat.querySelector(".badge");
+  if (!badge) return;
   badge.textContent = count;
   badge.style.display = count > 0 ? "block" : "none";
 }
@@ -63,10 +59,14 @@ onChildAdded(chatMessagesRef, (snapshot) => {
   const msg = snapshot.val();
   renderMessage(msg);
 
-  if (msg.timestamp > lastSeenTimestamp && chatModal.classList.contains("hidden")) {
+  if (
+    msg.timestamp > lastSeenTimestamp &&
+    chatModal.classList.contains("hidden") &&
+    msg.name !== nickname
+  ) {
     unreadCount++;
     showUnreadBadge(unreadCount);
-    if (notifySound) notifySound.play().catch(() => {});
+    notifySound?.play().catch(() => {});
   }
 });
 
