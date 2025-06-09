@@ -1,5 +1,14 @@
 [
   {
+    "name": "Hill Climb Racing 2",
+    "description": "- Freeze Currencies",
+    "version": "1.66.0",
+    "download": "https://vhistoretg.s3.eu-north-1.amazonaws.com/Hill+Climb+2+_1.66.0_1749451411.ipa",
+    "icon": "https://github.com/iPAGroove/iPAGroove/blob/main/IMG_5669.jpeg?raw=true",
+    "genre": "Games",
+    "lastModified": "2025-06-06T00:00:00Z"
+  },
+  {
     "name": "Idle Theme Park",
     "description": "- Infinite Cash",
     "version": "7.3.0",
