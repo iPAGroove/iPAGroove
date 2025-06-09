@@ -32,6 +32,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const loader = document.getElementById("loader");
   const searchInput = document.getElementById("searchInput");
   const certificateInfo = document.getElementById("certificateInfo");
+  const catalogSection = document.getElementById("catalogSection");
 
   let gamesData = [];
   let appsData = [];
@@ -39,6 +40,10 @@ document.addEventListener("DOMContentLoaded", () => {
   let currentCatalog = "games";
   let currentPage = 1;
   const itemsPerPage = 5;
+
+  // По умолчанию показываем сертификаты, скрываем каталог
+  if (catalogSection) catalogSection.style.display = "none";
+  if (certificateInfo) certificateInfo.style.display = "block";
 
   async function loadJSON(url) {
     const response = await fetch(url);
@@ -125,6 +130,10 @@ document.addEventListener("DOMContentLoaded", () => {
     mainListTitle.textContent = type === "games" ? "All Games" : "All Apps";
     searchInput.classList.remove("hidden");
     loader.style.display = "flex";
+
+    if (certificateInfo) certificateInfo.style.display = "none";
+    if (catalogSection) catalogSection.style.display = "block";
+
     try {
       const data = await loadJSON(`${type}.json`);
       if (type === "games") gamesData = data;
@@ -134,6 +143,7 @@ document.addEventListener("DOMContentLoaded", () => {
     } catch {
       gamesList.innerHTML = "<p class='text-red-500'>Error loading data</p>";
     }
+
     loader.style.display = "none";
   }
 
@@ -144,8 +154,6 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   document.getElementById("siteTitle").addEventListener("click", () => location.reload());
-
-  if (certificateInfo) certificateInfo.style.display = "block";
 
   searchInput.addEventListener("input", () => {
     const value = searchInput.value.toLowerCase();
