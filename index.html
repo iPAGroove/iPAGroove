@@ -65,47 +65,60 @@
 
   <main class="pt-16 pb-8 min-h-screen px-4">
     <!-- Certificate Info Section -->
-    <section id="certificateInfo" class="relative bg-[rgba(255,255,255,0.05)] rounded-xl p-5 mt-4 mb-6 mx-2 text-white shadow-lg border border-purple-500/30 ring-1 ring-purple-600/20 backdrop-blur-sm overflow-hidden">
-      <h2 class="text-xl font-bold text-purple-400 drop-shadow-[0_0_6px_rgba(110,28,255,0.6)] mb-3">📋 Installation Certificates</h2>
-      <p class="text-sm text-gray-300 mb-2">🔐 A personal certificate is required to install cracked .ipa files.</p>
-      <div class="space-y-4 text-sm text-gray-300">
-        <div class="flex items-start gap-2">
-          <span class="text-green-300 text-lg">🛡️</span>
-          <div><span class="font-semibold text-green-300">Standard Certificate</span> — <span class="font-semibold">$6</span><br>Delivered within <strong>72 hours</strong></div>
-        </div>
-        <div class="flex items-start gap-2">
-          <span class="text-yellow-300 text-lg">⚡</span>
-          <div><span class="font-semibold text-yellow-300">Instant Certificate</span> — <span class="font-semibold">$12</span><br>Delivered within <strong>5 minutes</strong> after payment</div>
-        </div>
-      </div>
-      <p class="text-sm text-gray-400 mt-3">💳 Payments accepted from most countries worldwide</p>
-      <p class="text-sm text-gray-400">📄 All certificates come with a <strong>1-year warranty</strong> ✅</p>
+    <section id="certificateInfo" class="relative bg-[rgba(30,0,60,0.6)] rounded-2xl p-6 mt-4 mb-6 mx-2 text-white shadow-xl border border-purple-600/30 ring-2 ring-purple-500/30 backdrop-blur-lg overflow-hidden transition-all duration-300">
+  <h2 class="text-2xl font-bold text-purple-300 drop-shadow-[0_0_6px_rgba(110,28,255,0.6)] mb-4 tracking-wide flex items-center gap-2">
+    📋 Installation Certificates
+  </h2>
+  <p class="text-sm text-gray-300 mb-3">🔐 A personal certificate is required to install cracked .ipa files.</p>
 
-      <div class="flex justify-between items-center gap-3 mt-6">
-        <div class="flex flex-col items-center">
-          <img src="https://github.com/iPAGroove/iPAGroove/blob/main/scarlet.JPG?raw=true" class="w-12 h-12 rounded-xl shadow-md" alt="Scarlet" />
-          <span class="text-xs mt-1 font-semibold text-purple-300">Scarlet</span>
-        </div>
-        <div class="flex flex-col items-center">
-          <img src="https://github.com/iPAGroove/iPAGroove/blob/main/esign.JPG?raw=true" class="w-12 h-12 rounded-xl shadow-md" alt="ESign" />
-          <span class="text-xs mt-1 font-semibold text-purple-300">ESign</span>
-        </div>
-        <div class="flex flex-col items-center">
-          <img src="https://github.com/iPAGroove/iPAGroove/blob/main/gbox.JPG?raw=true" class="w-12 h-12 rounded-xl shadow-md" alt="GBox" />
-          <span class="text-xs mt-1 font-semibold text-purple-300">GBox</span>
-        </div>
-        <div class="flex flex-col items-center">
-          <img src="https://github.com/iPAGroove/iPAGroove/blob/main/fether.JPG?raw=true" class="w-12 h-12 rounded-xl shadow-md" alt="Feather" />
-          <span class="text-xs mt-1 font-semibold text-purple-300">Feather</span>
-        </div>
+  <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+    <div class="bg-[rgba(255,255,255,0.05)] rounded-xl p-4 border border-purple-400/20 hover:ring-2 hover:ring-purple-500 transition-all">
+      <div class="flex items-center gap-3 mb-2">
+        <span class="text-green-300 text-2xl">🛡️</span>
+        <span class="font-semibold text-green-300 text-lg">Standard Certificate</span>
       </div>
+      <p class="text-sm text-gray-300 leading-relaxed">💲 <strong>$6</strong> — Delivered within <strong>72 hours</strong></p>
+    </div>
+    
+    <div class="bg-[rgba(255,255,255,0.05)] rounded-xl p-4 border border-yellow-400/20 hover:ring-2 hover:ring-yellow-300 transition-all">
+      <div class="flex items-center gap-3 mb-2">
+        <span class="text-yellow-300 text-2xl">⚡</span>
+        <span class="font-semibold text-yellow-300 text-lg">Instant Certificate</span>
+      </div>
+      <p class="text-sm text-gray-300 leading-relaxed">💲 <strong>$12</strong> — Delivered within <strong>5 minutes</strong> after payment</p>
+    </div>
+  </div>
 
-      <a href="#" id="buyCertBtn" class="block mt-6">
-        <button class="w-full bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white py-2 rounded-xl font-bold text-sm transition duration-300 shadow-md">
-          💳 Buy Certificate
-        </button>
-      </a>
-    </section>
+  <div class="mt-4 text-sm text-gray-400">
+    <p>💳 Payments accepted from most countries worldwide</p>
+    <p class="mt-1">📄 All certificates come with a <strong>1-year warranty</strong> ✅</p>
+  </div>
+
+  <div class="flex justify-between items-center gap-4 mt-6">
+    <div class="flex flex-col items-center">
+      <img src="https://github.com/iPAGroove/iPAGroove/blob/main/scarlet.JPG?raw=true" class="w-14 h-14 rounded-xl shadow-lg border border-purple-300" alt="Scarlet" />
+      <span class="text-xs mt-1 font-semibold text-purple-300">Scarlet</span>
+    </div>
+    <div class="flex flex-col items-center">
+      <img src="https://github.com/iPAGroove/iPAGroove/blob/main/esign.JPG?raw=true" class="w-14 h-14 rounded-xl shadow-lg border border-purple-300" alt="ESign" />
+      <span class="text-xs mt-1 font-semibold text-purple-300">ESign</span>
+    </div>
+    <div class="flex flex-col items-center">
+      <img src="https://github.com/iPAGroove/iPAGroove/blob/main/gbox.JPG?raw=true" class="w-14 h-14 rounded-xl shadow-lg border border-purple-300" alt="GBox" />
+      <span class="text-xs mt-1 font-semibold text-purple-300">GBox</span>
+    </div>
+    <div class="flex flex-col items-center">
+      <img src="https://github.com/iPAGroove/iPAGroove/blob/main/fether.JPG?raw=true" class="w-14 h-14 rounded-xl shadow-lg border border-purple-300" alt="Feather" />
+      <span class="text-xs mt-1 font-semibold text-purple-300">Feather</span>
+    </div>
+  </div>
+
+  <a href="#" id="buyCertBtn" class="block mt-6">
+    <button class="w-full bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white py-2 rounded-xl font-bold text-sm transition duration-300 shadow-lg">
+      💳 Buy Certificate
+    </button>
+  </a>
+</section>
 
     <div id="catalogSection">
       <h2 id="mainListTitle" class="text-xl font-bold mb-2"></h2>
