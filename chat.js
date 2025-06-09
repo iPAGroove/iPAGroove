@@ -118,6 +118,13 @@ document.addEventListener("DOMContentLoaded", () => {
   const isOpening = chatModal.classList.contains("hidden");
   chatModal.classList.toggle("hidden");
 
+  if (!chatModal.classList.contains("hidden")) {
+    lastSeenTimestamp = Date.now();
+    localStorage.setItem("lastSeen", lastSeenTimestamp.toString());
+    unreadCount = 0;
+    showUnreadBadge(0);
+  }
+
   if (isOpening) {
     setOnline();
     lastSeenTimestamp = Date.now();
