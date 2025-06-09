@@ -12,7 +12,11 @@ document.addEventListener("DOMContentLoaded", () => {
   // userRef удалён, заменено на userId и ref(db, `onlineUsers/${userId}`)
 
   function setOnline() {
-  set(ref(db, `onlineUsers/${userId}`), true);
+  const refPath = ref(db, `onlineUsers/${userId}`);
+  set(refPath, true).then(() => {
+    onDisconnect(refPath).remove();
+  });
+}`), true);
   onDisconnect(ref(db, `onlineUsers/${userId}`)).remove();
 }
 
