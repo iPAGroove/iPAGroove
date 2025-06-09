@@ -64,6 +64,7 @@ document.addEventListener("DOMContentLoaded", () => {
     updatePresence();
   }
 
+  // 🛠 Основной обработчик кнопки Chat
   chatBtn.addEventListener("click", () => {
     chatModal.classList.toggle("hidden");
 
@@ -117,10 +118,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const messagesRef = ref(db, "messages");
   onChildAdded(messagesRef, (data) => {
     const msg = data.val();
-    if (!msg || !chatMessages) {
-      console.warn("Сообщение пустое или chatMessages не найдено", msg);
-      return;
-    }
+    if (!msg || !chatMessages) return;
 
     const div = document.createElement("div");
     div.className = "mb-2";
