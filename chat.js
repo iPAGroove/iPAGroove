@@ -128,6 +128,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const count = Object.keys(users).length;
       onlineCounter.textContent = `🟢 Online: ${count}`;
       chatInlineOnline.textContent = `🟢 Online: ${count}`;
+document.getElementById("navOnlineIndicator").textContent = `🟢 ${count}`;
     });
   }
 
