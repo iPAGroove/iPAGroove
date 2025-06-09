@@ -1,4 +1,3 @@
-
 import { getDatabase, ref, push, onChildAdded, onValue } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-database.js";
 
 const db = getDatabase();
@@ -29,6 +28,7 @@ const currentNickname = document.getElementById("currentNickname");
 const changeNicknameBtn = document.getElementById("changeNickname");
 const onlineCounter = document.getElementById("onlineCounter");
 const navChat = document.getElementById("navChat");
+const onlineBadge = navChat.querySelector(".online-indicator");
 
 function getColorForName(name) {
   let hash = 0;
@@ -120,9 +120,10 @@ function init() {
 
   onValue(onlineUsersRef, (snapshot) => {
     const users = snapshot.val() || {};
-    onlineCounter.textContent = `🟢 Online: ${Object.keys(users).length}`;
+    const count = Object.keys(users).length;
+    onlineCounter.textContent = `🟢 Online: ${count}`;
+    if (onlineBadge) onlineBadge.textContent = `🟢 ${count}`;
   });
 }
 
 init();
-
