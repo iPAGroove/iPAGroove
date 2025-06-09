@@ -161,6 +161,20 @@ document.addEventListener("DOMContentLoaded", () => {
     renderList(currentCatalog === "games" ? gamesData : appsData);
   });
 
+  
+  document.getElementById("navGames").addEventListener("click", () => {
+    document.querySelector('[data-catalog="games"]').click();
+  });
+  document.getElementById("navApps").addEventListener("click", () => {
+    document.querySelector('[data-catalog="apps"]').click();
+  });
+  document.getElementById("navChat").addEventListener("click", () => {
+    document.getElementById("chatButton").click();
+  });
+  document.getElementById("navMore").addEventListener("click", () => {
+    document.getElementById("moreModal").classList.remove("hidden");
+  });
+
   window.closeModal = function () {
     gameModal.classList.remove("show");
   };
