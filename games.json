@@ -1,5 +1,14 @@
 [
   {
+  "name": "Fortnite",
+  "description": "- Unlocked All Outfit\n- Unlocked All Back Bling\n- Unlocked All Pickaxe\n- Unlocked All Glider\n- Unlocked All Kicks\n- Unlocked All Contrail\n- Unlocked All Aura\n- Unlocked All Emote\n- Unlocked All Wrap\n- Unlocked All Lobby Music\n- Unlocked All Loading Screen",
+  "icon": "https://github.com/iPAGroove/iPAGroove/blob/main/fortnite.JPG?raw=true",
+  "version": "35.20",
+  "download": "https://vhistoretg.s3.eu-north-1.amazonaws.com/Fortnite_36.00_1749448024.ipa",
+  "genre": "Games",
+  "lastModified": "2025-06-06T00:00:00Z"
+}
+  {
   "name": "Hunt Royale",
   "description": "- Dumb Enemies",
   "version": "3.9.1",
@@ -77,15 +86,6 @@
     "icon": "https://github.com/iPAGroove/iPAGroove/blob/main/IMG_5594.png?raw=true",
     "version": "28.0.0",
     "download": "https://vhistoretg.s3.eu-north-1.amazonaws.com/Township+_28.0.0_1749279355.ipa",
-    "genre": "Games",
-    "lastModified": "2025-06-06T00:00:00Z"
-  },
-  {
-    "name": "Fortnite",
-    "description": "120fps available",
-    "icon": "https://github.com/iPAGroove/iPAGroove/blob/main/fortnite.JPG?raw=true",
-    "version": "35.20",
-    "download": "https://vhistoretg.s3.eu-north-1.amazonaws.com/Fortnite_35.20_1749211273.ipa",
     "genre": "Games",
     "lastModified": "2025-06-06T00:00:00Z"
   },
