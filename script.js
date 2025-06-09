@@ -1,3 +1,4 @@
+
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
 import {
   getDatabase, ref, onValue, runTransaction
@@ -18,19 +19,16 @@ const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
 document.addEventListener("DOMContentLoaded", () => {
-  const menuToggle = document.getElementById("menuToggle");
-  const menuClose = document.getElementById("menuClose");
-  const sideMenu = document.getElementById("sideMenu");
-  const overlay = document.getElementById("overlay");
   const mainListTitle = document.getElementById("mainListTitle");
   const gamesList = document.getElementById("gamesList");
-  const gameModal = document.getElementById("gameModal");
   const modalTitle = document.getElementById("modalTitle");
   const modalDesc = document.getElementById("modalDesc");
-  const modalDownload = document.getElementById("modalDownload");
   const modalIcon = document.getElementById("modalIcon");
-  const loader = document.getElementById("loader");
+  const modalDownload = document.getElementById("modalDownload");
+  const modalCounter = document.getElementById("modalDownloadCount");
+  const gameModal = document.getElementById("gameModal");
   const searchInput = document.getElementById("searchInput");
+  const loader = document.getElementById("loader");
   const certificateInfo = document.getElementById("certificateInfo");
 
   let gamesData = [];
@@ -70,14 +68,12 @@ document.addEventListener("DOMContentLoaded", () => {
         modalIcon.src = btn.dataset.icon;
         modalDownload.href = btn.dataset.download;
         gameModal.classList.add("show");
-
-        const itemName = btn.dataset.name;
-        incrementDownloadCount(itemName);
+        incrementDownloadCount(btn.dataset.name);
       });
     });
   }
 
-  async function updateDownloadCounts() {
+  function updateDownloadCounts() {
     const snapshotRef = ref(db, "downloads");
     onValue(snapshotRef, (snapshot) => {
       downloadsData = snapshot.val() || {};
@@ -89,7 +85,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (modalTitle.textContent && downloadsData[modalTitle.textContent]) {
         const count = downloadsData[modalTitle.textContent];
-        const modalCounter = document.getElementById("modalDownloadCount");
         if (modalCounter) modalCounter.textContent = `⬇️ Downloads: ${count}`;
       }
     });
@@ -100,99 +95,59 @@ document.addEventListener("DOMContentLoaded", () => {
     runTransaction(countRef, (current) => (current || 0) + 1);
   }
 
-  document.getElementById("siteTitle").addEventListener("click", () => location.reload());
+  // НАВИГАЦИОННЫЕ КНОПКИ
+  const navGames = document.getElementById("navGames");
+  const navApps = document.getElementById("navApps");
+  const navChat = document.getElementById("navChat");
+  const navMore = document.getElementById("navMore");
 
-  menuToggle.addEventListener("click", () => {
-    sideMenu.classList.add("open");
-    overlay.classList.remove("hidden");
-  
-
-  menuClose.addEventListener("click", () => {
-    sideMenu.classList.remove("open");
-    overlay.classList.add("hidden");
+  if (navGames) navGames.addEventListener("click", async () => {
+    currentCatalog = "games";
+    mainListTitle.textContent = "All Games";
+    searchInput.classList.remove("hidden");
+    loader.style.display = "flex";
+    if (certificateInfo) certificateInfo.style.display = "none";
+    try {
+      gamesData = await loadJSON("games.json");
+      renderList(gamesData);
+    } catch {
+      gamesList.innerHTML = "<p class='text-red-500'>Error loading games</p>";
+    }
+    loader.style.display = "none";
   });
 
-  overlay.addEventListener("click", () => {
-    sideMenu.classList.remove("open");
-    overlay.classList.add("hidden");
+  if (navApps) navApps.addEventListener("click", async () => {
+    currentCatalog = "apps";
+    mainListTitle.textContent = "All Apps";
+    searchInput.classList.remove("hidden");
+    loader.style.display = "flex";
+    if (certificateInfo) certificateInfo.style.display = "none";
+    try {
+      appsData = await loadJSON("apps.json");
+      renderList(appsData);
+    } catch {
+      gamesList.innerHTML = "<p class='text-red-500'>Error loading apps</p>";
+    }
+    loader.style.display = "none";
   });
 
-  document.querySelectorAll(".menuItem").forEach(btn => {
-    btn.addEventListener("click", async () => {
-      currentCatalog = btn.dataset.catalog;
-      mainListTitle.textContent = currentCatalog === "games" ? "All Games" : "All Apps";
-      searchInput.classList.remove("hidden");
-      loader.style.display = "flex";
-
-      if (certificateInfo) certificateInfo.style.display = "none";
-
-      try {
-        const data = await loadJSON(currentCatalog + ".json");
-        if (currentCatalog === "games") {
-          gamesData = data;
-        } else {
-          appsData = data;
-        }
-        renderList(data);
-      } catch (err) {
-        gamesList.innerHTML = "<p class='text-red-500'>Error loading data</p>";
-      }
-
-      loader.style.display = "none";
-      sideMenu.classList.remove("open");
-      overlay.classList.add("hidden");
-    });
+  if (navChat) navChat.addEventListener("click", () => {
+    const chatModal = document.getElementById("chatModal");
+    chatModal.classList.toggle("hidden");
+    const nickname = localStorage.getItem("nickname");
+    document.getElementById("nicknamePrompt").classList.toggle("hidden", !!nickname);
+    document.getElementById("chatMain").classList.toggle("hidden", !nickname);
+    if (nickname) {
+      document.getElementById("currentNickname").textContent = `You: ${nickname}`;
+    }
   });
 
-  // показать сертификаты при загрузке
-  if (certificateInfo) {
-    certificateInfo.style.display = "block";
-  }
-
-  searchInput.addEventListener("input", () => {
-    const value = searchInput.value.toLowerCase();
-    const filtered = (currentCatalog === "games" ? gamesData : appsData).filter(item =>
-      item.name.toLowerCase().includes(value)
-    );
-    renderList(filtered);
+  if (navMore) navMore.addEventListener("click", () => {
+    document.getElementById("moreModal").classList.remove("hidden");
   });
 
-  document.getElementById("showMoreBtn").addEventListener("click", () => {
-    renderList(currentCatalog === "games" ? gamesData : appsData);
-  });
-
+  // Закрытие модального окна
   window.closeModal = function () {
     gameModal.classList.remove("show");
   };
-
-  // Stripe Buy Certificate
-  const certBtn = document.getElementById("buyCertBtn");
-  if (certBtn) {
-    certBtn.addEventListener("click", async (e) => {
-      e.preventDefault();
-      try {
-        const res = await fetch("https://9b8c441b-2ade-4693-a4fc-a8992f2956dc-00-6whnly4neon0.spock.replit.dev/create-checkout-session", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            priceId: "price_1RXKaJ08Gjl0YPOata2ufkK4" // $6 Standard Certificate
-          })
-        });
-
-        const { url } = await res.json();
-        if (url) {
-          window.location.href = url;
-        } else {
-          alert("Ошибка при создании Stripe-сессии");
-        }
-      } catch (err) {
-        console.error(err);
-        alert("Сервер Stripe недоступен");
-      }
-    });
-  }
-});
-
 });
