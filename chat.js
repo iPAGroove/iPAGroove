@@ -4,26 +4,13 @@ import { getDatabase, ref, push, onChildAdded, onValue } from "https://www.gstat
 document.addEventListener("DOMContentLoaded", () => {
   const db = getDatabase();
   const chatMessagesRef = ref(db, "messages");
-  const onlineUsersRef = ref(db, "onlineUsers");
-  const userId = localStorage.getItem("sessionID") || `session_${Date.now()}_${Math.floor(Math.random() * 10000)}`;
-  localStorage.setItem("sessionID", userId);
-  const userRef = ref(db, `onlineUsers/${userId}`);
+  const presenceRefRoot = ref(db, "presence");
 
   // userRef удалён, заменено на userId и ref(db, `onlineUsers/${userId}`)
 
-  function setOnline() {
-  const refPath = ref(db, `onlineUsers/${userId}`);
-  set(refPath, true).then(() => {
-    onDisconnect(refPath).remove();
-  });
-}`), true);
+  `), true);
   onDisconnect(ref(db, `onlineUsers/${userId}`)).remove();
 }
-
-  function setOffline() {
-    if (userRef) userRef.remove();
-  }
-
 
   let nickname = localStorage.getItem("nickname") || "";
   let lastSeenTimestamp = parseInt(localStorage.getItem("lastSeen") || "0");
@@ -153,11 +140,20 @@ document.addEventListener("DOMContentLoaded", () => {
     currentNickname.textContent = `👤 ${nickname}`;
   }
 
-  onValue(onlineUsersRef, (snapshot) => {
-      const users = snapshot.val() || {};
-      const count = Object.keys(users).length;
-      onlineCounter.textContent = `🟢 Online: ${count}`;
-    });
+  onValue(ref(db, "presence"), (snapshot) => {
+  const users = snapshot.val() || {};
+  const now = Date.now();
+  let onlineCount = 0;
+  for (const key in users) {
+    if (users[key].ts && now - users[key].ts < 30000) {
+      onlineCount++;
+    }
+  }
+  const onlineCountEl = document.getElementById("onlineCount");
+  if (onlineCountEl) {
+    onlineCountEl.textContent = `Online: ${onlineCount}`;
+  }
+});
   }
 
   init();
