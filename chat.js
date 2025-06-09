@@ -22,12 +22,13 @@ document.addEventListener("DOMContentLoaded", () => {
   let unreadCount = 0;
 
   let notifySound;
-  document.addEventListener("click", () => {
-    if (!notifySound) {
-      notifySound = new Audio("https://assets.mixkit.co/sfx/preview/mixkit-message-pop-alert-2354.mp3");
-      notifySound.volume = 0.4;
-    }
-  });
+document.addEventListener("click", () => {
+  if (!notifySound) {
+    // Заменил на звонкий звук beep_short
+    notifySound = new Audio("https://actions.google.com/sounds/v1/alarms/beep_short.ogg");
+    notifySound.volume = 0.4;
+  }
+});
 
   function getColorForName(name) {
     let hash = 0;
