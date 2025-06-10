@@ -1,5 +1,14 @@
 [
   {
+    "name": "Levelup RPG",
+    "description": "- Damage Multiplier\n- Never Die\n- Drop Multiplier\n- Add Gems\n- Add Gold\n- Add Exp\n- Add Everything",
+    "version": "3.8.3",
+    "download": "https://vhistoretg.s3.eu-north-1.amazonaws.com/LVUP+_3.8.3_1749590235.ipa",
+    "icon": "https://github.com/iPAGroove/iPAGroove/blob/main/IMG_5756.jpeg?raw=true",
+    "genre": "Games",
+    "lastModified": "2025-06-06T00:00:00Z"
+  },
+  {
     "name": "GUNS UP !",
     "description": "- Damage Multiplier\n- Defense Multiplier\n- Freeze Energy",
     "version": "1.36.4",
