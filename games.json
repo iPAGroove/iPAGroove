@@ -1,5 +1,14 @@
 [
   {
+    "name": "Geometry Dash",
+    "description": "- Free on iPA Groove",
+    "version": "2.207",
+    "download": "https://vhistoretg.s3.eu-north-1.amazonaws.com/Geometry_2.207_1749594992.ipa",
+    "icon": "https://github.com/iPAGroove/iPAGroove/blob/main/IMG_5776.jpeg?raw=true",
+    "genre": "Games",
+    "lastModified": "2025-06-06T00:00:00Z"
+  },
+  {
     "name": "OUTERPLANE",
     "description": "- Damage Multiplier\n- Defense Multiplier",
     "version": "1.3.5",
