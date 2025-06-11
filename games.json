@@ -1,5 +1,14 @@
 [
   {
+    "name": "Bid Wars",
+    "description": "- Free IAP \n- Click buy then cancel",
+    "version": "2.69.2",
+    "download": "https://vhistoretg.s3.eu-north-1.amazonaws.com/Bid+Wars_2.69.2_1749630062.ipa",
+    "icon": "https://github.com/iPAGroove/iPAGroove/blob/main/IMG_5785.jpeg?raw=true",
+    "genre": "Games",
+    "lastModified": "2025-06-06T00:00:00Z"
+  },
+  {
     "name": "Geometry Dash",
     "description": "- Free on iPA Groove",
     "version": "2.207",
