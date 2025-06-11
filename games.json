@@ -1,5 +1,14 @@
 [
   {
+    "name": "Traffic Rider",
+    "description": "- Free IAP \n- Click buy then cancel",
+    "version": "2.0",
+    "download": "https://vhistoretg.s3.eu-north-1.amazonaws.com/Traffic+Rider_2.0_1749633359.ipa",
+    "icon": "https://github.com/iPAGroove/iPAGroove/blob/main/IMG_5793.jpeg?raw=true",
+    "genre": "Games",
+    "lastModified": "2025-06-06T00:00:00Z"
+  },
+  {
     "name": "Bid Wars 2",
     "description": "- Free IAP \n- Click buy then cancel",
     "version": "2.16",
