@@ -1,5 +1,14 @@
 [
   {
+    "name": "Stone Miner",
+    "description": "- Free IAP \n- Click buy then cancel",
+    "version": "2.13.6",
+    "download": "https://vhistoretg.s3.eu-north-1.amazonaws.com/Stone+Miner_2.13.6_1749728164.ipa",
+    "icon": "https://github.com/iPAGroove/iPAGroove/blob/main/IMG_5840.jpeg?raw=true",
+    "genre": "Games",
+    "lastModified": "2025-06-06T00:00:00Z"
+  },
+  {
     "name": "Swamp Attack 2",
     "description": "- Free IAP \n- Click buy then cancel",
     "version": "1.0.76",
