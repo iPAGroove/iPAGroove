@@ -1,4 +1,13 @@
 [
+ {
+    "name": "Videoleap",
+    "description": "Pro Features unlocked",
+    "icon": "https://github.com/iPAGroove/iPAGroove/blob/main/IMG_5831.jpeg?raw=true",
+    "version": "2.70",
+    "download": "https://vhistoretg.s3.eu-north-1.amazonaws.com/Videoleap_2.70_1749693846.ipa",
+    "genre": "Apps",
+    "lastModified": "2025-06-06T00:00:00Z"
+  },
   {
     "name": "Bazaart Premium",
     "description": "Premium Features unlocked",
