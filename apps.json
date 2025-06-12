@@ -1,5 +1,14 @@
 [
   {
+    "name": "Bazaart Premium",
+    "description": "Premium Features unlocked",
+    "icon": "https://github.com/iPAGroove/iPAGroove/blob/main/IMG_5827.jpeg?raw=true",
+    "version": "10.7.2",
+    "download": "https://vhistoretg.s3.eu-north-1.amazonaws.com/Bazaart_10.7.2_1749692973.ipa",
+    "genre": "Apps",
+    "lastModified": "2025-06-06T00:00:00Z"
+  },
+  {
     "name": "Photoroom Pro",
     "description": "Pro Features unlocked",
     "icon": "https://github.com/iPAGroove/iPAGroove/blob/main/IMG_5773.jpeg?raw=true",
