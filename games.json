@@ -1,5 +1,14 @@
 [
   {
+    "name": "APEX Racer",
+    "description": "- Free IAP \n- Click buy then cancel",
+    "version": "0.9.35",
+    "download": "https://vhistoretg.s3.eu-north-1.amazonaws.com/APEX+Racer_0.9.35_1750187800.ipa",
+    "icon": "https://github.com/iPAGroove/iPAGroove/blob/main/IMG_5969.jpeg?raw=true",
+    "genre": "Games",
+    "lastModified": "2025-06-06T00:00:00Z"
+  },
+  {
     "name": "Idle Bank Tycoon",
     "description": "- Free IAP \n- Click buy then cancel",
     "version": "1.58.0",
