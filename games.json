@@ -1,5 +1,14 @@
 [
   {
+    "name": "Modern Strike Online",
+    "description": "- Radar Hack\n- Increase FireRate\n- Unlimited Ammo\n- No Spread\n- Night Vision Enabled\n- Instant Kill\n- God Mode\n- No FlashBang\n- Super Speed\n- No MedKit CoolDown",
+    "version": "1.76.6",
+    "download": "https://vhistoretg.s3.eu-north-1.amazonaws.com/Modern+Strike+Online_1.76.6_1750318149.ipa",
+    "icon": "https://github.com/iPAGroove/iPAGroove/blob/main/IMG_5981.jpeg?raw=true",
+    "genre": "Games",
+    "lastModified": "2025-06-06T00:00:00Z"
+  },
+  {
     "name": "CSR 2 - Realistic Drag Racing",
     "description": "- Instant Car Delivery\n- Instant Part Delivery\n- Freeze Currencies\n- Anti-Ban",
     "version": "5.8.0",
