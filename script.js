@@ -65,6 +65,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const vipMessageModal = document.getElementById("vipMessageModal");
 
   // Ensure VIP message modal is hidden on DOMContentLoaded as well
+  // This is a redundant check if the HTML starts with hidden, but provides extra robustness.
   if (vipMessageModal) {
     vipMessageModal.classList.add('hidden');
   }
@@ -220,14 +221,25 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Function to show the VIP message modal
   function showVipMessageModal() {
+      console.log('Showing VIP Message Modal'); // Debugging line
       vipMessageModal.classList.remove('hidden');
       gameModal.classList.remove('show'); // Hide the game modal behind the VIP message
   }
 
   // Function to close the VIP message modal
   window.closeVipMessageModal = function() {
+      console.log('Closing VIP Message Modal'); // Debugging line
       vipMessageModal.classList.add('hidden');
   }
+
+  // New function to handle VIP purchase button click
+  window.handleVipPurchaseClick = function() {
+      console.log('Redirecting to VIP purchase page or showing more info.');
+      // You would add your actual redirection or further modal logic here
+      // Example: window.location.href = 'your-vip-purchase-page.html';
+      // For now, just a console log.
+  }
+
 
   async function updateDownloadCounts() {
     const snapshotRef = ref(db, "downloads");
@@ -317,7 +329,4 @@ document.addEventListener("DOMContentLoaded", () => {
   window.closeModal = function () {
     gameModal.classList.remove("show");
   };
-
-  // Removed loadCatalog("games"); from here to prevent immediate display of catalog
-  // This line was the cause of the VIP modal showing on load if the first item was VIP.
 });
