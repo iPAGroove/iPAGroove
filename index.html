@@ -41,121 +41,264 @@
     align-items: center;
     justify-content: center;
     z-index: 9998;
-    font-size: 2em;
-    color: white;
+    font-size: 1.2rem;
   }
-  /* Стили для модального окна */
-  .modal-overlay {
-    position: fixed;
-    top: 0;
+  #sideMenu {
+    transition: left 0.3s ease;
+  }
+  #sideMenu.open {
     left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.7);
+  }
+  #gameModal.show {
     display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
   }
-  .modal-content {
-    background-color: #23004d;
-    padding: 20px;
-    border-radius: 10px;
-    text-align: center;
-    color: white;
-    max-width: 90%;
-    max-height: 90%;
-    overflow-y: auto;
-    position: relative;
-    border: 1px solid #6e1cff;
+  /* Custom styles for the download button and info grid */
+  .info-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
   }
-  .close-button {
+  .info-box {
+    background-color: rgba(255,255,255,0.04);
+    border-radius: 0.75rem; /* rounded-xl */
+    padding: 0.75rem; /* p-3 */
+    border: 1px solid rgba(147, 197, 253, 0.2); /* border-blue-400/20 for example, adjusted to purple */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* Align icon and text to start */
+    gap: 0.25rem;
+  }
+  .info-box span {
+    font-size: 0.875rem; /* text-sm */
+    color: #a0aec0; /* text-gray-400 */
+  }
+  .info-box .value {
+    font-weight: bold;
+    color: white; /* text-white */
+    font-size: 0.875rem; /* text-sm */
+  }
+
+  /* Styling for the VIP badge - Made rectangular, positioned over icon */
+  .vip-badge {
+    background-color: #FFD700; /* Gold color */
+    color: #333;
+    padding: 0.1rem 0.6rem; /* Make it more rectangular */
+    border-radius: 0.25rem; /* Keep some rounding */
+    font-size: 0.6rem; /* Smaller font size */
+    font-weight: bold;
+    text-transform: uppercase;
     position: absolute;
-    top: 10px;
-    right: 10px;
-    background: none;
-    border: none;
-    font-size: 1.5em;
+    top: 0;
+    right: 0;
+    z-index: 10; /* Ensure it's above the icon */
+    transform: translate(30%, -30%); /* Adjust position slightly to be outside the icon corner */
+    white-space: nowrap; /* Prevent text wrapping */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.3); /* Add a small shadow */
+  }
+
+  /* Custom modal for VIP access message */
+  #vipMessageModal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.8);
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+  }
+  #vipMessageModal .modal-content {
+    background-color: rgba(40,0,90,0.95);
+    border-radius: 1rem;
+    padding: 1.5rem;
+    max-width: 20rem;
+    width: 90%;
     color: white;
-    cursor: pointer;
+    text-align: center;
+    position: relative;
+    box-shadow: 0 0 1.5rem rgba(110,28,255,0.5);
   }
-  /* Стили для плавной анимации */
-  .modal {
-    transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
-    opacity: 0;
-    transform: translateY(-20px);
+  /* Additional styles for list items */
+  .game-card {
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    border: 1px solid rgba(110,28,255,0.3); /* Subtle border for definition */
+    position: relative; /* Needed for absolute positioning of VIP badge */
   }
-  .modal.show {
-    opacity: 1;
-    transform: translateY(0);
-  }
-  .genre-button.active {
-    background-color: #6e1cff;
-    color: white;
+  .game-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4), 0 0 10px rgba(110,28,255,0.7);
   }
 
-  /* Стили для вкладок VIP/TOP */
-  .tab-button {
-    padding: 8px 16px;
-    border-radius: 20px;
-    background-color: rgba(255, 255, 255, 0.1);
-    color: #fff;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+  /* Wrapper for game icon and VIP badge for relative positioning */
+  .icon-wrapper {
+      position: relative;
+      width: 4rem; /* w-16 */
+      height: 4rem; /* h-16 */
   }
 
-  .tab-button.active {
-    background-color: #6e1cff;
+  /* Styles for scrollable modal description */
+  #modalDesc {
+    max-height: 10rem; /* Set a max height */
+    overflow-y: auto; /* Enable vertical scrolling */
+    /* Add custom scrollbar styling if desired for webkit browsers */
+    scrollbar-width: thin; /* Firefox */
+    scrollbar-color: #6e1cff #23004d; /* thumb and track color for Firefox */
   }
-
+  /* Webkit scrollbar styling */
+  #modalDesc::-webkit-scrollbar {
+    width: 8px;
+  }
+  #modalDesc::-webkit-scrollbar-track {
+    background: rgba(35, 0, 77, 0.5); /* Darker track */
+    border-radius: 10px;
+  }
+  #modalDesc::-webkit-scrollbar-thumb {
+    background-color: #6e1cff; /* Purple thumb */
+    border-radius: 10px;
+    border: 2px solid rgba(35, 0, 77, 0.8); /* Dark border */
+  }
 </style>
 </head>
-<body class="text-white min-h-screen flex flex-col">
-<div id="loader">Loading...</div>
-
-<header class="text-center py-4 relative z-10">
-    <h1 class="text-2xl font-bold text-primary cursor-pointer" id="siteTitle">iOS Game Zone</h1>
+<body class="text-white font-sans max-w-screen-sm mx-auto p-0 relative locked">
+<div class="flex" id="loader">Loading data...</div>
+<header class="flex justify-center items-center relative px-4 py-2 fixed w-full top-0 left-0 z-40 backdrop-blur-md bg-[rgba(20,0,40,0.6)] border-b border-purple-500/30 shadow-md">
+    <h1 class="cursor-pointer text-lg font-extrabold text-white flex items-center gap-3 hover:text-purple-300 transition text-center" id="siteTitle" style="text-shadow: 0 0 8px rgba(110,28,255,0.9);">
+        <img alt="Logo" class="w-7 h-7 rounded shadow-md" src="https://github.com/iPAGroove/iPAGroove/blob/main/IMG_5539.PNG?raw=true"/>
+        iPA Groove
+    </h1>
+    <div class="absolute right-4 top-1/2 -translate-y-1/2 text-sm text-gray-300">
+        Users: <span id="totalUsersCount" class="font-bold text-white">3041</span>
+    </div>
 </header>
-
-<main class="flex-grow p-4 z-10">
-    <section id="certificateInfo" class="text-center mt-8">
-        <h2 class="text-xl font-semibold mb-4">Сертификат действителен до:</h2>
-        <p id="certificateDate" class="text-lg"></p>
-        <div id="certificateStatus" class="mt-2 text-red-400"></div>
-        <p class="mt-4 text-sm text-gray-300">
-            Если сертификат просрочен, вы не сможете устанавливать новые приложения.
-        </p>
-    </section>
-
-    <section id="catalogSection" class="hidden mt-4">
-        <input type="text" id="searchInput" placeholder="Search..." class="w-full p-2 rounded bg-gray-700 text-white mb-4 hidden">
-
-        <div id="catalogTabs" class="flex justify-center gap-4 mb-4 hidden">
-            <button class="tab-button active" id="topButton">TOP</button>
-            <button class="tab-button" id="vipButton">VIP</button>
-        </div>
-
-        <div id="catalogList" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-            </div>
-        <div id="pagination" class="flex justify-center gap-4 mt-4 hidden">
-            <button id="prevPage" class="bg-primary px-4 py-2 rounded">Previous</button>
-            <span id="pageInfo" class="flex items-center"></span>
-            <button id="nextPage" class="bg-primary px-4 py-2 rounded">Next</button>
-        </div>
-    </section>
+<main class="pt-16 pb-8 min-h-screen px-4">
+<section class="relative bg-[rgba(30,0,60,0.6)] rounded-xl p-4 mt-2 mb-4 mx-2 text-white shadow-lg border border-purple-600/30 ring-1 ring-purple-500/30 backdrop-blur-md overflow-hidden transition-all duration-300 text-sm" id="certificateInfo">
+<h2 class="text-lg font-bold text-purple-300 drop-shadow mb-3 tracking-wide flex items-center gap-2">
+    📋 Installation Certificates
+</h2>
+<p class="text-xs text-gray-300 mb-2 leading-snug">🔐 A personal certificate is required to install cracked .ipa files.</p>
+<div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
+<div class="bg-[rgba(255,255,255,0.04)] rounded-xl p-3 border border-purple-400/20 hover:ring hover:ring-purple-500 transition-all">
+<div class="flex items-center gap-2 mb-1">
+<span class="text-green-300 text-xl">🛡️</span>
+<span class="font-semibold text-green-300 text-sm">Standard Certificate</span>
+</div>
+<p class="text-xs text-gray-300 leading-tight">💲 <strong>$6</strong> — Delivered in <strong>72h</strong></p>
+</div>
+<div class="bg-[rgba(255,255,255,0.04)] rounded-xl p-3 border border-yellow-400/20 hover:ring hover:ring-yellow-300 transition-all">
+<div class="flex items-center gap-2 mb-1">
+<span class="text-yellow-300 text-xl">⚡</span>
+<span class="font-semibold text-yellow-300 text-sm">Instant Certificate</span>
+</div>
+<p class="text-xs text-gray-300 leading-tight">💲 <strong>$12</strong> — Delivered in <strong>5 min</strong></p>
+</div>
+</div>
+<div class="mt-3 text-xs text-gray-400 space-y-1">
+<p>💳 Payments accepted worldwide</p>
+<p>📄 All certificates include a <strong>1-year warranty</strong> ✅</p>
+</div>
+<div class="flex justify-between items-center gap-3 mt-4">
+<div class="flex flex-col items-center">
+<img alt="Scarlet" class="w-11 h-11 rounded-lg shadow-md border border-purple-300" src="https://github.com/iPAGroove/iPAGroove/blob/main/scarlet.JPG?raw=true"/>
+<span class="text-[11px] mt-1 font-semibold text-purple-300">Scarlet</span>
+</div>
+<div class="flex flex-col items-center">
+<img alt="ESign" class="w-11 h-11 rounded-lg shadow-md border border-purple-300" src="https://github.com/iPAGroove/iPAGroove/blob/main/esign.JPG?raw=true"/>
+<span class="text-[11px] mt-1 font-semibold text-purple-300">ESign</span>
+</div>
+<div class="flex flex-col items-center">
+<img alt="GBox" class="w-11 h-11 rounded-lg shadow-md border border-purple-300" src="https://github.com/iPAGroove/iPAGroove/blob/main/gbox.JPG?raw=true"/>
+<span class="text-[11px] mt-1 font-semibold text-purple-300">GBox</span>
+</div>
+<div class="flex flex-col items-center">
+<img alt="Feather" class="w-11 h-11 rounded-lg shadow-md border border-purple-300" src="https://github.com/iPAGroove/iPAGroove/blob/main/fether.JPG?raw=true"/>
+<span class="text-[11px] mt-1 font-semibold text-purple-300">Feather</span>
+</div>
+</div>
+<a class="block mt-4" href="#" id="buyCertBtn">
+<button class="w-full bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white py-1.5 rounded-xl font-bold text-xs transition duration-300 shadow-md">
+    💳 Buy Certificate
+</button>
+</a>
+</section>
+<div id="catalogSection" class="hidden"> <h2 class="text-xl font-bold mb-2 text-purple-300 drop-shadow ml-2" id="mainListTitle"></h2>
+<input class="w-full mb-4 px-4 py-2 rounded-xl bg-[rgba(255,255,255,0.05)] text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-600 shadow-inner ml-2 mr-2" id="searchInput" placeholder="🔍 Search by name..." type="text" style="width: calc(100% - 1rem);"/>
+<div class="space-y-4 mb-4 px-2" id="gamesList"></div>
+<div class="text-center" id="showMoreContainer">
+<button class="hidden px-4 py-2 bg-purple-700 rounded hover:bg-purple-900" id="showMoreBtn">Show More</button>
+</div>
+</div>
 </main>
+<div class="fixed bottom-20 right-4 bg-[rgba(40,0,90,0.95)] rounded-xl p-4 w-80 max-h-[70vh] overflow-y-auto text-white z-50 hidden shadow-lg" id="chatModal">
+<div id="nicknamePrompt">
+<p class="mb-2">Enter nickname:</p>
+<input class="w-full mb-2 px-2 py-1 text-black rounded" id="nicknameInput" placeholder="Your nickname" type="text"/>
+<button class="w-full bg-purple-600 hover:bg-purple-800 py-1 rounded" id="saveNickname">Save</button>
+</div>
+<div class="hidden" id="chatMain">
+<div class="flex justify-between items-center text-sm text-purple-300 mb-2">
+<span id="currentNickname"></span>
+<button class="text-xs text-gray-400 hover:text-white" id="changeNickname">Change nickname</button>
+</div>
+<div class="mb-2 max-h-48 overflow-y-auto text-sm pr-2" id="chatMessages"></div>
+<form class="flex gap-2" id="chatForm">
+<input class="flex-1 px-2 py-1 text-black rounded" id="chatInput" placeholder="Message..." type="text"/>
+<button class="bg-purple-600 hover:bg-purple-800 px-3 rounded">→</button>
+</form>
+<div class="mt-2 text-xs text-white flex items-center gap-2" id="onlineCounter">
+<div id="onlineDot" style="width:10px;height:10px;background:#00ff00;border-radius:50%;"></div>
+<span id="onlineCount">Online: 0</span>
+</div>
+</div>
+</div>
+<div class="fixed inset-0 bg-black bg-opacity-70 hidden z-50 items-center justify-center" id="gameModal">
+<div class="bg-[rgba(40,0,90,0.95)] rounded-xl p-6 max-w-sm w-full mx-4 text-white shadow-lg relative">
+<button class="absolute top-2 right-2 text-white text-xl hover:text-purple-300" onclick="closeModal()">×</button>
+<div class="flex gap-4 items-center mb-4">
+<img alt="App Icon" class="w-24 h-24 rounded-xl shadow-md border-2 border-purple-500" id="modalIcon" src=""/>
+<div class="flex-1">
+<h3 class="text-2xl font-bold text-white drop-shadow" id="modalTitle"></h3>
+<p class="text-sm text-gray-400 mt-1" id="modalGenre"></p>
+<p class="text-sm text-gray-400 mt-1 downloads-count-modal" id="modalDownloadCount">⬇️ Downloads: ...</p>
+</div>
+</div>
+<a class="block mb-4" href="#" id="modalDownload" target="_blank">
+<button class="w-full bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white py-2 rounded-xl font-bold text-lg shadow-md transition duration-300">
+    ⬇️ Download
+</button>
+</a>
+<button id="vipAccessButton" class="block mb-4 w-full bg-gradient-to-r from-yellow-500 to-amber-500 hover:from-yellow-600 hover:to-amber-600 text-black py-2 rounded-xl font-bold text-lg shadow-md transition duration-300 hidden">
+    🌟 Get VIP
+</button>
 
-<div id="gameModal" class="modal-overlay hidden">
-    <div class="modal-content modal">
-        <button class="close-button" onclick="closeModal()">&times;</button>
-        <img id="modalIcon" src="" alt="App Icon" class="w-24 h-24 mx-auto mb-4 rounded-lg shadow-lg">
-        <h3 id="modalName" class="text-2xl font-bold mb-2"></h3>
-        <p id="modalDescription" class="text-gray-300 mb-4 text-left whitespace-pre-line"></p>
-        <p id="modalVersion" class="text-sm text-gray-400">Version: </p>
-        <p id="modalFileSize" class="text-sm text-gray-400">Size: </p>
-        <p id="modalMinIosVersion" class="text-sm text-gray-400 mb-4">Requires iOS: </p>
-        <button id="downloadButton" class="bg-primary hover:bg-purple-700 text-white font-bold py-2 px-4 rounded w-full">Download</button>
-        <button id="vipPurchaseButton" class="mt-2 bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded w-full hidden" onclick="handleVipPurchaseClick()">Learn More about VIP</button>
+<div class="info-grid mb-4">
+<div class="info-box">
+<span class="text-gray-400">📏 Size</span>
+<span class="value" id="modalSize"></span>
+</div>
+<div class="info-box">
+<span class="text-gray-400">📱 iOS Version</span>
+<span class="value" id="modalMinIos"></span>
+</div>
+<div class="info-box">
+<span class="text-gray-400">📅 Updated</span>
+<span class="value" id="modalAddedDate"></span>
+</div>
+<div class="info-box">
+<span class="text-gray-400">ℹ️ Version</span>
+<span class="value" id="modalVersion"></span>
+</div>
+</div>
+
+<h4 class="text-lg font-bold text-purple-300 text-center mt-4 mb-2 drop-shadow">Hack Features</h4>
+<div class="text-sm text-gray-300 whitespace-pre-line text-left px-4 py-3 mb-4 rounded-lg border border-purple-700/30 shadow-inner bg-[rgba(255,255,255,0.02)]" id="modalDesc"></div>
+
+</div>
+</div>
+
+<div id="vipMessageModal" class="hidden">
+    <div class="modal-content">
+        <button class="absolute top-2 right-2 text-white text-xl hover:text-purple-300" onclick="closeVipMessageModal()">×</button>
+        <h3 class="text-xl font-bold mb-4">VIP Access Required</h3>
+        <p class="text-gray-300 mb-6">To download VIP applications and games, you need to purchase a VIP subscription. This gives you access to exclusive content!</p>
+        <button class="bg-purple-600 hover:bg-purple-800 py-2 px-4 rounded-xl text-white font-bold" onclick="handleVipPurchaseClick()">Learn More about VIP</button>
     </div>
 </div>
 
@@ -178,24 +321,11 @@
     ⋯<span class="text-xs mt-1">More</span>
 </button>
 </nav>
-<div class="fixed inset-0 bg-black bg-opacity-70 hidden z-50 flex items-center justify-center" id="moreModal">
-    <div class="bg-dark p-6 rounded-lg shadow-xl text-center relative max-w-sm w-full mx-4 border border-primary">
-        <button class="absolute top-2 right-2 text-gray-400 hover:text-white text-2xl" onclick="document.getElementById('moreModal').classList.add('hidden');">&times;</button>
-        <h3 class="text-xl font-bold mb-4 text-primary">More Options</h3>
-        <ul class="space-y-3">
-            <li>
-                <a href="https://t.me/iPAGroove" target="_blank" class="text-white hover:text-primary block py-2 px-4 rounded-md bg-gray-700 hover:bg-gray-600 transition duration-300">
-                    Telegram Channel
-                </a>
-            </li>
-            <li>
-                <a href="#" class="text-white hover:text-primary block py-2 px-4 rounded-md bg-gray-700 hover:bg-gray-600 transition duration-300" onclick="alert('Current certificate information is displayed on the main page.'); return false;">
-                    Certificate Info
-                </a>
-            </li>
-        </ul>
-    </div>
+<div class="fixed inset-0 bg-black bg-opacity-70 hidden z-50 items-center justify-center" id="moreModal">
+<div class="bg-[rgba(40,0,90,0.95)] rounded-xl p-6 max-w-sm w-full mx-4 text-white shadow-lg relative">
+<button class="absolute top-2 right-2 text-white text-xl hover:text-purple-300" onclick="document.getElementById('moreModal').classList.add('hidden')">×</button>
+<p class="text-center text-sm text-gray-300">🚧 More options coming soon...</p>
 </div>
-
+</div>
 </body>
 </html>
