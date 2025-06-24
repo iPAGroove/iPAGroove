@@ -143,7 +143,8 @@ document.addEventListener("DOMContentLoaded", () => {
     gamesList.innerHTML = "";
     pageItems.forEach(item => {
       const card = document.createElement("div");
-      card.className = "bg-[rgba(255,255,255,0.05)] rounded-lg p-4 flex gap-4 items-center";
+      // ADDED 'game-card' class here for hover effects and subtle border
+      card.className = "bg-[rgba(255,255,255,0.05)] rounded-lg p-4 flex gap-4 items-center game-card";
       card.innerHTML = `
         <img src="${item.icon}" alt="${item.name}" class="w-16 h-16 rounded shadow" />
         <div class="flex-1">
