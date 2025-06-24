@@ -78,16 +78,18 @@
     font-size: 0.875rem; /* text-sm */
   }
 
-  /* Styling for the VIP badge */
+  /* Styling for the VIP badge - Made more compact */
   .vip-badge {
     background-color: #FFD700; /* Gold color */
     color: #333;
-    padding: 0.25rem 0.5rem;
-    border-radius: 0.375rem;
-    font-size: 0.75rem;
+    padding: 0.1rem 0.4rem; /* Smaller padding */
+    border-radius: 0.25rem; /* Smaller radius */
+    font-size: 0.65rem; /* Smaller font size */
     font-weight: bold;
-    margin-left: 0.5rem;
+    margin-left: 0.4rem; /* Smaller margin */
+    vertical-align: middle; /* Align with text vertically */
     display: inline-block;
+    text-transform: uppercase; /* Make text uppercase for stylistic consistency */
   }
 
   /* Custom modal for VIP access message */
@@ -95,7 +97,6 @@
     position: fixed;
     inset: 0;
     background: rgba(0, 0, 0, 0.8);
-    /* REMOVED display: flex; from here. Visibility will be controlled by adding/removing 'hidden' class via JS. */
     align-items: center;
     justify-content: center;
     z-index: 9999;
@@ -119,6 +120,28 @@
   .game-card:hover {
     transform: translateY(-5px);
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4), 0 0 10px rgba(110,28,255,0.7);
+  }
+
+  /* Styles for scrollable modal description */
+  #modalDesc {
+    max-height: 10rem; /* Set a max height */
+    overflow-y: auto; /* Enable vertical scrolling */
+    /* Add custom scrollbar styling if desired for webkit browsers */
+    scrollbar-width: thin; /* Firefox */
+    scrollbar-color: #6e1cff #23004d; /* thumb and track color for Firefox */
+  }
+  /* Webkit scrollbar styling */
+  #modalDesc::-webkit-scrollbar {
+    width: 8px;
+  }
+  #modalDesc::-webkit-scrollbar-track {
+    background: rgba(35, 0, 77, 0.5); /* Darker track */
+    border-radius: 10px;
+  }
+  #modalDesc::-webkit-scrollbar-thumb {
+    background-color: #6e1cff; /* Purple thumb */
+    border-radius: 10px;
+    border: 2px solid rgba(35, 0, 77, 0.8); /* Dark border */
   }
 </style>
 </head>
@@ -302,4 +325,3 @@
 </div>
 </body>
 </html>
-
