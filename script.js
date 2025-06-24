@@ -59,24 +59,24 @@ document.addEventListener("DOMContentLoaded", () => {
   const modalVersion = document.getElementById("modalVersion");
   const modalDownloadCountModal = document.getElementById("modalDownloadCount");
 
-  const vipAccessButton = document.getElementById("vipAccessButton"); // Этот элемент может быть null, если удален из HTML
-  const vipMessageModal = document.getElementById("vipMessageModal"); // Kept, but hidden
+  const vipAccessButton = document.getElementById("vipAccessButton");
+  const vipMessageModal = document.getElementById("vipMessageModal");
 
   const totalUsersCountElement = document.getElementById("totalUsersCount");
 
   if (vipMessageModal) {
-    vipMessageModal.classList.add('hidden'); // Ensure it's hidden
+    vipMessageModal.classList.add('hidden');
   }
 
   let gamesData = [];
   let appsData = [];
-  let filteredData = []; // This will just hold search results now
+  let filteredData = [];
   let currentCatalog = "games";
 
   let currentPage = 1;
   const itemsPerPage = 5;
 
-  let downloadsFromFirebase = {}; // Still used for displaying download counts
+  let downloadsFromFirebase = {};
 
   async function loadJSON(url) {
     const response = await fetch(url);
@@ -137,7 +137,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function renderList(data) {
-    filteredData = data; // filteredData is now just the result of search/current catalog
+    filteredData = data;
     const pageItems = paginate(data, currentPage);
     gamesList.innerHTML = "";
     pageItems.forEach(item => {
@@ -146,7 +146,7 @@ document.addEventListener("DOMContentLoaded", () => {
       card.innerHTML = `
         <div class="icon-wrapper">
           <img src="${item.icon}" alt="${item.name}" class="w-16 h-16 rounded shadow" />
-          </div>
+        </div>
         <div class="flex-1">
           <h3 class="font-bold text-lg">${item.name}</h3>
           <p class="text-sm text-gray-300">${item.version || ""}</p>
@@ -176,9 +176,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const snapshotRef = ref(db, "downloads");
     onValue(snapshotRef, (snapshot) => {
       downloadsFromFirebase = snapshot.val() || {};
-      // Re-render the current list to show updated download counts
-      // We need to know which data is currently being displayed (gamesData or appsData)
-      // and which items are currently filtered by search
       const currentSourceData = currentCatalog === "games" ? gamesData : appsData;
       const currentSearchValue = searchInput.value.toLowerCase();
       if (currentSearchValue) {
@@ -219,15 +216,12 @@ document.addEventListener("DOMContentLoaded", () => {
       console.log("User already counted recently.");
   }
 
-  // --- applyFilter function is simplified, no longer needs currentFilter logic ---
   function applyFilter() {
     const dataToRender = currentCatalog === "games" ? gamesData : appsData;
     mainListTitle.textContent = `All ${currentCatalog.charAt(0).toUpperCase() + currentCatalog.slice(1)}`;
     currentPage = 1;
     renderList(dataToRender);
   }
-  // --- END simplified applyFilter ---
-
 
   async function loadCatalog(type) {
     currentCatalog = type;
@@ -238,7 +232,6 @@ document.addEventListener("DOMContentLoaded", () => {
     catalogSection.style.display = "block";
 
     activateButton(currentCatalog === "games" ? document.getElementById("navGames") : document.getElementById("navApps"));
-    // No filter buttons to activate/deactivate now
 
     try {
       const data = await loadJSON(`${type}.json`);
@@ -246,8 +239,9 @@ document.addEventListener("DOMContentLoaded", () => {
         ...item,
         fileSize: item.fileSize || `${(Math.random() * 500 + 50).toFixed(0)} MB`,
         minIosVersion: item.minIosVersion || `iOS ${Math.floor(Math.random() * 5) + 10}.0`,
-        lastModified: item.lastModified || new Date(Date.now() - Math.random() * 365 * 24 * 60 * 60 * 1000).toISOString(),
-        access_type: item.access_type || 'Free' // access_type kept for data consistency, but not used for filtering
+        // ИЗМЕНЕНО ЗДЕСЬ: Всегда генерировать текущее время для lastModified
+        lastModified: new Date().toISOString(), // Теперь всегда будет текущая дата
+        access_type: item.access_type || 'Free'
       }));
       if (type === "games") gamesData = processedData;
       else appsData = processedData;
@@ -273,8 +267,6 @@ document.addEventListener("DOMContentLoaded", () => {
       button.classList.remove('text-white');
     }
   }
-
-  // No need for activateFilterButton function anymore
 
   document.getElementById("navGames").addEventListener("click", () => {
     loadCatalog("games");
@@ -303,7 +295,6 @@ document.addEventListener("DOMContentLoaded", () => {
     activateButton(null);
   });
 
-
   searchInput.addEventListener("input", () => {
     const value = searchInput.value.toLowerCase();
     const sourceData = currentCatalog === "games" ? gamesData : appsData;
@@ -314,16 +305,13 @@ document.addEventListener("DOMContentLoaded", () => {
     mainListTitle.textContent = `Search Results for "${value}"`;
   });
 
-
   window.closeModal = function () {
     gameModal.classList.remove("show");
   };
 
-  // --- ВОЗВРАЩЕННЫЙ ОБРАБОТЧИК КЛИКОВ ДЛЯ КНОПКИ "Open" ---
-  // Event listener for opening the game modal (on "Open" button click)
   gamesList.addEventListener('click', (event) => {
     const button = event.target.closest('button');
-    if (button && button.textContent.includes('Open')) { // Убедитесь, что это кнопка "Open"
+    if (button && button.textContent.includes('Open')) {
         const name = button.dataset.name;
         const download = button.dataset.download;
         const desc = button.dataset.desc;
@@ -331,7 +319,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const version = button.dataset.version;
         const size = button.dataset.size;
         const minIos = button.dataset.minIos;
-        const lastModified = button.dataset.lastModified;
+        const lastModified = button.dataset.lastModified; // Эта дата будет уже текущей, если изменена в loadCatalog
         const genre = button.dataset.genre;
         const accessType = button.dataset.accessType;
 
@@ -348,7 +336,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
         modalDownload.style.display = 'block';
         downloadButton.textContent = '⬇️ Download';
-        // Убедитесь, что vipAccessButton существует перед попыткой доступа к .style
         if (vipAccessButton) {
             vipAccessButton.style.display = 'none';
         }
@@ -360,16 +347,13 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // Listener for the actual download button inside the modal
   downloadButton.addEventListener('click', () => {
       const title = modalTitle.textContent;
       incrementDownloadCount(title);
   });
-  // --- КОНЕЦ ВОЗВРАЩЕННОГО ОБРАБОТЧИКА КЛИКОВ ---
 
-  updateDownloadCounts(); // Initial load of download counts
-
-  document.getElementById("navGames").click(); // Initial load of Games
+  updateDownloadCounts();
+  document.getElementById("navGames").click();
   certificateInfo.style.display = "block";
   catalogSection.style.display = "none";
   searchInput.classList.add("hidden");
