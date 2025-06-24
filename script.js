@@ -64,6 +64,11 @@ document.addEventListener("DOMContentLoaded", () => {
   const vipAccessButton = document.getElementById("vipAccessButton");
   const vipMessageModal = document.getElementById("vipMessageModal");
 
+  // Ensure VIP message modal is hidden on DOMContentLoaded as well
+  if (vipMessageModal) {
+    vipMessageModal.classList.add('hidden');
+  }
+
   let gamesData = [];
   let appsData = [];
   let filteredData = [];
@@ -316,4 +321,3 @@ document.addEventListener("DOMContentLoaded", () => {
   // Removed loadCatalog("games"); from here to prevent immediate display of catalog
   // This line was the cause of the VIP modal showing on load if the first item was VIP.
 });
-
