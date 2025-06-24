@@ -78,18 +78,20 @@
     font-size: 0.875rem; /* text-sm */
   }
 
-  /* Styling for the VIP badge - Made more compact */
+  /* Styling for the VIP badge in list view */
   .vip-badge {
-    background-color: #FFD700; /* Gold color */
+    position: absolute; /* Position absolutely within the relative parent (.game-card) */
+    top: 0.5rem; /* From top */
+    right: 0.5rem; /* From right */
+    background-color: rgba(255, 215, 0, 0.9); /* Gold color, slightly transparent */
     color: #333;
-    padding: 0.1rem 0.4rem; /* Smaller padding */
-    border-radius: 0.25rem; /* Smaller radius */
-    font-size: 0.65rem; /* Smaller font size */
+    padding: 0.2rem 0.5rem; /* Rectangular padding */
+    border-radius: 0.3rem; /* Small border radius for rectangular shape */
+    font-size: 0.7rem; /* Compact font size */
     font-weight: bold;
-    margin-left: 0.4rem; /* Smaller margin */
-    vertical-align: middle; /* Align with text vertically */
-    display: inline-block;
-    text-transform: uppercase; /* Make text uppercase for stylistic consistency */
+    text-transform: uppercase;
+    z-index: 10; /* Ensure it's on top of other elements in the card */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Subtle shadow */
   }
 
   /* Custom modal for VIP access message */
@@ -114,6 +116,7 @@
   }
   /* Additional styles for list items */
   .game-card {
+    position: relative; /* Needed for absolute positioning of .vip-badge */
     transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
     border: 1px solid rgba(110,28,255,0.3); /* Subtle border for definition */
   }
@@ -255,7 +258,8 @@
       ⬇️ Download
     </button>
 </a>
-<button id="vipAccessButton" class="w-full bg-gradient-to-r from-yellow-500 to-amber-500 hover:from-yellow-600 hover:to-amber-600 text-black py-2 rounded-xl font-bold text-lg shadow-md transition duration-300 hidden">
+<!-- Adjusted width and centered the VIP button -->
+<button id="vipAccessButton" class="max-w-[80%] mx-auto block bg-gradient-to-r from-yellow-500 to-amber-500 hover:from-yellow-600 hover:to-amber-600 text-black py-2 rounded-xl font-bold text-lg shadow-md transition duration-300 hidden">
     🌟 Get VIP Access
 </button>
 
