@@ -1,5 +1,17 @@
 [
   {
+    "name": "Ronin",
+    "description": "- Damage Multiplier \n- Defense Multiplier",
+    "icon": "https://github.com/iPAGroove/iPAGroove/blob/main/icons/IMG_6112.jpeg?raw=true",
+    "version": "2.19.760",
+    "download": "https://vhistoretg.s3.eu-north-1.amazonaws.com/Ronin_2.19.760_1750804563.ipa",
+    "genre": "Games",
+    "lastModified": "2025-06-25T00:01:53Z",
+    "fileSize": "383 MB",
+    "minIosVersion": "iOS 12.0",
+    "access_type": "Free"
+  },
+  {
     "name": "Toon Blast",
     "description": "- Items/Coins Increase \n- Always Red Blocks \n- Unlimited Lives",
     "icon": "https://github.com/iPAGroove/iPAGroove/blob/main/icons/IMG_6108.jpeg?raw=true",
