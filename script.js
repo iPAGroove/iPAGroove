@@ -1,4 +1,4 @@
-// Управление адаптивной высотой для мобильных
+// Manages adaptive height for mobile
 function setVh() {
   const vh = window.innerHeight * 0.01;
   document.documentElement.style.setProperty('--vh', `${vh * 100}px`);
@@ -9,12 +9,15 @@ window.addEventListener('load', setVh);
 
 setVh();
 
-// Блокируем прокрутку при загрузке
+// Locks scrolling on load
 document.body.classList.add('locked');
 
 window.addEventListener("load", () => {
   document.getElementById("loader").style.display = "none";
   document.body.classList.remove('locked');
+  // Ensure certificate info is visible on initial load
+  document.getElementById("certificateInfo").style.display = "block";
+  document.getElementById("catalogSection").style.display = "none";
 });
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
@@ -37,10 +40,12 @@ const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
 document.addEventListener("DOMContentLoaded", () => {
-  const menuToggle = document.getElementById("menuToggle"); // Not used in provided HTML, keeping for consistency
-  const menuClose = document.getElementById("menuClose");   // Not used in provided HTML, keeping for consistency
-  const sideMenu = document.getElementById("sideMenu");     // Not used in provided HTML, keeping for consistency
-  const overlay = document.getElementById("overlay");       // Not used in provided HTML, keeping for consistency
+  // These elements are not used in the provided HTML but kept for consistency if they exist elsewhere
+  // const menuToggle = document.getElementById("menuToggle"); 
+  // const menuClose = document.getElementById("menuClose");   
+  // const sideMenu = document.getElementById("sideMenu");     
+  // const overlay = document.getElementById("overlay");       
+
   const mainListTitle = document.getElementById("mainListTitle");
   const gamesList = document.getElementById("gamesList");
   const gameModal = document.getElementById("gameModal");
@@ -53,23 +58,22 @@ document.addEventListener("DOMContentLoaded", () => {
   const certificateInfo = document.getElementById("certificateInfo");
   const catalogSection = document.getElementById("catalogSection");
 
-  // New modal elements
+  // New modal elements for displaying detailed info
   const modalSize = document.getElementById("modalSize");
   const modalMinIos = document.getElementById("modalMinIos");
   const modalAddedDate = document.getElementById("modalAddedDate");
   const modalVersion = document.getElementById("modalVersion");
-
+  const modalDownloadCountModal = document.getElementById("modalDownloadCount"); // Download count in modal
 
   let gamesData = [];
   let appsData = [];
   let filteredData = [];
-  let currentCatalog = "games";
+  let currentCatalog = "games"; // Default catalog if user navigates
+
   let currentPage = 1;
   const itemsPerPage = 5;
 
-  // По умолчанию показываем сертификаты, скрываем каталог
-  if (catalogSection) catalogSection.style.display = "none";
-  if (certificateInfo) certificateInfo.style.display = "block";
+  // Initial display settings are handled in window.load
 
   async function loadJSON(url) {
     const response = await fetch(url);
@@ -130,7 +134,6 @@ document.addEventListener("DOMContentLoaded", () => {
     return Math.floor(seconds) + " seconds ago";
   }
 
-
   function renderList(data) {
     filteredData = data;
     const pageItems = paginate(data, currentPage);
@@ -154,6 +157,7 @@ document.addEventListener("DOMContentLoaded", () => {
           data-size="${item.fileSize || 'N/A'}"
           data-min-ios="${item.minIosVersion || 'N/A'}"
           data-last-modified="${item.lastModified || ''}"
+          data-genre="${item.genre || ''}"
         >Open</button>
       `;
       gamesList.appendChild(card);
@@ -162,19 +166,22 @@ document.addEventListener("DOMContentLoaded", () => {
     gamesList.querySelectorAll("button").forEach(btn => {
       btn.addEventListener("click", () => {
         modalTitle.textContent = btn.dataset.name;
-        modalDesc.textContent = btn.dataset.desc;
+        modalDesc.innerHTML = btn.dataset.desc.replace(/\n/g, '<br>'); // Replace \n with <br> for multiline description
         modalIcon.src = btn.dataset.icon;
         modalDownload.href = btn.dataset.download;
 
         // Populate new fields
-        modalVersion.textContent = `Version: ${btn.dataset.version}`;
-        modalSize.textContent = `Size: ${btn.dataset.size}`;
-        modalMinIos.textContent = `Min iOS: ${btn.dataset.minIos}`;
+        modalVersion.textContent = btn.dataset.version;
+        modalSize.textContent = btn.dataset.size;
+        modalMinIos.textContent = btn.dataset.minIos;
         if (btn.dataset.lastModified) {
-          modalAddedDate.textContent = `Added: ${timeAgo(btn.dataset.lastModified)}`;
+          modalAddedDate.textContent = timeAgo(btn.dataset.lastModified);
         } else {
-          modalAddedDate.textContent = 'Added: N/A';
+          modalAddedDate.textContent = 'N/A';
         }
+        // Update modal download count
+        const currentDownloads = document.querySelector(`.downloads-count[data-title="${btn.dataset.name}"]`).textContent.split(': ')[1];
+        modalDownloadCountModal.textContent = `⬇️ Downloads: ${currentDownloads}`;
 
         gameModal.classList.add("show");
         incrementDownloadCount(btn.dataset.name);
@@ -193,6 +200,11 @@ document.addEventListener("DOMContentLoaded", () => {
         const title = el.dataset.title;
         el.textContent = `⬇️ Downloads: ${downloadsData[title] || 0}`;
       });
+      // Update download count in the modal if it's open
+      if (gameModal.classList.contains("show")) {
+        const currentTitle = modalTitle.textContent;
+        modalDownloadCountModal.textContent = `⬇️ Downloads: ${downloadsData[currentTitle] || 0}`;
+      }
     });
   }
 
@@ -207,8 +219,8 @@ document.addEventListener("DOMContentLoaded", () => {
     searchInput.classList.remove("hidden");
     loader.style.display = "flex";
 
-    if (certificateInfo) certificateInfo.style.display = "none";
-    if (catalogSection) catalogSection.style.display = "block";
+    certificateInfo.style.display = "none";
+    catalogSection.style.display = "block";
 
     try {
       const data = await loadJSON(`${type}.json`);
@@ -231,13 +243,30 @@ document.addEventListener("DOMContentLoaded", () => {
     loader.style.display = "none";
   }
 
-  document.getElementById("navGames").addEventListener("click", () => loadCatalog("games"));
-  document.getElementById("navApps").addEventListener("click", () => loadCatalog("apps"));
+  // Event listeners for navigation buttons
+  document.getElementById("navGames").addEventListener("click", () => {
+    loadCatalog("games");
+    certificateInfo.style.display = "none";
+    catalogSection.style.display = "block";
+  });
+
+  document.getElementById("navApps").addEventListener("click", () => {
+    loadCatalog("apps");
+    certificateInfo.style.display = "none";
+    catalogSection.style.display = "block";
+  });
+
   document.getElementById("navMore").addEventListener("click", () => {
     document.getElementById("moreModal").classList.remove("hidden");
   });
 
-  document.getElementById("siteTitle").addEventListener("click", () => location.reload());
+  // Restore initial view when site title is clicked
+  document.getElementById("siteTitle").addEventListener("click", () => {
+    certificateInfo.style.display = "block";
+    catalogSection.style.display = "none";
+    searchInput.classList.add("hidden"); // Hide search when viewing certificates
+    searchInput.value = ""; // Clear search input
+  });
 
   searchInput.addEventListener("input", () => {
     const value = searchInput.value.toLowerCase();
@@ -251,6 +280,5 @@ document.addEventListener("DOMContentLoaded", () => {
     gameModal.classList.remove("show");
   };
 
-  // Initial load for games when the page loads
-  loadCatalog("games");
+  // The initial loading of the catalog is now controlled by explicit navigation clicks or the window.load event
 });
