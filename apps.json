@@ -1,12 +1,14 @@
 [
- {
+  {
     "name": "Videoleap",
     "description": "Pro Features unlocked",
     "icon": "https://github.com/iPAGroove/iPAGroove/blob/main/IMG_5831.jpeg?raw=true",
     "version": "2.70",
     "download": "https://vhistoretg.s3.eu-north-1.amazonaws.com/Videoleap_2.70_1749693846.ipa",
     "genre": "Apps",
-    "lastModified": "2025-06-06T00:00:00Z"
+    "lastModified": "2025-06-06T00:00:00Z",
+    "fileSize": "150 MB",
+    "minIosVersion": "iOS 13.0"
   },
   {
     "name": "Bazaart Premium",
@@ -15,7 +17,9 @@
     "version": "10.7.2",
     "download": "https://vhistoretg.s3.eu-north-1.amazonaws.com/Bazaart_10.7.2_1749692973.ipa",
     "genre": "Apps",
-    "lastModified": "2025-06-06T00:00:00Z"
+    "lastModified": "2025-06-06T00:00:00Z",
+    "fileSize": "120 MB",
+    "minIosVersion": "iOS 14.0"
   },
   {
     "name": "Photoroom Pro",
@@ -24,7 +28,9 @@
     "version": "2025.23.01",
     "download": "https://vhistoretg.s3.eu-north-1.amazonaws.com/Photoroom_2025.23.01_1749594152.ipa",
     "genre": "Apps",
-    "lastModified": "2025-06-06T00:00:00Z"
+    "lastModified": "2025-06-06T00:00:00Z",
+    "fileSize": "200 MB",
+    "minIosVersion": "iOS 13.5"
   },
   {
     "name": "Spotify",
@@ -33,7 +39,9 @@
     "version": "9.0.50",
     "download": "https://vhistoretg.s3.eu-north-1.amazonaws.com/Spotify_9.0.50_1749190616.ipa",
     "genre": "Apps",
-    "lastModified": "2025-06-06T00:00:00Z"
+    "lastModified": "2025-06-06T00:00:00Z",
+    "fileSize": "90 MB",
+    "minIosVersion": "iOS 12.0"
   },
   {
     "name": "YouTube",
@@ -42,7 +50,9 @@
     "version": "20.21.6",
     "download": "https://vhistoretg.s3.eu-north-1.amazonaws.com/YouTube_iPA+Groove(1).ipa",
     "genre": "Apps",
-    "lastModified": "2025-06-06T00:00:00Z"
+    "lastModified": "2025-06-06T00:00:00Z",
+    "fileSize": "250 MB",
+    "minIosVersion": "iOS 14.0"
   },
   {
     "name": "YouTube Music",
@@ -51,6 +61,8 @@
     "download": "https://vhistoretg.s3.eu-north-1.amazonaws.com/YouTube+Music_8.22.2_1749155020.ipa",
     "icon": "https://github.com/iPAGroove/iPAGroove/blob/main/ytmusic.JPG?raw=true",
     "genre": "Apps",
-    "lastModified": "2025-06-06T00:00:00Z"
+    "lastModified": "2025-06-06T00:00:00Z",
+    "fileSize": "180 MB",
+    "minIosVersion": "iOS 14.5"
   }
 ]
