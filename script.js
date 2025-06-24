@@ -171,54 +171,8 @@ document.addEventListener("DOMContentLoaded", () => {
       gamesList.appendChild(card);
     });
 
-    gamesList.querySelectorAll("button").forEach(btn => {
-      btn.addEventListener("click", () => {
-        const itemAccessType = btn.dataset.accessType;
-
-        modalTitle.textContent = btn.dataset.name;
-        modalDesc.innerHTML = btn.dataset.desc.replace(/\n/g, '<br>'); // Replace \n with <br> for multiline description
-        modalIcon.src = btn.dataset.icon;
-
-        // Populate info grid fields
-        modalVersion.textContent = btn.dataset.version;
-        modalSize.textContent = btn.dataset.size;
-        modalMinIos.textContent = btn.dataset.minIos;
-        if (btn.dataset.lastModified) {
-          modalAddedDate.textContent = timeAgo(btn.dataset.lastModified);
-        } else {
-          modalAddedDate.textContent = 'N/A';
-        }
-
-        // Update modal download count
-        const currentDownloads = document.querySelector(`.downloads-count[data-title="${btn.dataset.name}"]`).textContent.split(': ')[1];
-        modalDownloadCountModal.textContent = `⬇️ Downloads: ${currentDownloads}`;
-
-        if (itemAccessType === 'VIP') {
-          modalDownload.style.display = 'none'; // Hide the download link container
-          vipAccessButton.style.display = 'block'; // Show the VIP access button
-          // If VIP, attach an event listener to redirect to the Telegram link
-          vipAccessButton.onclick = () => window.location.href = 'https://t.me/m/5LVQoCCqMjUy';
-        } else {
-          modalDownload.style.display = 'block'; // Show the download link container
-          modalDownload.href = btn.dataset.download; // Set the download link for free items
-          vipAccessButton.style.display = 'none'; // Hide the VIP access button
-          // For free items, the download button works as usual
-          downloadButton.onclick = () => incrementDownloadCount(btn.dataset.name);
-        }
-
-        gameModal.classList.add("show");
-        // Only increment download count if it's a free item, or if it's VIP and somehow downloaded
-        if (itemAccessType === 'Free') {
-              // For free downloads, increment directly
-              incrementDownloadCount(btn.dataset.name);
-        } else {
-            // For VIP, we only open the modal, so don't increment until actual download (not implemented here)
-        }
-      });
-    });
-
     renderPagination(data.length);
-    updateDownloadCounts();
+    updateDownloadCounts(); // Call to update download counts for current list items
   }
 
   // Function to show the VIP message modal
