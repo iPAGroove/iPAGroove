@@ -1,4 +1,17 @@
 [
+{
+    "name": "Volleyball Arena",
+    "description": "- Unlimited Stamina \n- High Jumps \n- Hard Hits (be careful its hard to win with this sometimes lol) \n- Increased Movement Speed \n- Unlocks All Powers To Use (Must leave it on to keep it unlock and use them)
+- x99 Power Up Cards to Use In A Match (if you turn it off it will go back to normal, leave it on when you want to use any power ups) \n- Unlock Power Up Card Slots \n- Remove Ads After Playing a Match \n- Prevent Powers from running out",
+    "icon": "https://github.com/iPAGroove/iPAGroove/blob/main/icons/IMG_6081.JPG?raw=true",
+    "version": "15.1.0",
+    "download": "https://vhistoretg.s3.eu-north-1.amazonaws.com/Volleyball+Arena_15.1.0_1750776065.ipa",
+    "genre": "Games",
+    "lastModified": "2025-06-24T00:18:10Z",
+    "fileSize": "160MB",
+    "minIosVersion": "iOS 13.0",
+    "access_type": "VIP"
+  },
   {
     "name": "idle miner",
     "description": "- Free IAP \n- Click buy then cancel",
