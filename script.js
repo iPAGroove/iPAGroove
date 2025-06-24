@@ -239,8 +239,8 @@ document.addEventListener("DOMContentLoaded", () => {
         ...item,
         fileSize: item.fileSize || `${(Math.random() * 500 + 50).toFixed(0)} MB`,
         minIosVersion: item.minIosVersion || `iOS ${Math.floor(Math.random() * 5) + 10}.0`,
-        // ИЗМЕНЕНО ЗДЕСЬ: Всегда генерировать текущее время для lastModified
-        lastModified: new Date().toISOString(), // Теперь всегда будет текущая дата
+        // ВОЗВРАЩЕНО К ИСХОДНОМУ ПОВЕДЕНИЮ: используем lastModified из JSON, если есть, иначе генерируем
+        lastModified: item.lastModified || new Date(Date.now() - Math.random() * 365 * 24 * 60 * 60 * 1000).toISOString(),
         access_type: item.access_type || 'Free'
       }));
       if (type === "games") gamesData = processedData;
@@ -295,6 +295,7 @@ document.addEventListener("DOMContentLoaded", () => {
     activateButton(null);
   });
 
+
   searchInput.addEventListener("input", () => {
     const value = searchInput.value.toLowerCase();
     const sourceData = currentCatalog === "games" ? gamesData : appsData;
@@ -304,6 +305,7 @@ document.addEventListener("DOMContentLoaded", () => {
     renderList(filtered);
     mainListTitle.textContent = `Search Results for "${value}"`;
   });
+
 
   window.closeModal = function () {
     gameModal.classList.remove("show");
@@ -319,7 +321,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const version = button.dataset.version;
         const size = button.dataset.size;
         const minIos = button.dataset.minIos;
-        const lastModified = button.dataset.lastModified; // Эта дата будет уже текущей, если изменена в loadCatalog
+        const lastModified = button.dataset.lastModified;
         const genre = button.dataset.genre;
         const accessType = button.dataset.accessType;
 
@@ -330,7 +332,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         modalSize.textContent = size;
         modalMinIos.textContent = minIos;
-        modalAddedDate.textContent = timeAgo(lastModified);
+        modalAddedDate.textContent = timeAgo(lastModified); // Теперь здесь будет использоваться дата из JSON
         modalVersion.textContent = version;
         document.getElementById("modalGenre").textContent = genre;
 
