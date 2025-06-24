@@ -60,28 +60,25 @@ document.addEventListener("DOMContentLoaded", () => {
   const modalDownloadCountModal = document.getElementById("modalDownloadCount");
 
   const vipAccessButton = document.getElementById("vipAccessButton");
-  const vipMessageModal = document.getElementById("vipMessageModal");
+  const vipMessageModal = document.getElementById("vipMessageModal"); // Kept, but hidden
 
   const totalUsersCountElement = document.getElementById("totalUsersCount");
 
-  // --- ССЫЛКИ НА КНОПКИ (ТОЛЬКО VIP) ---
-  const vipButton = document.getElementById("vipButton");
-  // --- КОНЕЦ ССЫЛОК ---
+  // Кнопок TOP/VIP здесь больше нет
 
   if (vipMessageModal) {
-    vipMessageModal.classList.add('hidden');
+    vipMessageModal.classList.add('hidden'); // Ensure it's hidden
   }
 
   let gamesData = [];
   let appsData = [];
-  let filteredData = [];
+  let filteredData = []; // This will just hold search results now
   let currentCatalog = "games";
-  let currentFilter = "all"; // 'all', 'vip'
 
   let currentPage = 1;
   const itemsPerPage = 5;
 
-  let downloadsFromFirebase = {};
+  let downloadsFromFirebase = {}; // Still used for displaying download counts
 
   async function loadJSON(url) {
     const response = await fetch(url);
@@ -142,7 +139,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function renderList(data) {
-    filteredData = data;
+    filteredData = data; // filteredData is now just the result of search/current catalog
     const pageItems = paginate(data, currentPage);
     gamesList.innerHTML = "";
     pageItems.forEach(item => {
@@ -151,8 +148,7 @@ document.addEventListener("DOMContentLoaded", () => {
       card.innerHTML = `
         <div class="icon-wrapper">
           <img src="${item.icon}" alt="${item.name}" class="w-16 h-16 rounded shadow" />
-          ${item.access_type === 'VIP' ? '<span class="vip-badge">VIP</span>' : ''}
-        </div>
+          </div>
         <div class="flex-1">
           <h3 class="font-bold text-lg">${item.name}</h3>
           <p class="text-sm text-gray-300">${item.version || ""}</p>
@@ -177,22 +173,36 @@ document.addEventListener("DOMContentLoaded", () => {
     renderPagination(data.length);
   }
 
-  function showVipMessageModal() {
-      console.log('Showing VIP Message Modal');
-      vipMessageModal.classList.remove('hidden');
-      gameModal.classList.remove('show');
-  }
-
-  window.closeVipMessageModal = function() {
-      console.log('Closing VIP Message Modal');
-      vipMessageModal.classList.add('hidden');
-  }
+  // No longer needed since VIP is removed
+  // function showVipMessageModal() {
+  //     console.log('Showing VIP Message Modal');
+  //     vipMessageModal.classList.remove('hidden');
+  //     gameModal.classList.remove('show');
+  // }
+  // window.closeVipMessageModal = function() {
+  //     console.log('Closing VIP Message Modal');
+  //     vipMessageModal.classList.add('hidden');
+  // }
+  // window.handleVipPurchaseClick = function() {
+  //     console.log('User clicked Learn More about VIP');
+  //     // Add your logic to redirect or show more info about VIP purchase
+  //     closeVipMessageModal();
+  // }
 
   function updateDownloadCounts() {
     const snapshotRef = ref(db, "downloads");
     onValue(snapshotRef, (snapshot) => {
       downloadsFromFirebase = snapshot.val() || {};
-      applyFilter(); // Теперь applyFilter будет обновлять список с актуальными данными
+      // Re-render the current list to show updated download counts
+      // We need to know which data is currently being displayed (gamesData or appsData)
+      // and which items are currently filtered by search
+      const currentSourceData = currentCatalog === "games" ? gamesData : appsData;
+      const currentSearchValue = searchInput.value.toLowerCase();
+      if (currentSearchValue) {
+        renderList(currentSourceData.filter(item => item.name.toLowerCase().includes(currentSearchValue)));
+      } else {
+        renderList(currentSourceData);
+      }
     });
   }
 
@@ -226,30 +236,18 @@ document.addEventListener("DOMContentLoaded", () => {
       console.log("User already counted recently.");
   }
 
-  // --- ИЗМЕНЕННАЯ ФУНКЦИЯ applyFilter (без TOP) ---
+  // --- applyFilter function is simplified, no longer needs currentFilter logic ---
   function applyFilter() {
-    let dataToFilter = currentCatalog === "games" ? gamesData : appsData;
-    let resultData = [];
-
-    searchInput.value = ""; // Очищаем строку поиска при смене фильтра
-
-    if (currentFilter === "vip") {
-      resultData = dataToFilter.filter(item => item.access_type === 'VIP');
-      mainListTitle.textContent = `VIP ${currentCatalog.charAt(0).toUpperCase() + currentCatalog.slice(1)}`;
-    } else { // 'all'
-      resultData = dataToFilter;
-      mainListTitle.textContent = `All ${currentCatalog.charAt(0).toUpperCase() + currentCatalog.slice(1)}`;
-    }
-
+    const dataToRender = currentCatalog === "games" ? gamesData : appsData;
+    mainListTitle.textContent = `All ${currentCatalog.charAt(0).toUpperCase() + currentCatalog.slice(1)}`;
     currentPage = 1;
-    renderList(resultData);
+    renderList(dataToRender);
   }
-  // --- КОНЕЦ ИЗМЕНЕННОЙ ФУНКЦИИ ---
+  // --- END simplified applyFilter ---
 
 
   async function loadCatalog(type) {
     currentCatalog = type;
-    currentFilter = "all"; // Сбрасываем фильтр на "все" при смене каталога
     searchInput.classList.remove("hidden");
     loader.style.display = "flex";
 
@@ -257,7 +255,7 @@ document.addEventListener("DOMContentLoaded", () => {
     catalogSection.style.display = "block";
 
     activateButton(currentCatalog === "games" ? document.getElementById("navGames") : document.getElementById("navApps"));
-    activateFilterButton(null); // Деактивируем VIP кнопку фильтра
+    // No filter buttons to activate/deactivate now
 
     try {
       const data = await loadJSON(`${type}.json`);
@@ -266,12 +264,12 @@ document.addEventListener("DOMContentLoaded", () => {
         fileSize: item.fileSize || `${(Math.random() * 500 + 50).toFixed(0)} MB`,
         minIosVersion: item.minIosVersion || `iOS ${Math.floor(Math.random() * 5) + 10}.0`,
         lastModified: item.lastModified || new Date(Date.now() - Math.random() * 365 * 24 * 60 * 60 * 1000).toISOString(),
-        access_type: item.access_type || 'Free'
+        access_type: item.access_type || 'Free' // access_type kept for data consistency, but not used for filtering
       }));
       if (type === "games") gamesData = processedData;
       else appsData = processedData;
 
-      applyFilter(); // Вызываем applyFilter
+      applyFilter();
 
     } catch(error) {
       console.error("Error loading catalog:", error);
@@ -293,26 +291,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  function activateFilterButton(button) {
-    const filterButtons = [vipButton]; // Только vipButton
-    filterButtons.forEach(btn => {
-      btn.classList.remove('bg-purple-900', 'ring-2', 'ring-purple-400'); // Убираем активные стили
-      // Сброс VIP-кнопки к базовым градиентам
-      if (btn.id === 'vipButton') {
-        btn.classList.remove('from-amber-600', 'to-yellow-600');
-        btn.classList.add('from-yellow-500', 'to-amber-500');
-      }
-    });
-
-    if (button) { // Если кнопка передана, делаем её активной
-      button.classList.add('bg-purple-900', 'ring-2', 'ring-purple-400');
-      // Применяем активные градиенты для VIP-кнопки
-      if (button.id === 'vipButton') {
-        button.classList.remove('from-yellow-500', 'to-amber-500');
-        button.classList.add('from-amber-600', 'to-yellow-600');
-      }
-    }
-  }
+  // No need for activateFilterButton function anymore
 
   document.getElementById("navGames").addEventListener("click", () => {
     loadCatalog("games");
@@ -333,22 +312,14 @@ document.addEventListener("DOMContentLoaded", () => {
     activateButton(document.getElementById("navMore"));
   });
 
-  // --- СЛУШАТЕЛЬ ТОЛЬКО ДЛЯ КНОПКИ VIP ---
-  vipButton.addEventListener("click", () => {
-    currentFilter = "vip";
-    applyFilter();
-    activateFilterButton(vipButton);
-  });
-  // --- КОНЕЦ СЛУШАТЕЛЯ ---
-
   document.getElementById("siteTitle").addEventListener("click", () => {
     certificateInfo.style.display = "block";
     catalogSection.style.display = "none";
     searchInput.classList.add("hidden");
     searchInput.value = "";
-    currentFilter = "all";
+    // currentFilter = "all"; // Not needed
     activateButton(null);
-    activateFilterButton(null);
+    // No filter buttons to deactivate
   });
 
 
@@ -359,7 +330,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const filtered = sourceData.filter(item => item.name.toLowerCase().includes(value));
     currentPage = 1;
     renderList(filtered);
-    activateFilterButton(null);
+    // No filter buttons to deactivate
     mainListTitle.textContent = `Search Results for "${value}"`;
   });
 
@@ -368,13 +339,58 @@ document.addEventListener("DOMContentLoaded", () => {
     gameModal.classList.remove("show");
   };
 
-  updateDownloadCounts();
+  // Event listener for opening the game modal (on "Open" button click)
+  gamesList.addEventListener('click', (event) => {
+    const button = event.target.closest('button');
+    if (button && button.textContent.includes('Open')) {
+        const name = button.dataset.name;
+        const download = button.dataset.download;
+        const desc = button.dataset.desc;
+        const icon = button.dataset.icon;
+        const version = button.dataset.version;
+        const size = button.dataset.size;
+        const minIos = button.dataset.minIos;
+        const lastModified = button.dataset.lastModified;
+        const genre = button.dataset.genre;
+        const accessType = button.dataset.accessType; // Still retrieve accessType
 
-  document.getElementById("navGames").click();
+        modalTitle.textContent = name;
+        modalDesc.textContent = desc;
+        modalIcon.src = icon;
+        modalDownload.href = download;
+
+        modalSize.textContent = size;
+        modalMinIos.textContent = minIos;
+        modalAddedDate.textContent = timeAgo(lastModified);
+        modalVersion.textContent = version;
+        document.getElementById("modalGenre").textContent = genre;
+
+        // Simplified logic: always show download button, never VIP button or VIP modal
+        modalDownload.style.display = 'block';
+        downloadButton.textContent = '⬇️ Download';
+        vipAccessButton.style.display = 'none';
+
+        // Increment download count only on actual download button click (not just opening modal)
+        // This is handled by the click listener on modalDownload's button
+        const currentDownloads = downloadsFromFirebase[name] || 0;
+        modalDownloadCountModal.textContent = `⬇️ Downloads: ${currentDownloads}`;
+
+        gameModal.classList.add("show");
+    }
+  });
+
+  // Listener for the actual download button inside the modal
+  downloadButton.addEventListener('click', () => {
+      const title = modalTitle.textContent; // Get title from modal
+      incrementDownloadCount(title); // Increment count
+  });
+
+  updateDownloadCounts(); // Initial load of download counts
+
+  document.getElementById("navGames").click(); // Initial load of Games
   certificateInfo.style.display = "block";
   catalogSection.style.display = "none";
   searchInput.classList.add("hidden");
   activateButton(null);
-  activateFilterButton(null);
-
+  // No filter buttons to activate
 });
