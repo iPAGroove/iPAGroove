@@ -40,18 +40,13 @@ const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
 document.addEventListener("DOMContentLoaded", () => {
-  // These elements are not used in the provided HTML but kept for consistency if they exist elsewhere
-  // const menuToggle = document.getElementById("menuToggle"); 
-  // const menuClose = document.getElementById("menuClose");   
-  // const sideMenu = document.getElementById("sideMenu");     
-  // const overlay = document.getElementById("overlay");       
-
   const mainListTitle = document.getElementById("mainListTitle");
   const gamesList = document.getElementById("gamesList");
   const gameModal = document.getElementById("gameModal");
   const modalTitle = document.getElementById("modalTitle");
   const modalDesc = document.getElementById("modalDesc");
-  const modalDownload = document.getElementById("modalDownload");
+  const modalDownload = document.getElementById("modalDownload"); // The actual download link container (<a>)
+  const downloadButton = modalDownload.querySelector('button'); // The download button inside the link
   const modalIcon = document.getElementById("modalIcon");
   const loader = document.getElementById("loader");
   const searchInput = document.getElementById("searchInput");
@@ -65,6 +60,10 @@ document.addEventListener("DOMContentLoaded", () => {
   const modalVersion = document.getElementById("modalVersion");
   const modalDownloadCountModal = document.getElementById("modalDownloadCount"); // Download count in modal
 
+  // VIP access elements
+  const vipAccessButton = document.getElementById("vipAccessButton");
+  const vipMessageModal = document.getElementById("vipMessageModal");
+
   let gamesData = [];
   let appsData = [];
   let filteredData = [];
@@ -72,8 +71,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   let currentPage = 1;
   const itemsPerPage = 5;
-
-  // Initial display settings are handled in window.load
 
   async function loadJSON(url) {
     const response = await fetch(url);
@@ -144,7 +141,9 @@ document.addEventListener("DOMContentLoaded", () => {
       card.innerHTML = `
         <img src="${item.icon}" alt="${item.name}" class="w-16 h-16 rounded shadow" />
         <div class="flex-1">
-          <h3 class="font-bold text-lg">${item.name}</h3>
+          <h3 class="font-bold text-lg">${item.name}
+            ${item.access_type === 'VIP' ? '<span class="vip-badge">VIP</span>' : ''}
+          </h3>
           <p class="text-sm text-gray-300">${item.version || ""}</p>
           <p class="text-sm text-gray-400 downloads-count" data-title="${item.name}">⬇️ Downloads: ...</p>
         </div>
@@ -158,6 +157,7 @@ document.addEventListener("DOMContentLoaded", () => {
           data-min-ios="${item.minIosVersion || 'N/A'}"
           data-last-modified="${item.lastModified || ''}"
           data-genre="${item.genre || ''}"
+          data-access-type="${item.access_type || 'Free'}"
         >Open</button>
       `;
       gamesList.appendChild(card);
@@ -165,12 +165,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
     gamesList.querySelectorAll("button").forEach(btn => {
       btn.addEventListener("click", () => {
+        const itemAccessType = btn.dataset.accessType;
+
         modalTitle.textContent = btn.dataset.name;
         modalDesc.innerHTML = btn.dataset.desc.replace(/\n/g, '<br>'); // Replace \n with <br> for multiline description
         modalIcon.src = btn.dataset.icon;
-        modalDownload.href = btn.dataset.download;
 
-        // Populate new fields
+        // Populate info grid fields
         modalVersion.textContent = btn.dataset.version;
         modalSize.textContent = btn.dataset.size;
         modalMinIos.textContent = btn.dataset.minIos;
@@ -179,17 +180,48 @@ document.addEventListener("DOMContentLoaded", () => {
         } else {
           modalAddedDate.textContent = 'N/A';
         }
+
         // Update modal download count
         const currentDownloads = document.querySelector(`.downloads-count[data-title="${btn.dataset.name}"]`).textContent.split(': ')[1];
         modalDownloadCountModal.textContent = `⬇️ Downloads: ${currentDownloads}`;
 
+        if (itemAccessType === 'VIP') {
+          modalDownload.style.display = 'none'; // Hide the download link container
+          vipAccessButton.style.display = 'block'; // Show the VIP access button
+          // If VIP, attach an event listener to show the VIP message modal
+          vipAccessButton.onclick = () => showVipMessageModal();
+        } else {
+          modalDownload.style.display = 'block'; // Show the download link container
+          modalDownload.href = btn.dataset.download; // Set the download link for free items
+          vipAccessButton.style.display = 'none'; // Hide the VIP access button
+          // For free items, the download button works as usual
+          downloadButton.onclick = () => incrementDownloadCount(btn.dataset.name);
+        }
+
         gameModal.classList.add("show");
-        incrementDownloadCount(btn.dataset.name);
+        // Only increment download count if it's a free item, or if it's VIP and somehow downloaded
+        if (itemAccessType === 'Free') {
+             // For free downloads, increment directly
+             incrementDownloadCount(btn.dataset.name);
+        } else {
+            // For VIP, we only open the modal, so don't increment until actual download (not implemented here)
+        }
       });
     });
 
     renderPagination(data.length);
     updateDownloadCounts();
+  }
+
+  // Function to show the VIP message modal
+  function showVipMessageModal() {
+      vipMessageModal.classList.remove('hidden');
+      gameModal.classList.remove('show'); // Hide the game modal behind the VIP message
+  }
+
+  // Function to close the VIP message modal
+  window.closeVipMessageModal = function() {
+      vipMessageModal.classList.add('hidden');
   }
 
   async function updateDownloadCounts() {
@@ -229,7 +261,8 @@ document.addEventListener("DOMContentLoaded", () => {
         ...item,
         fileSize: item.fileSize || `${(Math.random() * 500 + 50).toFixed(0)} MB`, // Example random size
         minIosVersion: item.minIosVersion || `iOS ${Math.floor(Math.random() * 5) + 10}.0`, // Example random iOS version
-        lastModified: item.lastModified || new Date(Date.now() - Math.random() * 365 * 24 * 60 * 60 * 1000).toISOString() // Example random last modified date
+        lastModified: item.lastModified || new Date(Date.now() - Math.random() * 365 * 24 * 60 * 60 * 1000).toISOString(), // Example random last modified date
+        access_type: item.access_type || 'Free' // Default to Free if not specified
       }));
       if (type === "games") gamesData = processedData;
       else appsData = processedData;
