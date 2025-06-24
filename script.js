@@ -64,6 +64,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const vipAccessButton = document.getElementById("vipAccessButton");
   const vipMessageModal = document.getElementById("vipMessageModal");
 
+  // Element to display total user count
+  const totalUsersCountElement = document.getElementById("totalUsersCount");
+
   // Ensure VIP message modal is hidden on DOMContentLoaded as well
   if (vipMessageModal) {
     vipMessageModal.classList.add('hidden');
@@ -144,8 +147,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const card = document.createElement("div");
       card.className = "bg-[rgba(255,255,255,0.05)] rounded-lg p-4 flex gap-4 items-center game-card";
       card.innerHTML = `
-        <div class="icon-wrapper"> <!-- New wrapper for icon and VIP badge -->
-          <img src="${item.icon}" alt="${item.name}" class="w-16 h-16 rounded shadow" />
+        <div class="icon-wrapper"> <img src="${item.icon}" alt="${item.name}" class="w-16 h-16 rounded shadow" />
           ${item.access_type === 'VIP' ? '<span class="vip-badge">VIP</span>' : ''}
         </div>
         <div class="flex-1">
@@ -207,8 +209,8 @@ document.addEventListener("DOMContentLoaded", () => {
         gameModal.classList.add("show");
         // Only increment download count if it's a free item, or if it's VIP and somehow downloaded
         if (itemAccessType === 'Free') {
-             // For free downloads, increment directly
-             incrementDownloadCount(btn.dataset.name);
+              // For free downloads, increment directly
+              incrementDownloadCount(btn.dataset.name);
         } else {
             // For VIP, we only open the modal, so don't increment until actual download (not implemented here)
         }
@@ -232,15 +234,6 @@ document.addEventListener("DOMContentLoaded", () => {
       vipMessageModal.classList.add('hidden');
   }
 
-  // This function is now redundant as onclick directly handles redirection for VIP button
-  // window.handleVipPurchaseClick = function() {
-  //     console.log('Redirecting to VIP purchase page or showing more info.');
-  //     // You would add your actual redirection or further modal logic here
-  //     // Example: window.location.href = 'your-vip-purchase-page.html';
-  //     // For now, just a console log.
-  // }
-
-
   async function updateDownloadCounts() {
     const snapshotRef = ref(db, "downloads");
     onValue(snapshotRef, (snapshot) => {
@@ -261,6 +254,16 @@ document.addEventListener("DOMContentLoaded", () => {
     const countRef = ref(db, `downloads/${title}`);
     runTransaction(countRef, (current) => (current || 0) + 1);
   }
+
+  // Fetch and display total user count
+  const totalUsersRef = ref(db, "users/totalCount");
+  onValue(totalUsersRef, (snapshot) => {
+      const totalUsers = snapshot.val();
+      if (totalUsersCountElement) {
+          totalUsersCountElement.textContent = totalUsers !== null ? totalUsers.toLocaleString() : "0";
+      }
+  });
+
 
   async function loadCatalog(type) {
     currentCatalog = type;
@@ -330,4 +333,3 @@ document.addEventListener("DOMContentLoaded", () => {
     gameModal.classList.remove("show");
   };
 });
-
