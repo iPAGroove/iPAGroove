@@ -95,10 +95,10 @@
     position: fixed;
     inset: 0;
     background: rgba(0, 0, 0, 0.8);
-    display: flex; /* Kept as flex for when it's shown, 'hidden' class will override */
+    /* Removed display: flex; from here. Visibility will be controlled by adding/removing 'hidden' class via JS. */
     align-items: center;
     justify-content: center;
-    z-index: 9999; /* Higher than gameModal */
+    z-index: 9999;
   }
   #vipMessageModal .modal-content {
     background-color: rgba(40,0,90,0.95);
@@ -241,7 +241,6 @@
 <span class="value" id="modalAddedDate"></span>
 </div>
 <div class="info-box">
-<span class="text-gray-400">ℹ️ Version</span>
 <span class="value" id="modalVersion"></span>
 </div>
 </div>
