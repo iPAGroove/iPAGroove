@@ -77,6 +77,40 @@
     color: white; /* text-white */
     font-size: 0.875rem; /* text-sm */
   }
+
+  /* Styling for the VIP badge */
+  .vip-badge {
+    background-color: #FFD700; /* Gold color */
+    color: #333;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.375rem;
+    font-size: 0.75rem;
+    font-weight: bold;
+    margin-left: 0.5rem;
+    display: inline-block;
+  }
+
+  /* Custom modal for VIP access message */
+  #vipMessageModal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999; /* Higher than gameModal */
+  }
+  #vipMessageModal .modal-content {
+    background-color: rgba(40,0,90,0.95);
+    border-radius: 1rem;
+    padding: 1.5rem;
+    max-width: 20rem;
+    width: 90%;
+    color: white;
+    text-align: center;
+    position: relative;
+    box-shadow: 0 0 1.5rem rgba(110,28,255,0.5);
+  }
 </style>
 </head>
 <body class="text-white font-sans max-w-screen-sm mx-auto p-0 relative locked">
@@ -183,12 +217,15 @@
 <p class="text-sm text-gray-400 mt-1 downloads-count-modal" id="modalDownloadCount">⬇️ Downloads: ...</p>
 </div>
 </div>
-<!-- New Download Button and Info Grid -->
+<!-- Download Button (Free) / VIP Access Button (VIP) -->
 <a class="block mb-4" href="#" id="modalDownload" target="_blank">
 <button class="w-full bg-purple-600 hover:bg-purple-800 py-2 rounded-xl text-white font-bold text-lg shadow-md">
       ⬇️ Download
     </button>
 </a>
+<button id="vipAccessButton" class="w-full bg-yellow-500 hover:bg-yellow-600 py-2 rounded-xl text-black font-bold text-lg shadow-md hidden">
+    🌟 Get VIP Access
+</button>
 
 <div class="info-grid mb-4">
 <div class="info-box">
@@ -209,12 +246,23 @@
 </div>
 </div>
 
-<!-- New Hack Features Title -->
+<!-- Hack Features Title -->
 <h4 class="text-lg font-bold text-purple-300 text-center mt-4 mb-2">Hack Features</h4>
 <div class="text-sm text-gray-300 whitespace-pre-line text-center px-2 py-1 mb-4" id="modalDesc" style="background-color: rgba(255,255,255,0.02); border-radius: 0.5rem;"></div>
 
 </div>
 </div>
+
+<!-- VIP Message Modal -->
+<div id="vipMessageModal" class="hidden">
+    <div class="modal-content">
+        <button class="absolute top-2 right-2 text-white text-xl hover:text-purple-300" onclick="closeVipMessageModal()">×</button>
+        <h3 class="text-xl font-bold mb-4">VIP Access Required</h3>
+        <p class="text-gray-300 mb-6">To download VIP applications and games, you need to purchase a VIP subscription. This gives you access to exclusive content!</p>
+        <button class="bg-purple-600 hover:bg-purple-800 py-2 px-4 rounded-xl text-white font-bold" onclick="alert('Redirect to VIP purchase page or show more info (not implemented yet)')">Learn More about VIP</button>
+    </div>
+</div>
+
 <!-- Footer -->
 <footer class="mt-8 text-center text-gray-400 text-sm pb-4">
     © 2025 iOS Game Zone
