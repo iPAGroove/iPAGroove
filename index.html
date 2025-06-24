@@ -52,6 +52,31 @@
   #gameModal.show {
     display: flex;
   }
+  /* Custom styles for the download button and info grid */
+  .info-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+  .info-box {
+    background-color: rgba(255,255,255,0.04);
+    border-radius: 0.75rem; /* rounded-xl */
+    padding: 0.75rem; /* p-3 */
+    border: 1px solid rgba(147, 197, 253, 0.2); /* border-blue-400/20 for example, adjusted to purple */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* Align icon and text to start */
+    gap: 0.25rem;
+  }
+  .info-box span {
+    font-size: 0.875rem; /* text-sm */
+    color: #a0aec0; /* text-gray-400 */
+  }
+  .info-box .value {
+    font-weight: bold;
+    color: white; /* text-white */
+    font-size: 0.875rem; /* text-sm */
+  }
 </style>
 </head>
 <body class="text-white font-sans max-w-screen-sm mx-auto p-0 relative locked">
@@ -113,7 +138,7 @@
     </button>
 </a>
 </section>
-<div id="catalogSection">
+<div id="catalogSection" class="hidden"> <!-- Initially hidden, will be shown when Games/Apps are clicked -->
 <h2 class="text-xl font-bold mb-2" id="mainListTitle"></h2>
 <input class="w-full mb-4 px-4 py-2 rounded bg-[rgba(255,255,255,0.05)] text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-600 hidden" id="searchInput" placeholder="🔍 Search by name..." type="text"/>
 <div class="space-y-4 mb-4" id="gamesList"></div>
@@ -151,21 +176,41 @@
 <div class="bg-[rgba(40,0,90,0.95)] rounded-xl p-6 max-w-sm w-full mx-4 text-white shadow-lg relative">
 <button class="absolute top-2 right-2 text-white text-xl hover:text-purple-300" onclick="closeModal()">×</button>
 <div class="flex gap-4 items-center mb-4">
-<img alt="App Icon" class="w-16 h-16 rounded shadow-md" id="modalIcon" src=""/>
-<div>
-<h3 class="text-xl font-bold" id="modalTitle"></h3>
-<!-- New fields for application details -->
-<p class="text-sm text-gray-400 mb-1" id="modalVersion"></p>
-<p class="text-sm text-gray-400 mb-1" id="modalSize"></p>
-<p class="text-sm text-gray-400 mb-1" id="modalMinIos"></p>
-<p class="text-sm text-gray-400 mb-1" id="modalAddedDate"></p>
-<p class="text-sm text-gray-400" id="modalDownloadCount">⬇️ Downloads: ...</p>
+<img alt="App Icon" class="w-24 h-24 rounded-xl shadow-md" id="modalIcon" src=""/>
+<div class="flex-1">
+<h3 class="text-2xl font-bold" id="modalTitle"></h3>
+<p class="text-sm text-gray-400 mt-1" id="modalGenre"></p>
+<p class="text-sm text-gray-400 mt-1 downloads-count-modal" id="modalDownloadCount">⬇️ Downloads: ...</p>
 </div>
 </div>
-<ul class="text-sm text-gray-300 whitespace-pre-line mb-4 list-disc ml-5" id="modalDesc"></ul>
-<a class="block" href="#" id="modalDownload" target="_blank">
-<button class="w-full bg-purple-600 hover:bg-purple-800 py-2 rounded text-white font-bold">⬇️ Download</button>
+<!-- New Download Button and Info Grid -->
+<a class="block mb-4" href="#" id="modalDownload" target="_blank">
+<button class="w-full bg-purple-600 hover:bg-purple-800 py-2 rounded-xl text-white font-bold text-lg shadow-md">
+      ⬇️ Download
+    </button>
 </a>
+
+<div class="info-grid mb-4">
+<div class="info-box">
+<span class="text-gray-400">📏 Размер</span>
+<span class="value" id="modalSize"></span>
+</div>
+<div class="info-box">
+<span class="text-gray-400">📱 iOS версия</span>
+<span class="value" id="modalMinIos"></span>
+</div>
+<div class="info-box">
+<span class="text-gray-400">📅 Обновлено</span>
+<span class="value" id="modalAddedDate"></span>
+</div>
+<div class="info-box">
+<span class="text-gray-400">ℹ️ Версия</span>
+<span class="value" id="modalVersion"></span>
+</div>
+</div>
+
+<div class="text-sm text-gray-300 whitespace-pre-line mb-4 list-disc" id="modalDesc"></div>
+
 </div>
 </div>
 <!-- Footer -->
