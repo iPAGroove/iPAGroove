@@ -59,12 +59,10 @@ document.addEventListener("DOMContentLoaded", () => {
   const modalVersion = document.getElementById("modalVersion");
   const modalDownloadCountModal = document.getElementById("modalDownloadCount");
 
-  const vipAccessButton = document.getElementById("vipAccessButton");
+  const vipAccessButton = document.getElementById("vipAccessButton"); // Этот элемент может быть null, если удален из HTML
   const vipMessageModal = document.getElementById("vipMessageModal"); // Kept, but hidden
 
   const totalUsersCountElement = document.getElementById("totalUsersCount");
-
-  // Кнопок TOP/VIP здесь больше нет
 
   if (vipMessageModal) {
     vipMessageModal.classList.add('hidden'); // Ensure it's hidden
@@ -173,21 +171,6 @@ document.addEventListener("DOMContentLoaded", () => {
     renderPagination(data.length);
   }
 
-  // No longer needed since VIP is removed
-  // function showVipMessageModal() {
-  //     console.log('Showing VIP Message Modal');
-  //     vipMessageModal.classList.remove('hidden');
-  //     gameModal.classList.remove('show');
-  // }
-  // window.closeVipMessageModal = function() {
-  //     console.log('Closing VIP Message Modal');
-  //     vipMessageModal.classList.add('hidden');
-  // }
-  // window.handleVipPurchaseClick = function() {
-  //     console.log('User clicked Learn More about VIP');
-  //     // Add your logic to redirect or show more info about VIP purchase
-  //     closeVipMessageModal();
-  // }
 
   function updateDownloadCounts() {
     const snapshotRef = ref(db, "downloads");
@@ -317,9 +300,7 @@ document.addEventListener("DOMContentLoaded", () => {
     catalogSection.style.display = "none";
     searchInput.classList.add("hidden");
     searchInput.value = "";
-    // currentFilter = "all"; // Not needed
     activateButton(null);
-    // No filter buttons to deactivate
   });
 
 
@@ -330,7 +311,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const filtered = sourceData.filter(item => item.name.toLowerCase().includes(value));
     currentPage = 1;
     renderList(filtered);
-    // No filter buttons to deactivate
     mainListTitle.textContent = `Search Results for "${value}"`;
   });
 
@@ -339,10 +319,11 @@ document.addEventListener("DOMContentLoaded", () => {
     gameModal.classList.remove("show");
   };
 
+  // --- ВОЗВРАЩЕННЫЙ ОБРАБОТЧИК КЛИКОВ ДЛЯ КНОПКИ "Open" ---
   // Event listener for opening the game modal (on "Open" button click)
   gamesList.addEventListener('click', (event) => {
     const button = event.target.closest('button');
-    if (button && button.textContent.includes('Open')) {
+    if (button && button.textContent.includes('Open')) { // Убедитесь, что это кнопка "Open"
         const name = button.dataset.name;
         const download = button.dataset.download;
         const desc = button.dataset.desc;
@@ -352,7 +333,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const minIos = button.dataset.minIos;
         const lastModified = button.dataset.lastModified;
         const genre = button.dataset.genre;
-        const accessType = button.dataset.accessType; // Still retrieve accessType
+        const accessType = button.dataset.accessType;
 
         modalTitle.textContent = name;
         modalDesc.textContent = desc;
@@ -365,13 +346,13 @@ document.addEventListener("DOMContentLoaded", () => {
         modalVersion.textContent = version;
         document.getElementById("modalGenre").textContent = genre;
 
-        // Simplified logic: always show download button, never VIP button or VIP modal
         modalDownload.style.display = 'block';
         downloadButton.textContent = '⬇️ Download';
-        vipAccessButton.style.display = 'none';
+        // Убедитесь, что vipAccessButton существует перед попыткой доступа к .style
+        if (vipAccessButton) {
+            vipAccessButton.style.display = 'none';
+        }
 
-        // Increment download count only on actual download button click (not just opening modal)
-        // This is handled by the click listener on modalDownload's button
         const currentDownloads = downloadsFromFirebase[name] || 0;
         modalDownloadCountModal.textContent = `⬇️ Downloads: ${currentDownloads}`;
 
@@ -381,9 +362,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Listener for the actual download button inside the modal
   downloadButton.addEventListener('click', () => {
-      const title = modalTitle.textContent; // Get title from modal
-      incrementDownloadCount(title); // Increment count
+      const title = modalTitle.textContent;
+      incrementDownloadCount(title);
   });
+  // --- КОНЕЦ ВОЗВРАЩЕННОГО ОБРАБОТЧИКА КЛИКОВ ---
 
   updateDownloadCounts(); // Initial load of download counts
 
@@ -392,5 +374,4 @@ document.addEventListener("DOMContentLoaded", () => {
   catalogSection.style.display = "none";
   searchInput.classList.add("hidden");
   activateButton(null);
-  // No filter buttons to activate
 });
