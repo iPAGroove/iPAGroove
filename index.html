@@ -78,7 +78,7 @@
     font-size: 0.875rem; /* text-sm */
   }
 
-  /* Styling for the VIP badge - Made rectangular, positioned over icon */
+  /* Styling for the VIP badge - This will now be removed, but keeping the style just in case it's added back */
   .vip-badge {
     background-color: #FFD700; /* Gold color */
     color: #333;
@@ -96,7 +96,7 @@
     box-shadow: 0 2px 4px rgba(0,0,0,0.3); /* Add a small shadow */
   }
 
-  /* Custom modal for VIP access message */
+  /* Custom modal for VIP access message - Will be hidden, but keeping the style */
   #vipMessageModal {
     position: fixed;
     inset: 0;
@@ -219,13 +219,6 @@
 </a>
 </section>
 <div id="catalogSection" class="hidden">
-    <div class="flex justify-center gap-4 mb-4 mx-2">
-        <button id="vipButton" class="px-6 py-2 rounded-full font-bold text-sm transition-all duration-300 transform scale-100 hover:scale-105 active:scale-95 shadow-lg
-                   bg-gradient-to-r from-yellow-500 to-amber-500 text-black
-                   border border-yellow-400/50 hover:border-yellow-300 focus:outline-none focus:ring-2 focus:ring-yellow-400">
-            🌟 VIP
-        </button>
-    </div>
     <h2 class="text-xl font-bold mb-2 text-purple-300 drop-shadow ml-2" id="mainListTitle"></h2>
     <input class="w-full mb-4 px-4 py-2 rounded-xl bg-[rgba(255,255,255,0.05)] text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-600 shadow-inner ml-2 mr-2" id="searchInput" placeholder="🔍 Search by name..." type="text" style="width: calc(100% - 1rem);"/>
     <div class="space-y-4 mb-4 px-2" id="gamesList"></div>
@@ -272,10 +265,6 @@
     ⬇️ Download
 </button>
 </a>
-<button id="vipAccessButton" class="block mb-4 w-full bg-gradient-to-r from-yellow-500 to-amber-500 hover:from-yellow-600 hover:to-amber-600 text-black py-2 rounded-xl font-bold text-lg shadow-md transition duration-300 hidden">
-    🌟 Get VIP
-</button>
-
 <div class="info-grid mb-4">
 <div class="info-box">
 <span class="text-gray-400">📏 Size</span>
