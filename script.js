@@ -32,279 +32,258 @@ const firebaseConfig = {
   projectId: "ipa-chat",
   storageBucket: "ipa-chat.firebasestorage.app",
   messagingSenderId: "534978415110",
-  appId: "1:534978415110:web:443213a43690d5658e4b77"
+  appId: "1:534978415110:web:a40838ef597b6d0ff09187",
+  measurementId: "G-H2T6L8VZPG"
 };
 
-// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
-const ITEMS_PER_PAGE = 10;
-let currentPage = 1;
-let currentCatalog = "games"; // 'games' or 'apps'
-let gamesData = [];
-let appsData = [];
-let currentFilter = "top"; // 'top' or 'vip'
+document.addEventListener("DOMContentLoaded", () => {
+  const mainListTitle = document.getElementById("mainListTitle");
+  const gamesList = document.getElementById("gamesList");
+  const gameModal = document.getElementById("gameModal");
+  const modalTitle = document.getElementById("modalTitle");
+  const modalDesc = document.getElementById("modalDesc");
+  const modalDownload = document.getElementById("modalDownload"); // The actual download link container (<a>)
+  const downloadButton = modalDownload.querySelector('button'); // The download button inside the link
+  const modalIcon = document.getElementById("modalIcon");
+  const loader = document.getElementById("loader");
+  const searchInput = document.getElementById("searchInput");
+  const certificateInfo = document.getElementById("certificateInfo");
+  const catalogSection = document.getElementById("catalogSection");
 
-const gamesList = document.getElementById("catalogList");
-const certificateInfo = document.getElementById("certificateInfo");
-const catalogSection = document.getElementById("catalogSection");
-const searchInput = document.getElementById("searchInput");
-const pagination = document.getElementById("pagination");
-const prevPageBtn = document.getElementById("prevPage");
-const nextPageBtn = document.getElementById("nextPage");
-const pageInfoSpan = document.getElementById("pageInfo");
-const gameModal = document.getElementById("gameModal");
-const downloadButton = document.getElementById("downloadButton");
-const vipPurchaseButton = document.getElementById("vipPurchaseButton");
-const loader = document.getElementById("loader");
+  // New modal elements for displaying detailed info
+  const modalSize = document.getElementById("modalSize");
+  const modalMinIos = document.getElementById("modalMinIos");
+  const modalAddedDate = document.getElementById("modalAddedDate");
+  const modalVersion = document.getElementById("modalVersion");
+  const modalDownloadCountModal = document.getElementById("modalDownloadCount"); // Download count in modal
 
-const topButton = document.getElementById("topButton");
-const vipButton = document.getElementById("vipButton");
-const catalogTabs = document.getElementById("catalogTabs");
+  // VIP access elements
+  const vipAccessButton = document.getElementById("vipAccessButton");
+  const vipMessageModal = document.getElementById("vipMessageModal");
 
-// Function to fetch certificate expiry date
-function fetchCertificateExpiry() {
-  const certRef = ref(db, 'certificateExpiry');
-  onValue(certRef, (snapshot) => {
-    const expiryDate = snapshot.val();
-    const certDateEl = document.getElementById("certificateDate");
-    const certStatusEl = document.getElementById("certificateStatus");
+  // Element to display total user count
+  const totalUsersCountElement = document.getElementById("totalUsersCount");
 
-    if (expiryDate) {
-      certDateEl.textContent = new Date(expiryDate).toLocaleDateString();
-      const now = new Date();
-      const expiry = new Date(expiryDate);
-      if (now > expiry) {
-        certStatusEl.textContent = "Сертификат просрочен!";
-        certStatusEl.classList.remove("text-green-400");
-        certStatusEl.classList.add("text-red-400");
-      } else {
-        certStatusEl.textContent = "Сертификат действителен";
-        certStatusEl.classList.remove("text-red-400");
-        certStatusEl.classList.add("text-green-400");
-      }
-    } else {
-      certDateEl.textContent = "Информация о сертификате недоступна.";
-      certStatusEl.textContent = "";
-    }
-  });
-}
-
-fetchCertificateExpiry();
-
-function renderList(data) {
-  gamesList.innerHTML = "";
-  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-  const endIndex = startIndex + ITEMS_PER_PAGE;
-  const itemsToDisplay = data.slice(startIndex, endIndex);
-
-  if (itemsToDisplay.length === 0) {
-    gamesList.innerHTML = "<p class='text-center text-gray-400 col-span-full'>No items found.</p>";
-    pagination.classList.add("hidden");
-    return;
+  // Ensure VIP message modal is hidden on DOMContentLoaded as well
+  if (vipMessageModal) {
+    vipMessageModal.classList.add('hidden');
   }
 
-  itemsToDisplay.forEach((item) => {
-    const itemDiv = document.createElement("div");
-    itemDiv.className = "bg-dark p-4 rounded-lg text-center cursor-pointer transform transition-transform duration-200 hover:scale-105 border border-purple-500/30";
-    itemDiv.innerHTML = `
-            <img src="${item.icon}" alt="${item.name}" class="w-24 h-24 mx-auto mb-2 rounded-lg shadow-md">
-            <h3 class="text-md font-semibold text-white truncate">${item.name}</h3>
-            <p class="text-gray-400 text-sm truncate">${item.description}</p>
-        `;
-    itemDiv.addEventListener("click", () => openModal(item));
-    gamesList.appendChild(itemDiv);
-  });
-
-  updatePagination(data.length);
-}
-
-function updatePagination(totalItems) {
-  const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE);
-  pageInfoSpan.textContent = `Page ${currentPage} of ${totalPages}`;
-
-  prevPageBtn.disabled = currentPage === 1;
-  nextPageBtn.disabled = currentPage === totalPages;
-
-  if (totalPages > 1) {
-    pagination.classList.remove("hidden");
-  } else {
-    pagination.classList.add("hidden");
-  }
-}
-
-prevPageBtn.addEventListener("click", () => {
-  if (currentPage > 1) {
-    currentPage--;
-    applyFiltersAndRender();
-  }
-});
-
-nextPageBtn.addEventListener("click", () => {
-  const sourceData = currentCatalog === "games" ? gamesData : appsData;
-  const totalPages = Math.ceil(sourceData.length / ITEMS_PER_PAGE);
-  if (currentPage < totalPages) {
-    currentPage++;
-    applyFiltersAndRender();
-  }
-});
-
-function openModal(item) {
-  document.getElementById("modalIcon").src = item.icon;
-  document.getElementById("modalName").textContent = item.name;
-  document.getElementById("modalDescription").textContent = item.description;
-  document.getElementById("modalVersion").textContent = `Version: ${item.version}`;
-  document.getElementById("modalFileSize").textContent = `Size: ${item.fileSize}`;
-  document.getElementById("modalMinIosVersion").textContent = `Requires iOS: ${item.minIosVersion}`;
-
-  downloadButton.onclick = () => {
-    if (item.download) {
-      window.location.href = item.download;
-      // Increment download count for TOP apps
-      if (currentFilter === "top") {
-        incrementDownloadCount(item.name, currentCatalog);
-      }
-    } else {
-      alert("Download link not available.");
-    }
-  };
-
-  if (item.access_type === "VIP") {
-    downloadButton.classList.add("hidden");
-    vipPurchaseButton.classList.remove("hidden");
-  } else {
-    downloadButton.classList.remove("hidden");
-    vipPurchaseButton.classList.add("hidden");
-  }
-
-  gameModal.classList.add("show");
-  gameModal.classList.remove("hidden");
-}
-
-window.closeModal = function () {
-  gameModal.classList.remove("show");
-  gameModal.classList.add("hidden");
-};
-
-async function loadCatalog(type) {
-  loader.style.display = "flex";
-  currentCatalog = type;
-  currentPage = 1; // Reset to first page when changing catalog
-
-  searchInput.value = ""; // Clear search input when switching tabs
-  searchInput.classList.remove("hidden"); // Show search input
-
-  catalogTabs.classList.remove("hidden"); // Show TOP/VIP tabs
-
-  // Reset filter to 'top' when switching catalogs
-  currentFilter = "top";
-  topButton.classList.add("active");
-  vipButton.classList.remove("active");
-
-  try {
-    const response = await fetch(`${type} (1).json`);
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    const data = await response.json();
-    if (type === "games") {
-      gamesData = data;
-    } else {
-      appsData = data;
-    }
-    applyFiltersAndRender();
-  } catch (error) {
-    console.error("Error loading catalog:", error);
-    gamesList.innerHTML = "<p class='text-red-500'>Error loading data</p>";
-  }
-
-  loader.style.display = "none";
-}
-
-function applyFiltersAndRender() {
-  let sourceData = currentCatalog === "games" ? gamesData : appsData;
+  let gamesData = [];
+  let appsData = [];
   let filteredData = [];
+  let currentCatalog = "games"; // Default catalog if user navigates
 
-  const searchValue = searchInput.value.toLowerCase();
+  let currentPage = 1;
+  const itemsPerPage = 5;
 
-  if (currentFilter === "top") {
-    // Filter by search input first
-    let searchFiltered = sourceData.filter(item => item.name.toLowerCase().includes(searchValue));
-    // Sort by downloads (descending) for TOP
-    filteredData = searchFiltered.sort((a, b) => (b.downloads || 0) - (a.downloads || 0));
-  } else if (currentFilter === "vip") {
-    // Filter by VIP status and then by search input
-    let vipFiltered = sourceData.filter(item => item.access_type === "VIP");
-    filteredData = vipFiltered.filter(item => item.name.toLowerCase().includes(searchValue));
+  async function loadJSON(url) {
+    const response = await fetch(url);
+    if (!response.ok) throw new Error("Load error: " + url);
+    return await response.json();
   }
 
-  renderList(filteredData);
-}
+  function paginate(data, page) {
+    const start = (page - 1) * itemsPerPage;
+    return data.slice(start, start + itemsPerPage);
+  }
 
-// Event listeners for navigation buttons
-document.getElementById("navGames").addEventListener("click", () => {
-  loadCatalog("games");
-  certificateInfo.style.display = "none";
-  catalogSection.style.display = "block";
-});
+  function renderPagination(totalItems) {
+    const totalPages = Math.ceil(totalItems / itemsPerPage);
+    const container = document.getElementById("showMoreContainer");
+    container.innerHTML = "";
+    if (totalPages <= 1) return;
 
-document.getElementById("navApps").addEventListener("click", () => {
-  loadCatalog("apps");
-  certificateInfo.style.display = "none";
-  catalogSection.style.display = "block";
-});
-
-document.getElementById("navMore").addEventListener("click", () => {
-  document.getElementById("moreModal").classList.remove("hidden");
-});
-
-// Restore initial view when site title is clicked
-document.getElementById("siteTitle").addEventListener("click", () => {
-  certificateInfo.style.display = "block";
-  catalogSection.style.display = "none";
-  searchInput.classList.add("hidden"); // Hide search when viewing certificates
-  catalogTabs.classList.add("hidden"); // Hide TOP/VIP tabs
-  searchInput.value = ""; // Clear search input
-});
-
-searchInput.addEventListener("input", () => {
-  currentPage = 1; // Reset to first page on search
-  applyFiltersAndRender();
-});
-
-// Event listeners for TOP/VIP buttons
-topButton.addEventListener("click", () => {
-  currentFilter = "top";
-  topButton.classList.add("active");
-  vipButton.classList.remove("active");
-  currentPage = 1; // Reset to first page on filter change
-  applyFiltersAndRender();
-});
-
-vipButton.addEventListener("click", () => {
-  currentFilter = "vip";
-  vipButton.classList.add("active");
-  topButton.classList.remove("active");
-  currentPage = 1; // Reset to first page on filter change
-  applyFiltersAndRender();
-});
-
-function handleVipPurchaseClick() {
-  alert("This is a VIP-only item. Please contact us for VIP access!");
-  // You can add more complex logic here, e.g., redirect to a VIP purchase page.
-}
-
-// Function to increment download count in Firebase
-function incrementDownloadCount(itemName, catalogType) {
-  const itemRef = ref(db, `${catalogType}/${itemName}`); // Assuming item name is unique identifier
-  runTransaction(itemRef, (currentItem) => {
-    if (currentItem) {
-      if (!currentItem.downloads) {
-        currentItem.downloads = 0;
-      }
-      currentItem.downloads++;
+    for (let i = 1; i <= totalPages; i++) {
+      const btn = document.createElement("button");
+      btn.textContent = i;
+      btn.className = "mx-1 px-3 py-1 rounded bg-purple-700 hover:bg-purple-900 text-white";
+      if (i === currentPage) btn.classList.add("bg-purple-900");
+      btn.addEventListener("click", () => {
+        currentPage = i;
+        renderList(filteredData);
+      });
+      container.appendChild(btn);
     }
-    return currentItem;
+  }
+
+  // Function to calculate time ago
+  function timeAgo(dateString) {
+    const date = new Date(dateString);
+    const now = new Date();
+    const seconds = Math.floor((now - date) / 1000);
+
+    let interval = seconds / 31536000;
+    if (interval > 1) {
+      return Math.floor(interval) + " years ago";
+    }
+    interval = seconds / 2592000;
+    if (interval > 1) {
+      return Math.floor(interval) + " months ago";
+    }
+    interval = seconds / 86400;
+    if (interval > 1) {
+      return Math.floor(interval) + " days ago";
+    }
+    interval = seconds / 3600;
+    if (interval > 1) {
+      return Math.floor(interval) + " hours ago";
+    }
+    interval = seconds / 60;
+    if (interval > 1) {
+      return Math.floor(interval) + " minutes ago";
+    }
+    return Math.floor(seconds) + " seconds ago";
+  }
+
+  function renderList(data) {
+    filteredData = data;
+    const pageItems = paginate(data, currentPage);
+    gamesList.innerHTML = "";
+    pageItems.forEach(item => {
+      const card = document.createElement("div");
+      card.className = "bg-[rgba(255,255,255,0.05)] rounded-lg p-4 flex gap-4 items-center game-card";
+      card.innerHTML = `
+        <div class="icon-wrapper"> <img src="${item.icon}" alt="${item.name}" class="w-16 h-16 rounded shadow" />
+          ${item.access_type === 'VIP' ? '<span class="vip-badge">VIP</span>' : ''}
+        </div>
+        <div class="flex-1">
+          <h3 class="font-bold text-lg">${item.name}</h3>
+          <p class="text-sm text-gray-300">${item.version || ""}</p>
+          <p class="text-sm text-gray-400 downloads-count" data-title="${item.name}">⬇️ Downloads: ...</p>
+        </div>
+        <button class="bg-purple-600 hover:bg-purple-800 px-3 py-1 rounded"
+          data-name="${item.name}"
+          data-download="${item.download}"
+          data-desc="${item.description}"
+          data-icon="${item.icon}"
+          data-version="${item.version || 'N/A'}"
+          data-size="${item.fileSize || 'N/A'}"
+          data-min-ios="${item.minIosVersion || 'N/A'}"
+          data-last-modified="${item.lastModified || ''}"
+          data-genre="${item.genre || ''}"
+          data-access-type="${item.access_type || 'Free'}"
+        >Open</button>
+      `;
+      gamesList.appendChild(card);
+    });
+
+    renderPagination(data.length);
+    updateDownloadCounts(); // Call to update download counts for current list items
+  }
+
+  // Function to show the VIP message modal
+  function showVipMessageModal() {
+      console.log('Showing VIP Message Modal'); // Debugging line
+      vipMessageModal.classList.remove('hidden');
+      gameModal.classList.remove('show'); // Hide the game modal behind the VIP message
+  }
+
+  // Function to close the VIP message modal
+  window.closeVipMessageModal = function() {
+      console.log('Closing VIP Message Modal'); // Debugging line
+      vipMessageModal.classList.add('hidden');
+  }
+
+  async function updateDownloadCounts() {
+    const snapshotRef = ref(db, "downloads");
+    onValue(snapshotRef, (snapshot) => {
+      const downloadsData = snapshot.val() || {};
+      document.querySelectorAll(".downloads-count").forEach(el => {
+        const title = el.dataset.title;
+        el.textContent = `⬇️ Downloads: ${downloadsData[title] || 0}`;
+      });
+      // Update download count in the modal if it's open
+      if (gameModal.classList.contains("show")) {
+        const currentTitle = modalTitle.textContent;
+        modalDownloadCountModal.textContent = `⬇️ Downloads: ${downloadsData[currentTitle] || 0}`;
+      }
+    });
+  }
+
+  function incrementDownloadCount(title) {
+    const countRef = ref(db, `downloads/${title}`);
+    runTransaction(countRef, (current) => (current || 0) + 1);
+  }
+
+  // Fetch and display total user count
+  const totalUsersRef = ref(db, "users/totalCount");
+  onValue(totalUsersRef, (snapshot) => {
+      const totalUsers = snapshot.val();
+      if (totalUsersCountElement) {
+          totalUsersCountElement.textContent = totalUsers !== null ? totalUsers.toLocaleString() : "0";
+      }
   });
-}
+
+
+  async function loadCatalog(type) {
+    currentCatalog = type;
+    mainListTitle.textContent = type === "games" ? "All Games" : "All Apps";
+    searchInput.classList.remove("hidden");
+    loader.style.display = "flex";
+
+    certificateInfo.style.display = "none";
+    catalogSection.style.display = "block";
+
+    try {
+      const data = await loadJSON(`${type}.json`);
+      // Add dummy data for new fields if not present in JSON
+      const processedData = data.map(item => ({
+        ...item,
+        fileSize: item.fileSize || `${(Math.random() * 500 + 50).toFixed(0)} MB`, // Example random size
+        minIosVersion: item.minIosVersion || `iOS ${Math.floor(Math.random() * 5) + 10}.0`, // Example random iOS version
+        lastModified: item.lastModified || new Date(Date.now() - Math.random() * 365 * 24 * 60 * 60 * 1000).toISOString(), // Example random last modified date
+        access_type: item.access_type || 'Free' // Default to Free if not specified
+      }));
+      if (type === "games") gamesData = processedData;
+      else appsData = processedData;
+      currentPage = 1;
+      renderList(processedData);
+    } catch(error) {
+      console.error("Error loading catalog:", error);
+      gamesList.innerHTML = "<p class='text-red-500'>Error loading data</p>";
+    }
+
+    loader.style.display = "none";
+  }
+
+  // Event listeners for navigation buttons
+  document.getElementById("navGames").addEventListener("click", () => {
+    loadCatalog("games");
+    certificateInfo.style.display = "none";
+    catalogSection.style.display = "block";
+  });
+
+  document.getElementById("navApps").addEventListener("click", () => {
+    loadCatalog("apps");
+    certificateInfo.style.display = "none";
+    catalogSection.style.display = "block";
+  });
+
+  document.getElementById("navMore").addEventListener("click", () => {
+    document.getElementById("moreModal").classList.remove("hidden");
+  });
+
+  // Restore initial view when site title is clicked
+  document.getElementById("siteTitle").addEventListener("click", () => {
+    certificateInfo.style.display = "block";
+    catalogSection.style.display = "none";
+    searchInput.classList.add("hidden"); // Hide search when viewing certificates
+    searchInput.value = ""; // Clear search input
+  });
+
+  searchInput.addEventListener("input", () => {
+    const value = searchInput.value.toLowerCase();
+    const sourceData = currentCatalog === "games" ? gamesData : appsData;
+    const filtered = sourceData.filter(item => item.name.toLowerCase().includes(value));
+    currentPage = 1;
+    renderList(filtered);
+  });
+
+  window.closeModal = function () {
+    gameModal.classList.remove("show");
+  };
+});
