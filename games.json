@@ -6,7 +6,9 @@
     "version": "5.11.0",
     "download": "https://vhistoretg.s3.eu-north-1.amazonaws.com/Idle+Miner_5.11.0_1750596543.ipa",
     "genre": "Games",
-    "lastModified": "2025-06-06T00:00:00Z"
+    "lastModified": "2025-06-06T00:00:00Z",
+    "fileSize": "95 MB",
+    "minIosVersion": "iOS 11.0"
   },
   {
     "name": "Fortnite",
@@ -15,7 +17,9 @@
     "version": "36.10",
     "download": "https://vhistoretg.s3.eu-north-1.amazonaws.com/Fortnite_36.10_1750447368.ipa",
     "genre": "Games",
-    "lastModified": "2025-06-06T00:00:00Z"
+    "lastModified": "2025-06-06T00:00:00Z",
+    "fileSize": "3.5 GB",
+    "minIosVersion": "iOS 15.0"
   },
   {
     "name": "No Limit 2",
@@ -24,7 +28,9 @@
     "download": "https://vhistoretg.s3.eu-north-1.amazonaws.com/No+Limit+2_2.2.14_1750330288.ipa",
     "icon": "https://github.com/iPAGroove/iPAGroove/blob/main/IMG_5990.jpeg?raw=true",
     "genre": "Games",
-    "lastModified": "2025-06-06T00:00:00Z"
+    "lastModified": "2025-06-06T00:00:00Z",
+    "fileSize": "1.2 GB",
+    "minIosVersion": "iOS 13.0"
   },
   {
     "name": "Modern Strike Online",
@@ -33,7 +39,9 @@
     "download": "https://vhistoretg.s3.eu-north-1.amazonaws.com/Modern+Strike+Online_1.76.6_1750318149.ipa",
     "icon": "https://github.com/iPAGroove/iPAGroove/blob/main/IMG_5981.jpeg?raw=true",
     "genre": "Games",
-    "lastModified": "2025-06-06T00:00:00Z"
+    "lastModified": "2025-06-06T00:00:00Z",
+    "fileSize": "750 MB",
+    "minIosVersion": "iOS 12.0"
   },
   {
     "name": "CSR 2 - Realistic Drag Racing",
@@ -42,7 +50,9 @@
     "download": "https://vhistoretg.s3.eu-north-1.amazonaws.com/CSR+Racing+2_5.8.0_1750315667.ipa",
     "icon": "https://github.com/iPAGroove/iPAGroove/blob/main/IMG_5978.jpeg?raw=true",
     "genre": "Games",
-    "lastModified": "2025-06-06T00:00:00Z"
+    "lastModified": "2025-06-06T00:00:00Z",
+    "fileSize": "2.1 GB",
+    "minIosVersion": "iOS 14.0"
   },
   {
     "name": "APEX Racer",
@@ -51,7 +61,9 @@
     "download": "https://vhistoretg.s3.eu-north-1.amazonaws.com/APEX+Racer_0.9.35_1750187800.ipa",
     "icon": "https://github.com/iPAGroove/iPAGroove/blob/main/IMG_5969.jpeg?raw=true",
     "genre": "Games",
-    "lastModified": "2025-06-06T00:00:00Z"
+    "lastModified": "2025-06-06T00:00:00Z",
+    "fileSize": "400 MB",
+    "minIosVersion": "iOS 13.0"
   },
   {
     "name": "Idle Bank Tycoon",
@@ -60,7 +72,9 @@
     "download": "https://vhistoretg.s3.eu-north-1.amazonaws.com/Idle+Bank+Tycoon_1.58.0_1749846560.ipa",
     "icon": "https://github.com/iPAGroove/iPAGroove/blob/main/IMG_5911.jpeg?raw=true",
     "genre": "Games",
-    "lastModified": "2025-06-06T00:00:00Z"
+    "lastModified": "2025-06-06T00:00:00Z",
+    "fileSize": "80 MB",
+    "minIosVersion": "iOS 11.0"
   },
   {
     "name": "Stone Miner",
@@ -69,7 +83,9 @@
     "download": "https://vhistoretg.s3.eu-north-1.amazonaws.com/Stone+Miner_2.13.6_1749728164.ipa",
     "icon": "https://github.com/iPAGroove/iPAGroove/blob/main/IMG_5840.jpeg?raw=true",
     "genre": "Games",
-    "lastModified": "2025-06-06T00:00:00Z"
+    "lastModified": "2025-06-06T00:00:00Z",
+    "fileSize": "110 MB",
+    "minIosVersion": "iOS 10.0"
   },
   {
     "name": "Swamp Attack 2",
@@ -78,7 +94,9 @@
     "download": "https://vhistoretg.s3.eu-north-1.amazonaws.com/Swamp+Attack+2_1.0.76_1749690696.ipa",
     "icon": "https://github.com/iPAGroove/iPAGroove/blob/main/IMG_5823.jpeg?raw=true",
     "genre": "Games",
-    "lastModified": "2025-06-06T00:00:00Z"
+    "lastModified": "2025-06-06T00:00:00Z",
+    "fileSize": "130 MB",
+    "minIosVersion": "iOS 11.0"
   },
   {
     "name": "Need for Speed No Limits",
@@ -87,7 +105,9 @@
     "download": "https://vhistoretg.s3.eu-north-1.amazonaws.com/No+Limits+_8.5.01_1749641629.ipa",
     "icon": "https://github.com/iPAGroove/iPAGroove/blob/main/IMG_5806.jpeg?raw=true",
     "genre": "Games",
-    "lastModified": "2025-06-06T00:00:00Z"
+    "lastModified": "2025-06-06T00:00:00Z",
+    "fileSize": "2.5 GB",
+    "minIosVersion": "iOS 14.0"
   },
   {
     "name": "CarX Highway Racing",
@@ -96,7 +116,9 @@
     "download": "https://vhistoretg.s3.eu-north-1.amazonaws.com/CarX+Highway+Racing+_1.75.5_1749640479.ipa",
     "icon": "https://github.com/iPAGroove/iPAGroove/blob/main/IMG_5802.jpeg?raw=true",
     "genre": "Games",
-    "lastModified": "2025-06-06T00:00:00Z"
+    "lastModified": "2025-06-06T00:00:00Z",
+    "fileSize": "900 MB",
+    "minIosVersion": "iOS 13.0"
   },
   {
     "name": "Wormix - PVP Multiplayer",
@@ -105,7 +127,9 @@
     "download": "https://vhistoretg.s3.eu-north-1.amazonaws.com/Wormix_2.73.28_1749635144.ipa",
     "icon": "https://github.com/iPAGroove/iPAGroove/blob/main/IMG_5798.jpeg?raw=true",
     "genre": "Games",
-    "lastModified": "2025-06-06T00:00:00Z"
+    "lastModified": "2025-06-06T00:00:00Z",
+    "fileSize": "280 MB",
+    "minIosVersion": "iOS 12.0"
   },
   {
     "name": "Traffic Racer",
@@ -114,7 +138,9 @@
     "download": "https://vhistoretg.s3.eu-north-1.amazonaws.com/Traffic+Racer_3.6_1749634079.ipa",
     "icon": "https://github.com/iPAGroove/iPAGroove/blob/main/IMG_5782.jpeg?raw=true",
     "genre": "Games",
-    "lastModified": "2025-06-06T00:00:00Z"
+    "lastModified": "2025-06-06T00:00:00Z",
+    "fileSize": "70 MB",
+    "minIosVersion": "iOS 10.0"
   },
   {
     "name": "Traffic Rider",
@@ -123,7 +149,9 @@
     "download": "https://vhistoretg.s3.eu-north-1.amazonaws.com/Traffic+Rider_2.0_1749633359.ipa",
     "icon": "https://github.com/iPAGroove/iPAGroove/blob/main/IMG_5793.jpeg?raw=true",
     "genre": "Games",
-    "lastModified": "2025-06-06T00:00:00Z"
+    "lastModified": "2025-06-06T00:00:00Z",
+    "fileSize": "90 MB",
+    "minIosVersion": "iOS 10.0"
   },
   {
     "name": "Bid Wars 2",
@@ -132,7 +160,9 @@
     "download": "https://vhistoretg.s3.eu-north-1.amazonaws.com/Bid+Wars%3A+Pawn+Empire_2.16_1749631062.ipa",
     "icon": "https://github.com/iPAGroove/iPAGroove/blob/main/IMG_5788.jpeg?raw=true",
     "genre": "Games",
-    "lastModified": "2025-06-06T00:00:00Z"
+    "lastModified": "2025-06-06T00:00:00Z",
+    "fileSize": "180 MB",
+    "minIosVersion": "iOS 12.0"
   },
   {
     "name": "Bid Wars: Storage Auction",
@@ -141,7 +171,9 @@
     "download": "https://vhistoretg.s3.eu-north-1.amazonaws.com/Bid+Wars_2.69.2_1749630062.ipa",
     "icon": "https://github.com/iPAGroove/iPAGroove/blob/main/IMG_5785.jpeg?raw=true",
     "genre": "Games",
-    "lastModified": "2025-06-06T00:00:00Z"
+    "lastModified": "2025-06-06T00:00:00Z",
+    "fileSize": "170 MB",
+    "minIosVersion": "iOS 12.0"
   },
   {
     "name": "Geometry Dash",
@@ -150,7 +182,9 @@
     "download": "https://vhistoretg.s3.eu-north-1.amazonaws.com/Geometry_2.207_1749594992.ipa",
     "icon": "https://github.com/iPAGroove/iPAGroove/blob/main/IMG_5776.jpeg?raw=true",
     "genre": "Games",
-    "lastModified": "2025-06-06T00:00:00Z"
+    "lastModified": "2025-06-06T00:00:00Z",
+    "fileSize": "100 MB",
+    "minIosVersion": "iOS 10.0"
   },
   {
     "name": "OUTERPLANE",
@@ -159,7 +193,9 @@
     "download": "https://vhistoretg.s3.eu-north-1.amazonaws.com/OUTERPLANE+_1.3.5_1749593351.ipa",
     "icon": "https://github.com/iPAGroove/iPAGroove/blob/main/IMG_5770.jpeg?raw=true",
     "genre": "Games",
-    "lastModified": "2025-06-06T00:00:00Z"
+    "lastModified": "2025-06-06T00:00:00Z",
+    "fileSize": "800 MB",
+    "minIosVersion": "iOS 14.0"
   },
   {
     "name": "Ghost Hunter Idle",
@@ -168,7 +204,9 @@
     "download": "https://vhistoretg.s3.eu-north-1.amazonaws.com/Ghost+Hunter+Idle+_24.1.0_1749592818.ipa",
     "icon": "https://github.com/iPAGroove/iPAGroove/blob/main/IMG_5767.jpeg?raw=true",
     "genre": "Games",
-    "lastModified": "2025-06-06T00:00:00Z"
+    "lastModified": "2025-06-06T00:00:00Z",
+    "fileSize": "120 MB",
+    "minIosVersion": "iOS 13.0"
   },
   {
     "name": "F Class Adventurer",
@@ -177,7 +215,9 @@
     "download": "https://vhistoretg.s3.eu-north-1.amazonaws.com/F-Adventurer+_1.91.01_1749591056.ipa",
     "icon": "https://github.com/iPAGroove/iPAGroove/blob/main/IMG_5759.jpeg?raw=true",
     "genre": "Games",
-    "lastModified": "2025-06-06T00:00:00Z"
+    "lastModified": "2025-06-06T00:00:00Z",
+    "fileSize": "140 MB",
+    "minIosVersion": "iOS 12.0"
   },
   {
     "name": "Levelup RPG",
@@ -186,7 +226,9 @@
     "download": "https://vhistoretg.s3.eu-north-1.amazonaws.com/LVUP+_3.8.3_1749590235.ipa",
     "icon": "https://github.com/iPAGroove/iPAGroove/blob/main/IMG_5756.jpeg?raw=true",
     "genre": "Games",
-    "lastModified": "2025-06-06T00:00:00Z"
+    "lastModified": "2025-06-06T00:00:00Z",
+    "fileSize": "200 MB",
+    "minIosVersion": "iOS 13.0"
   },
   {
     "name": "GUNS UP !",
@@ -195,7 +237,9 @@
     "download": "https://vhistoretg.s3.eu-north-1.amazonaws.com/Guns+Up!+_1.36.4_1749589478.ipa",
     "icon": "https://github.com/iPAGroove/iPAGroove/blob/main/IMG_5753.jpeg?raw=true",
     "genre": "Games",
-    "lastModified": "2025-06-06T00:00:00Z"
+    "lastModified": "2025-06-06T00:00:00Z",
+    "fileSize": "600 MB",
+    "minIosVersion": "iOS 12.5"
   },
   {
     "name": "Merge Manor",
@@ -204,7 +248,9 @@
     "download": "https://vhistoretg.s3.eu-north-1.amazonaws.com/SunnyHouse+_1.3.36_1749541194.ipa",
     "icon": "https://github.com/iPAGroove/iPAGroove/blob/main/IMG_5733.jpeg?raw=true",
     "genre": "Games",
-    "lastModified": "2025-06-06T00:00:00Z"
+    "lastModified": "2025-06-06T00:00:00Z",
+    "fileSize": "150 MB",
+    "minIosVersion": "iOS 11.0"
   },
   {
     "name": "Eternal Hero",
@@ -213,7 +259,9 @@
     "version": "1.1.41",
     "download": "https://vhistoretg.s3.eu-north-1.amazonaws.com/Eternal+Hero+_1.1.41_1749591782.ipa",
     "genre": "Games",
-    "lastModified": "2025-06-06T00:00:00Z"
+    "lastModified": "2025-06-06T00:00:00Z",
+    "fileSize": "190 MB",
+    "minIosVersion": "iOS 13.0"
   },
   {
     "name": "ATHENA",
@@ -222,7 +270,9 @@
     "version": "1.0.6",
     "download": "https://vhistoretg.s3.eu-north-1.amazonaws.com/ATHENA_1.0.6_1749511741.ipa",
     "genre": "Games",
-    "lastModified": "2025-06-06T00:00:00Z"
+    "lastModified": "2025-06-06T00:00:00Z",
+    "fileSize": "300 MB",
+    "minIosVersion": "iOS 14.0"
   },
   {
     "name": "Cafeland",
@@ -231,7 +281,9 @@
     "download": "https://vhistoretg.s3.eu-north-1.amazonaws.com/Cafeland+_2.49.5_1749453305.ipa",
     "icon": "https://github.com/iPAGroove/iPAGroove/blob/main/IMG_5673.jpeg?raw=true",
     "genre": "Games",
-    "lastModified": "2025-06-06T00:00:00Z"
+    "lastModified": "2025-06-06T00:00:00Z",
+    "fileSize": "160 MB",
+    "minIosVersion": "iOS 11.0"
   },
   {
     "name": "Hill Climb Racing 2",
@@ -240,7 +292,9 @@
     "download": "https://vhistoretg.s3.eu-north-1.amazonaws.com/Hill+Climb+2+_1.66.0_1749451411.ipa",
     "icon": "https://github.com/iPAGroove/iPAGroove/blob/main/IMG_5669.jpeg?raw=true",
     "genre": "Games",
-    "lastModified": "2025-06-06T00:00:00Z"
+    "lastModified": "2025-06-06T00:00:00Z",
+    "fileSize": "220 MB",
+    "minIosVersion": "iOS 10.0"
   },
   {
     "name": "Idle Theme Park",
@@ -249,9 +303,10 @@
     "download": "https://vhistoretg.s3.eu-north-1.amazonaws.com/Theme+Park+_7.3.0_1749450252.ipa",
     "icon": "https://github.com/iPAGroove/iPAGroove/blob/main/IMG_5667.jpeg?raw=true",
     "genre": "Games",
-    "lastModified": "2025-06-06T00:00:00Z"
+    "lastModified": "2025-06-06T00:00:00Z",
+    "fileSize": "100 MB",
+    "minIosVersion": "iOS 11.0"
   },
-  
   {
     "name": "Hunt Royale",
     "description": "- Dumb Enemies",
@@ -259,7 +314,9 @@
     "download": "https://vhistoretg.s3.eu-north-1.amazonaws.com/Hunt%20Royale_3.9.1_1749422528.ipa",
     "icon": "https://github.com/iPAGroove/iPAGroove/blob/main/Hunt%20Royale.JPG?raw=true",
     "genre": "Games",
-    "lastModified": "2025-06-06T00:00:00Z"
+    "lastModified": "2025-06-06T00:00:00Z",
+    "fileSize": "140 MB",
+    "minIosVersion": "iOS 13.0"
   },
   {
     "name": "World Robot Boxing",
@@ -268,7 +325,9 @@
     "version": "97.97.120",
     "download": "https://vhistoretg.s3.eu-north-1.amazonaws.com/WRB+_97.97.120_1749421079.ipa",
     "genre": "Games",
-    "lastModified": "2025-06-06T00:00:00Z"
+    "lastModified": "2025-06-06T00:00:00Z",
+    "fileSize": "700 MB",
+    "minIosVersion": "iOS 12.0"
   },
   {
     "name": "Gear Hill Customs",
@@ -277,7 +336,9 @@
     "version": "2025.6.480",
     "download": "https://vhistoretg.s3.eu-north-1.amazonaws.com/Gear+Hill+Customs+_2025.6.480_1749419843.ipa",
     "genre": "Games",
-    "lastModified": "2025-06-06T00:00:00Z"
+    "lastModified": "2025-06-06T00:00:00Z",
+    "fileSize": "300 MB",
+    "minIosVersion": "iOS 13.5"
   },
   {
     "name": "Zombastic",
@@ -286,7 +347,9 @@
     "version": "1.9.0",
     "download": "https://vhistoretg.s3.eu-north-1.amazonaws.com/Zombastic+_1.9.0_1749416642.ipa",
     "genre": "Games",
-    "lastModified": "2025-06-06T00:00:00Z"
+    "lastModified": "2025-06-06T00:00:00Z",
+    "fileSize": "110 MB",
+    "minIosVersion": "iOS 12.0"
   },
   {
     "name": "Hero Blitz",
@@ -295,51 +358,8 @@
     "version": "1.6.0",
     "download": "https://vhistoretg.s3.eu-north-1.amazonaws.com/Hero+Blitz+_1.6.0_1749374293.ipa",
     "genre": "Games",
-    "lastModified": "2025-06-06T00:00:00Z"
-  },
-  {
-    "name": "Hooked Inc: Fishing Games",
-    "description": "Freeze Currencies",
-    "icon": "https://github.com/iPAGroove/iPAGroove/blob/main/IMG_5639.jpeg?raw=true",
-    "version": "2.31.5",
-    "download": "https://vhistoretg.s3.eu-north-1.amazonaws.com/Hooked+Inc+_2.31.5_1749368550.ipa",
-    "genre": "Games",
-    "lastModified": "2025-06-06T00:00:00Z"
-  },
-  {
-    "name": "Car Parking",
-    "description": "Free IAP",
-    "icon": "https://github.com/iPAGroove/iPAGroove/blob/main/IMG_5596.jpeg?raw=true",
-    "version": "2.6.2",
-    "download": "https://vhistoretg.s3.eu-north-1.amazonaws.com/Car+Parking_4.9.2_1749285974.ipa",
-    "genre": "Games",
-    "lastModified": "2025-06-06T00:00:00Z"
-  },
-  {
-    "name": "Beach Buggy Racing",
-    "description": "Use iGG (i4)",
-    "icon": "https://github.com/iPAGroove/iPAGroove/blob/main/IMG_5598.jpeg?raw=true",
-    "version": "2024.01.04",
-    "download": "https://vhistoretg.s3.eu-north-1.amazonaws.com/BB+Racing_2024.01.04_1749283102.ipa",
-    "genre": "Games",
-    "lastModified": "2025-06-06T00:00:00Z"
-  },
-  {
-    "name": "Township",
-    "description": "Freeze Currencies",
-    "icon": "https://github.com/iPAGroove/iPAGroove/blob/main/IMG_5594.png?raw=true",
-    "version": "28.0.0",
-    "download": "https://vhistoretg.s3.eu-north-1.amazonaws.com/Township+_28.0.0_1749279355.ipa",
-    "genre": "Games",
-    "lastModified": "2025-06-06T00:00:00Z"
-  },
-  {
-    "name": "Good Pizza",
-    "description": "- Unlimited Cash\n- Unlimited Diamonds\n- Unlimited Pizza Pass Claim",
-    "icon": "https://github.com/iPAGroove/iPAGroove/blob/main/good%20pizza.jpeg?raw=true",
-    "version": "5.30.0",
-    "download": "https://vhistoretg.s3.eu-north-1.amazonaws.com/Good+Pizza+_5.30.0_1749157444.ipa",
-    "genre": "Games",
-    "lastModified": "2025-06-06T00:00:00Z"
+    "lastModified": "2025-06-06T00:00:00Z",
+    "fileSize": "130 MB",
+    "minIosVersion": "iOS 13.0"
   }
 ]
