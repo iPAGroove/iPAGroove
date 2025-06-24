@@ -65,7 +65,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const vipMessageModal = document.getElementById("vipMessageModal");
 
   // Ensure VIP message modal is hidden on DOMContentLoaded as well
-  // This is a redundant check if the HTML starts with hidden, but provides extra robustness.
   if (vipMessageModal) {
     vipMessageModal.classList.add('hidden');
   }
@@ -143,14 +142,13 @@ document.addEventListener("DOMContentLoaded", () => {
     gamesList.innerHTML = "";
     pageItems.forEach(item => {
       const card = document.createElement("div");
-      // ADDED 'game-card' class here for hover effects and subtle border
+      // Added 'game-card' class and changed structure for VIP badge positioning
       card.className = "bg-[rgba(255,255,255,0.05)] rounded-lg p-4 flex gap-4 items-center game-card";
       card.innerHTML = `
+        ${item.access_type === 'VIP' ? '<span class="vip-badge">VIP</span>' : ''}
         <img src="${item.icon}" alt="${item.name}" class="w-16 h-16 rounded shadow" />
         <div class="flex-1">
-          <h3 class="font-bold text-lg">${item.name}
-            ${item.access_type === 'VIP' ? '<span class="vip-badge">VIP</span>' : ''}
-          </h3>
+          <h3 class="font-bold text-lg">${item.name}</h3>
           <p class="text-sm text-gray-300">${item.version || ""}</p>
           <p class="text-sm text-gray-400 downloads-count" data-title="${item.name}">⬇️ Downloads: ...</p>
         </div>
@@ -233,12 +231,10 @@ document.addEventListener("DOMContentLoaded", () => {
       vipMessageModal.classList.add('hidden');
   }
 
-  // New function to handle VIP purchase button click
+  // New function to handle VIP purchase button click - now redirects to Telegram
   window.handleVipPurchaseClick = function() {
-      console.log('Redirecting to VIP purchase page or showing more info.');
-      // You would add your actual redirection or further modal logic here
-      // Example: window.location.href = 'your-vip-purchase-page.html';
-      // For now, just a console log.
+      console.log('Redirecting to VIP purchase page on Telegram.');
+      window.open('https://t.me/m/5LVQoCCqMjUy', '_blank'); // Open in new tab
   }
 
 
