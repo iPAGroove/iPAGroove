@@ -8,18 +8,18 @@
 <script src="chat.js" type="module"></script>
 <script src="https://cdn.tailwindcss.com"></script>
 <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            primary: '#6e1cff',
-            dark: '#23004d',
-            overlay: 'rgba(0,0,0,0.7)'
-          },
-        }
-      }
-    };
-  </script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          primary: '#6e1cff',
+          dark: '#23004d',
+          overlay: 'rgba(0,0,0,0.7)'
+        },
+      },
+    },
+  };
+</script>
 <style>
   :root {
     --vh: 100vh;
@@ -160,17 +160,19 @@
 <body class="text-white font-sans max-w-screen-sm mx-auto p-0 relative locked">
 <div class="flex" id="loader">Loading data...</div>
 <header class="flex justify-center items-center relative px-4 py-2 fixed w-full top-0 left-0 z-40 backdrop-blur-md bg-[rgba(20,0,40,0.6)] border-b border-purple-500/30 shadow-md">
-<h1 class="cursor-pointer text-lg font-extrabold text-white flex items-center gap-3 hover:text-purple-300 transition text-center" id="siteTitle" style="text-shadow: 0 0 8px rgba(110,28,255,0.9);">
-<img alt="Logo" class="w-7 h-7 rounded shadow-md" src="https://github.com/iPAGroove/iPAGroove/blob/main/IMG_5539.PNG?raw=true"/>
-    iPA Groove
-  </h1>
+    <h1 class="cursor-pointer text-lg font-extrabold text-white flex items-center gap-3 hover:text-purple-300 transition text-center" id="siteTitle" style="text-shadow: 0 0 8px rgba(110,28,255,0.9);">
+        <img alt="Logo" class="w-7 h-7 rounded shadow-md" src="https://github.com/iPAGroove/iPAGroove/blob/main/IMG_5539.PNG?raw=true"/>
+        iPA Groove
+    </h1>
+    <div class="absolute right-4 top-1/2 -translate-y-1/2 text-sm text-gray-300">
+        Users: <span id="totalUsersCount" class="font-bold text-white">0</span>
+    </div>
 </header>
 <main class="pt-16 pb-8 min-h-screen px-4">
-<!-- Certificate Info Section -->
 <section class="relative bg-[rgba(30,0,60,0.6)] rounded-xl p-4 mt-2 mb-4 mx-2 text-white shadow-lg border border-purple-600/30 ring-1 ring-purple-500/30 backdrop-blur-md overflow-hidden transition-all duration-300 text-sm" id="certificateInfo">
 <h2 class="text-lg font-bold text-purple-300 drop-shadow mb-3 tracking-wide flex items-center gap-2">
     📋 Installation Certificates
-  </h2>
+</h2>
 <p class="text-xs text-gray-300 mb-2 leading-snug">🔐 A personal certificate is required to install cracked .ipa files.</p>
 <div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
 <div class="bg-[rgba(255,255,255,0.04)] rounded-xl p-3 border border-purple-400/20 hover:ring hover:ring-purple-500 transition-all">
@@ -212,12 +214,11 @@
 </div>
 <a class="block mt-4" href="#" id="buyCertBtn">
 <button class="w-full bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white py-1.5 rounded-xl font-bold text-xs transition duration-300 shadow-md">
-      💳 Buy Certificate
-    </button>
+    💳 Buy Certificate
+</button>
 </a>
 </section>
-<div id="catalogSection" class="hidden"> <!-- Initially hidden, will be shown when Games/Apps are clicked -->
-<h2 class="text-xl font-bold mb-2 text-purple-300 drop-shadow ml-2" id="mainListTitle"></h2>
+<div id="catalogSection" class="hidden"> <h2 class="text-xl font-bold mb-2 text-purple-300 drop-shadow ml-2" id="mainListTitle"></h2>
 <input class="w-full mb-4 px-4 py-2 rounded-xl bg-[rgba(255,255,255,0.05)] text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-600 shadow-inner ml-2 mr-2" id="searchInput" placeholder="🔍 Search by name..." type="text" style="width: calc(100% - 1rem);"/>
 <div class="space-y-4 mb-4 px-2" id="gamesList"></div>
 <div class="text-center" id="showMoreContainer">
@@ -225,8 +226,6 @@
 </div>
 </div>
 </main>
-<!-- Chat Button -->
-<!-- Chat Modal -->
 <div class="fixed bottom-20 right-4 bg-[rgba(40,0,90,0.95)] rounded-xl p-4 w-80 max-h-[70vh] overflow-y-auto text-white z-50 hidden shadow-lg" id="chatModal">
 <div id="nicknamePrompt">
 <p class="mb-2">Enter nickname:</p>
@@ -249,7 +248,6 @@
 </div>
 </div>
 </div>
-<!-- Game Modal -->
 <div class="fixed inset-0 bg-black bg-opacity-70 hidden z-50 items-center justify-center" id="gameModal">
 <div class="bg-[rgba(40,0,90,0.95)] rounded-xl p-6 max-w-sm w-full mx-4 text-white shadow-lg relative">
 <button class="absolute top-2 right-2 text-white text-xl hover:text-purple-300" onclick="closeModal()">×</button>
@@ -261,13 +259,11 @@
 <p class="text-sm text-gray-400 mt-1 downloads-count-modal" id="modalDownloadCount">⬇️ Downloads: ...</p>
 </div>
 </div>
-<!-- Download Button (Free) / VIP Access Button (VIP) -->
 <a class="block mb-4" href="#" id="modalDownload" target="_blank">
 <button class="w-full bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white py-2 rounded-xl font-bold text-lg shadow-md transition duration-300">
-      ⬇️ Download
-    </button>
+    ⬇️ Download
+</button>
 </a>
-<!-- Corrected VIP button structure -->
 <button id="vipAccessButton" class="block mb-4 w-full bg-gradient-to-r from-yellow-500 to-amber-500 hover:from-yellow-600 hover:to-amber-600 text-black py-2 rounded-xl font-bold text-lg shadow-md transition duration-300 hidden">
     🌟 Get VIP
 </button>
@@ -291,14 +287,12 @@
 </div>
 </div>
 
-<!-- Hack Features Title -->
 <h4 class="text-lg font-bold text-purple-300 text-center mt-4 mb-2 drop-shadow">Hack Features</h4>
 <div class="text-sm text-gray-300 whitespace-pre-line text-left px-4 py-3 mb-4 rounded-lg border border-purple-700/30 shadow-inner bg-[rgba(255,255,255,0.02)]" id="modalDesc"></div>
 
 </div>
 </div>
 
-<!-- VIP Message Modal -->
 <div id="vipMessageModal" class="hidden">
     <div class="modal-content">
         <button class="absolute top-2 right-2 text-white text-xl hover:text-purple-300" onclick="closeVipMessageModal()">×</button>
@@ -308,11 +302,9 @@
     </div>
 </div>
 
-<!-- Footer -->
 <footer class="mt-8 text-center text-gray-400 text-sm pb-4">
     © 2025 iOS Game Zone
-  </footer>
-<!-- Bottom Navigation -->
+</footer>
 <nav class="fixed bottom-0 left-0 w-full bg-[rgba(20,0,40,0.9)] text-white border-t border-purple-500/30 z-50 flex justify-around py-2">
 <button class="flex flex-col items-center text-sm" id="navGames">
     🎮<span class="text-xs mt-1">Games</span>
@@ -321,7 +313,7 @@
     📱<span class="text-xs mt-1">Apps</span>
 </button>
 <button class="relative flex flex-col items-center text-sm" id="navChat">
-  💬<span class="text-xs mt-1">Chat</span>
+    💬<span class="text-xs mt-1">Chat</span>
 <span class="badge absolute -top-1 left-[69%] bg-red-600 text-white text-[10px] px-1 rounded-full hidden">0</span>
 <span class="online-indicator absolute -bottom-1 left-[60%] text-green-400 text-xs font-bold"></span>
 </button>
@@ -329,7 +321,6 @@
     ⋯<span class="text-xs mt-1">More</span>
 </button>
 </nav>
-<!-- More Modal -->
 <div class="fixed inset-0 bg-black bg-opacity-70 hidden z-50 items-center justify-center" id="moreModal">
 <div class="bg-[rgba(40,0,90,0.95)] rounded-xl p-6 max-w-sm w-full mx-4 text-white shadow-lg relative">
 <button class="absolute top-2 right-2 text-white text-xl hover:text-purple-300" onclick="document.getElementById('moreModal').classList.add('hidden')">×</button>
