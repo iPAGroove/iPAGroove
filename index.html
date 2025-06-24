@@ -95,7 +95,7 @@
     position: fixed;
     inset: 0;
     background: rgba(0, 0, 0, 0.8);
-    display: flex;
+    display: flex; /* Kept as flex for when it's shown, 'hidden' class will override */
     align-items: center;
     justify-content: center;
     z-index: 9999; /* Higher than gameModal */
@@ -259,7 +259,7 @@
         <button class="absolute top-2 right-2 text-white text-xl hover:text-purple-300" onclick="closeVipMessageModal()">×</button>
         <h3 class="text-xl font-bold mb-4">VIP Access Required</h3>
         <p class="text-gray-300 mb-6">To download VIP applications and games, you need to purchase a VIP subscription. This gives you access to exclusive content!</p>
-        <button class="bg-purple-600 hover:bg-purple-800 py-2 px-4 rounded-xl text-white font-bold" onclick="alert('Redirect to VIP purchase page or show more info (not implemented yet)')">Learn More about VIP</button>
+        <button class="bg-purple-600 hover:bg-purple-800 py-2 px-4 rounded-xl text-white font-bold" onclick="handleVipPurchaseClick()">Learn More about VIP</button>
     </div>
 </div>
 
