@@ -45,29 +45,29 @@ document.addEventListener("DOMContentLoaded", () => {
   const gameModal = document.getElementById("gameModal");
   const modalTitle = document.getElementById("modalTitle");
   const modalDesc = document.getElementById("modalDesc");
-  const modalDownload = document.getElementById("modalDownload"); // The actual download link container (<a>)
-  const downloadButton = modalDownload.querySelector('button'); // The download button inside the link
+  const modalDownload = document.getElementById("modalDownload");
+  const downloadButton = modalDownload.querySelector('button');
   const modalIcon = document.getElementById("modalIcon");
   const loader = document.getElementById("loader");
   const searchInput = document.getElementById("searchInput");
   const certificateInfo = document.getElementById("certificateInfo");
   const catalogSection = document.getElementById("catalogSection");
 
-  // New modal elements for displaying detailed info
   const modalSize = document.getElementById("modalSize");
   const modalMinIos = document.getElementById("modalMinIos");
   const modalAddedDate = document.getElementById("modalAddedDate");
   const modalVersion = document.getElementById("modalVersion");
-  const modalDownloadCountModal = document.getElementById("modalDownloadCount"); // Download count in modal
+  const modalDownloadCountModal = document.getElementById("modalDownloadCount");
 
-  // VIP access elements
   const vipAccessButton = document.getElementById("vipAccessButton");
   const vipMessageModal = document.getElementById("vipMessageModal");
 
-  // Element to display total user count
   const totalUsersCountElement = document.getElementById("totalUsersCount");
 
-  // Ensure VIP message modal is hidden on DOMContentLoaded as well
+  // --- ССЫЛКИ НА КНОПКИ (ТОЛЬКО VIP) ---
+  const vipButton = document.getElementById("vipButton");
+  // --- КОНЕЦ ССЫЛОК ---
+
   if (vipMessageModal) {
     vipMessageModal.classList.add('hidden');
   }
@@ -75,10 +75,13 @@ document.addEventListener("DOMContentLoaded", () => {
   let gamesData = [];
   let appsData = [];
   let filteredData = [];
-  let currentCatalog = "games"; // Default catalog if user navigates
+  let currentCatalog = "games";
+  let currentFilter = "all"; // 'all', 'vip'
 
   let currentPage = 1;
   const itemsPerPage = 5;
+
+  let downloadsFromFirebase = {};
 
   async function loadJSON(url) {
     const response = await fetch(url);
@@ -110,7 +113,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // Function to calculate time ago
   function timeAgo(dateString) {
     const date = new Date(dateString);
     const now = new Date();
@@ -147,13 +149,14 @@ document.addEventListener("DOMContentLoaded", () => {
       const card = document.createElement("div");
       card.className = "bg-[rgba(255,255,255,0.05)] rounded-lg p-4 flex gap-4 items-center game-card";
       card.innerHTML = `
-        <div class="icon-wrapper"> <img src="${item.icon}" alt="${item.name}" class="w-16 h-16 rounded shadow" />
+        <div class="icon-wrapper">
+          <img src="${item.icon}" alt="${item.name}" class="w-16 h-16 rounded shadow" />
           ${item.access_type === 'VIP' ? '<span class="vip-badge">VIP</span>' : ''}
         </div>
         <div class="flex-1">
           <h3 class="font-bold text-lg">${item.name}</h3>
           <p class="text-sm text-gray-300">${item.version || ""}</p>
-          <p class="text-sm text-gray-400 downloads-count" data-title="${item.name}">⬇️ Downloads: ...</p>
+          <p class="text-sm text-gray-400 downloads-count" data-title="${item.name}">⬇️ Downloads: ${downloadsFromFirebase[item.name] || 0}</p>
         </div>
         <button class="bg-purple-600 hover:bg-purple-800 px-3 py-1 rounded"
           data-name="${item.name}"
@@ -172,35 +175,24 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     renderPagination(data.length);
-    updateDownloadCounts(); // Call to update download counts for current list items
   }
 
-  // Function to show the VIP message modal
   function showVipMessageModal() {
-      console.log('Showing VIP Message Modal'); // Debugging line
+      console.log('Showing VIP Message Modal');
       vipMessageModal.classList.remove('hidden');
-      gameModal.classList.remove('show'); // Hide the game modal behind the VIP message
+      gameModal.classList.remove('show');
   }
 
-  // Function to close the VIP message modal
   window.closeVipMessageModal = function() {
-      console.log('Closing VIP Message Modal'); // Debugging line
+      console.log('Closing VIP Message Modal');
       vipMessageModal.classList.add('hidden');
   }
 
-  async function updateDownloadCounts() {
+  function updateDownloadCounts() {
     const snapshotRef = ref(db, "downloads");
     onValue(snapshotRef, (snapshot) => {
-      const downloadsData = snapshot.val() || {};
-      document.querySelectorAll(".downloads-count").forEach(el => {
-        const title = el.dataset.title;
-        el.textContent = `⬇️ Downloads: ${downloadsData[title] || 0}`;
-      });
-      // Update download count in the modal if it's open
-      if (gameModal.classList.contains("show")) {
-        const currentTitle = modalTitle.textContent;
-        modalDownloadCountModal.textContent = `⬇️ Downloads: ${downloadsData[currentTitle] || 0}`;
-      }
+      downloadsFromFirebase = snapshot.val() || {};
+      applyFilter(); // Теперь applyFilter будет обновлять список с актуальными данными
     });
   }
 
@@ -209,7 +201,6 @@ document.addEventListener("DOMContentLoaded", () => {
     runTransaction(countRef, (current) => (current || 0) + 1);
   }
 
-  // Fetch and display total user count
   const totalUsersRef = ref(db, "users/totalCount");
   onValue(totalUsersRef, (snapshot) => {
       const totalUsers = snapshot.val();
@@ -218,30 +209,70 @@ document.addEventListener("DOMContentLoaded", () => {
       }
   });
 
+  const lastVisitTimestamp = localStorage.getItem('lastVisitTimestamp');
+  const now = Date.now();
+  const twentyFourHours = 24 * 60 * 60 * 1000;
+
+  if (!lastVisitTimestamp || (now - parseInt(lastVisitTimestamp) > twentyFourHours)) {
+      runTransaction(totalUsersRef, (currentCount) => {
+          return (currentCount || 0) + 1;
+      }).then(() => {
+          console.log("Total users count incremented for a new/returning unique visitor.");
+          localStorage.setItem('lastVisitTimestamp', now.toString());
+      }).catch((error) => {
+          console.error("Failed to increment total users count:", error);
+      });
+  } else {
+      console.log("User already counted recently.");
+  }
+
+  // --- ИЗМЕНЕННАЯ ФУНКЦИЯ applyFilter (без TOP) ---
+  function applyFilter() {
+    let dataToFilter = currentCatalog === "games" ? gamesData : appsData;
+    let resultData = [];
+
+    searchInput.value = ""; // Очищаем строку поиска при смене фильтра
+
+    if (currentFilter === "vip") {
+      resultData = dataToFilter.filter(item => item.access_type === 'VIP');
+      mainListTitle.textContent = `VIP ${currentCatalog.charAt(0).toUpperCase() + currentCatalog.slice(1)}`;
+    } else { // 'all'
+      resultData = dataToFilter;
+      mainListTitle.textContent = `All ${currentCatalog.charAt(0).toUpperCase() + currentCatalog.slice(1)}`;
+    }
+
+    currentPage = 1;
+    renderList(resultData);
+  }
+  // --- КОНЕЦ ИЗМЕНЕННОЙ ФУНКЦИИ ---
+
 
   async function loadCatalog(type) {
     currentCatalog = type;
-    mainListTitle.textContent = type === "games" ? "All Games" : "All Apps";
+    currentFilter = "all"; // Сбрасываем фильтр на "все" при смене каталога
     searchInput.classList.remove("hidden");
     loader.style.display = "flex";
 
     certificateInfo.style.display = "none";
     catalogSection.style.display = "block";
 
+    activateButton(currentCatalog === "games" ? document.getElementById("navGames") : document.getElementById("navApps"));
+    activateFilterButton(null); // Деактивируем VIP кнопку фильтра
+
     try {
       const data = await loadJSON(`${type}.json`);
-      // Add dummy data for new fields if not present in JSON
       const processedData = data.map(item => ({
         ...item,
-        fileSize: item.fileSize || `${(Math.random() * 500 + 50).toFixed(0)} MB`, // Example random size
-        minIosVersion: item.minIosVersion || `iOS ${Math.floor(Math.random() * 5) + 10}.0`, // Example random iOS version
-        lastModified: item.lastModified || new Date(Date.now() - Math.random() * 365 * 24 * 60 * 60 * 1000).toISOString(), // Example random last modified date
-        access_type: item.access_type || 'Free' // Default to Free if not specified
+        fileSize: item.fileSize || `${(Math.random() * 500 + 50).toFixed(0)} MB`,
+        minIosVersion: item.minIosVersion || `iOS ${Math.floor(Math.random() * 5) + 10}.0`,
+        lastModified: item.lastModified || new Date(Date.now() - Math.random() * 365 * 24 * 60 * 60 * 1000).toISOString(),
+        access_type: item.access_type || 'Free'
       }));
       if (type === "games") gamesData = processedData;
       else appsData = processedData;
-      currentPage = 1;
-      renderList(processedData);
+
+      applyFilter(); // Вызываем applyFilter
+
     } catch(error) {
       console.error("Error loading catalog:", error);
       gamesList.innerHTML = "<p class='text-red-500'>Error loading data</p>";
@@ -250,40 +281,100 @@ document.addEventListener("DOMContentLoaded", () => {
     loader.style.display = "none";
   }
 
-  // Event listeners for navigation buttons
+  function activateButton(button) {
+    const navButtons = document.querySelectorAll('nav button');
+    navButtons.forEach(btn => {
+      btn.classList.remove('text-purple-300', 'font-bold');
+      btn.classList.add('text-white');
+    });
+    if (button) {
+      button.classList.add('text-purple-300', 'font-bold');
+      button.classList.remove('text-white');
+    }
+  }
+
+  function activateFilterButton(button) {
+    const filterButtons = [vipButton]; // Только vipButton
+    filterButtons.forEach(btn => {
+      btn.classList.remove('bg-purple-900', 'ring-2', 'ring-purple-400'); // Убираем активные стили
+      // Сброс VIP-кнопки к базовым градиентам
+      if (btn.id === 'vipButton') {
+        btn.classList.remove('from-amber-600', 'to-yellow-600');
+        btn.classList.add('from-yellow-500', 'to-amber-500');
+      }
+    });
+
+    if (button) { // Если кнопка передана, делаем её активной
+      button.classList.add('bg-purple-900', 'ring-2', 'ring-purple-400');
+      // Применяем активные градиенты для VIP-кнопки
+      if (button.id === 'vipButton') {
+        button.classList.remove('from-yellow-500', 'to-amber-500');
+        button.classList.add('from-amber-600', 'to-yellow-600');
+      }
+    }
+  }
+
   document.getElementById("navGames").addEventListener("click", () => {
     loadCatalog("games");
     certificateInfo.style.display = "none";
     catalogSection.style.display = "block";
+    activateButton(document.getElementById("navGames"));
   });
 
   document.getElementById("navApps").addEventListener("click", () => {
     loadCatalog("apps");
     certificateInfo.style.display = "none";
     catalogSection.style.display = "block";
+    activateButton(document.getElementById("navApps"));
   });
 
   document.getElementById("navMore").addEventListener("click", () => {
     document.getElementById("moreModal").classList.remove("hidden");
+    activateButton(document.getElementById("navMore"));
   });
 
-  // Restore initial view when site title is clicked
+  // --- СЛУШАТЕЛЬ ТОЛЬКО ДЛЯ КНОПКИ VIP ---
+  vipButton.addEventListener("click", () => {
+    currentFilter = "vip";
+    applyFilter();
+    activateFilterButton(vipButton);
+  });
+  // --- КОНЕЦ СЛУШАТЕЛЯ ---
+
   document.getElementById("siteTitle").addEventListener("click", () => {
     certificateInfo.style.display = "block";
     catalogSection.style.display = "none";
-    searchInput.classList.add("hidden"); // Hide search when viewing certificates
-    searchInput.value = ""; // Clear search input
+    searchInput.classList.add("hidden");
+    searchInput.value = "";
+    currentFilter = "all";
+    activateButton(null);
+    activateFilterButton(null);
   });
+
 
   searchInput.addEventListener("input", () => {
     const value = searchInput.value.toLowerCase();
     const sourceData = currentCatalog === "games" ? gamesData : appsData;
+
     const filtered = sourceData.filter(item => item.name.toLowerCase().includes(value));
     currentPage = 1;
     renderList(filtered);
+    activateFilterButton(null);
+    mainListTitle.textContent = `Search Results for "${value}"`;
   });
+
 
   window.closeModal = function () {
     gameModal.classList.remove("show");
   };
+
+  updateDownloadCounts();
+
+  document.getElementById("navGames").click();
+  certificateInfo.style.display = "block";
+  catalogSection.style.display = "none";
+  searchInput.classList.add("hidden");
+  activateButton(null);
+  activateFilterButton(null);
+
 });
