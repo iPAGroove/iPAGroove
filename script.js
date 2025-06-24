@@ -63,6 +63,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // VIP access elements
   const vipAccessButton = document.getElementById("vipAccessButton");
   const vipMessageModal = document.getElementById("vipMessageModal");
+  const buyCertBtn = document.getElementById("buyCertBtn"); // Get the Buy Certificate button
 
   // Element to display total user count
   const totalUsersCountElement = document.getElementById("totalUsersCount");
@@ -155,7 +156,7 @@ document.addEventListener("DOMContentLoaded", () => {
           <p class="text-sm text-gray-300">${item.version || ""}</p>
           <p class="text-sm text-gray-400 downloads-count" data-title="${item.name}">⬇️ Downloads: ...</p>
         </div>
-        <button class="bg-purple-600 hover:bg-purple-800 px-3 py-1 rounded"
+        <button class="bg-purple-600 hover:bg-purple-800 px-3 py-1 rounded open-modal-btn"
           data-name="${item.name}"
           data-download="${item.download}"
           data-desc="${item.description}"
@@ -175,18 +176,66 @@ document.addEventListener("DOMContentLoaded", () => {
     updateDownloadCounts(); // Call to update download counts for current list items
   }
 
+  // Event listener for opening the game modal using event delegation
+  gamesList.addEventListener('click', (event) => {
+    const targetButton = event.target.closest('.open-modal-btn');
+    if (targetButton) {
+      const item = targetButton.dataset;
+      modalTitle.textContent = item.name;
+      modalDesc.textContent = item.desc;
+      modalIcon.src = item.icon;
+      modalSize.textContent = item.size;
+      modalMinIos.textContent = item.minIos;
+      modalAddedDate.textContent = timeAgo(item.lastModified);
+      modalVersion.textContent = item.version;
+
+      if (item.accessType === 'VIP') {
+        modalDownload.classList.add('hidden');
+        vipAccessButton.classList.remove('hidden');
+      } else {
+        modalDownload.href = item.download;
+        modalDownload.classList.remove('hidden');
+        vipAccessButton.classList.add('hidden');
+      }
+      gameModal.classList.add("show");
+      updateDownloadCounts(); // Update count for the specific item in the modal
+    }
+  });
+
+
   // Function to show the VIP message modal
   function showVipMessageModal() {
       console.log('Showing VIP Message Modal'); // Debugging line
       vipMessageModal.classList.remove('hidden');
       gameModal.classList.remove('show'); // Hide the game modal behind the VIP message
+      document.body.classList.add('locked'); // Lock scrolling when modal is open
   }
 
   // Function to close the VIP message modal
   window.closeVipMessageModal = function() {
       console.log('Closing VIP Message Modal'); // Debugging line
       vipMessageModal.classList.add('hidden');
+      document.body.classList.remove('locked'); // Unlock scrolling when modal is closed
   }
+
+  // Handle VIP access button click
+  vipAccessButton.addEventListener('click', showVipMessageModal);
+
+  // Handle the click on the "Download" button inside the game modal
+  downloadButton.addEventListener('click', () => {
+    const currentTitle = modalTitle.textContent;
+    if (currentTitle) {
+      incrementDownloadCount(currentTitle);
+    }
+  });
+
+  // Handle "Buy Certificate" button click
+  buyCertBtn.addEventListener('click', (event) => {
+    event.preventDefault(); // Prevent default link behavior
+    // Replace with your actual certificate purchase URL or action
+    alert("Redirecting to certificate purchase page!");
+    window.open('YOUR_CERTIFICATE_PURCHASE_URL_HERE', '_blank'); // Open in a new tab/window
+  });
 
   async function updateDownloadCounts() {
     const snapshotRef = ref(db, "downloads");
@@ -286,4 +335,7 @@ document.addEventListener("DOMContentLoaded", () => {
   window.closeModal = function () {
     gameModal.classList.remove("show");
   };
+
+  // Initial load of games catalog when the script is fully loaded and DOM is ready
+  loadCatalog("games");
 });
