@@ -313,5 +313,7 @@ document.addEventListener("DOMContentLoaded", () => {
     gameModal.classList.remove("show");
   };
 
-  // The initial loading of the catalog is now controlled by explicit navigation clicks or the window.load event
+  // Removed loadCatalog("games"); from here to prevent immediate display of catalog
+  // This line was the cause of the VIP modal showing on load if the first item was VIP.
 });
+
