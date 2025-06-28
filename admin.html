@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Panel</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js" type="module"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database.js" type="module"></script>
+</head>
+<body class="bg-gray-900 text-white p-4">
+  <h1 class="text-xl font-bold mb-4">🛠 Add New App/Game</h1>
+  <form id="addForm" class="space-y-2">
+    <input class="w-full bg-gray-800 p-2 rounded" placeholder="Name" id="name"/>
+    <textarea class="w-full bg-gray-800 p-2 rounded" placeholder="Description" id="description"></textarea>
+    <input class="w-full bg-gray-800 p-2 rounded" placeholder="Download URL" id="download"/>
+    <input class="w-full bg-gray-800 p-2 rounded" placeholder="Icon URL" id="icon"/>
+    <input class="w-full bg-gray-800 p-2 rounded" placeholder="Version" id="version"/>
+    <input class="w-full bg-gray-800 p-2 rounded" placeholder="Genre" id="genre"/>
+    <input class="w-full bg-gray-800 p-2 rounded" placeholder="File Size (e.g. 149 MB)" id="fileSize"/>
+    <input class="w-full bg-gray-800 p-2 rounded" placeholder="Min iOS Version (e.g. iOS 12.0)" id="minIosVersion"/>
+    <select class="w-full bg-gray-800 p-2 rounded" id="access_type">
+      <option value="Free">Free</option>
+      <option value="VIP">VIP</option>
+    </select>
+    <select class="w-full bg-gray-800 p-2 rounded" id="category">
+      <option value="games">Game</option>
+      <option value="apps">App</option>
+    </select>
+    <button type="submit" class="bg-purple-600 hover:bg-purple-800 px-4 py-2 rounded">✅ Add</button>
+  </form>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
+    import { getDatabase, ref, push } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-database.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBizq_3JJXWgUa-aaW8MKj6AV0Jt_-XYcI",
+      authDomain: "ipa-chat.firebaseapp.com",
+      databaseURL: "https://ipa-chat-default-rtdb.firebaseio.com",
+      projectId: "ipa-chat",
+      storageBucket: "ipa-chat.appspot.com",
+      messagingSenderId: "534978415110",
+      appId: "1:534978415110:web:a40838ef597b6d0ff09187"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+
+    document.getElementById("addForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const item = {
+        name: name.value.trim(),
+        description: description.value.trim(),
+        download: download.value.trim(),
+        icon: icon.value.trim(),
+        version: version.value.trim(),
+        genre: genre.value.trim(),
+        fileSize: fileSize.value.trim(),
+        minIosVersion: minIosVersion.value.trim(),
+        access_type: access_type.value,
+        lastModified: new Date().toISOString()
+      };
+
+      const category = category.value;
+      await push(ref(db, `catalog/${category}`), item);
+
+      alert("✅ Added!");
+      e.target.reset();
+    });
+  </script>
+</body>
+</html>
