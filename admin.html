@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - iOS Game & App Catalog</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background: linear-gradient(135deg, #3b006d, #6e1cff, #23004d);
+            min-height: 100vh;
+            font-family: 'Inter', sans-serif;
+            color: #e0e0e0;
+        }
+        .container {
+            max-width: 900px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: rgba(20,0,40,0.8);
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #bbb;
+        }
+        .form-group input[type="text"],
+        .form-group input[type="url"],
+        .form-group input[type="file"],
+        .form-group textarea,
+        .form-group select {
+            width: calc(100% - 20px);
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #555;
+            background-color: rgba(0,0,0,0.3);
+            color: #fff;
+            font-size: 1rem;
+        }
+        .form-group textarea {
+            min-height: 80px;
+            resize: vertical;
+        }
+        .btn {
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+        .btn-primary {
+            background-color: #6e1cff;
+            color: white;
+        }
+        .btn-primary:hover {
+            background-color: #5a15cc;
+        }
+        .btn-danger {
+            background-color: #dc2626;
+            color: white;
+        }
+        .btn-danger:hover {
+            background-color: #b91c1c;
+        }
+        .btn-secondary {
+            background-color: #4a5568;
+            color: white;
+        }
+        .btn-secondary:hover {
+            background-color: #2d3748;
+        }
+        .table-auto {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        .table-auto th, .table-auto td {
+            padding: 10px;
+            border: 1px solid #444;
+            text-align: left;
+        }
+        .table-auto th {
+            background-color: rgba(100,20,150,0.5);
+        }
+        .table-auto td img {
+            width: 40px;
+            height: 40px;
+            border-radius: 4px;
+            object-fit: cover;
+        }
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 100; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgba(0,0,0,0.7); /* Black w/ opacity */
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            background-color: rgba(20,0,40,0.95);
+            margin: auto;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.7);
+            width: 80%; /* Could be responsive */
+            max-width: 600px;
+            position: relative;
+        }
+        .close-button {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            position: absolute;
+            top: 10px;
+            right: 20px;
+        }
+        .close-button:hover,
+        .close-button:focus {
+            color: white;
+            text-decoration: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-3xl font-bold text-center mb-6 text-white">Admin Panel</h1>
+
+        <div id="authSection" class="mb-8 p-6 bg-purple-900/50 rounded-lg">
+            <h2 class="text-2xl font-bold mb-4 text-white">Login / Register</h2>
+            <div class="form-group">
+                <label for="authEmail">Email:</label>
+                <input type="text" id="authEmail" placeholder="admin@example.com">
+            </div>
+            <div class="form-group">
+                <label for="authPassword">Password:</label>
+                <input type="password" id="authPassword" placeholder="********">
+            </div>
+            <div class="flex space-x-4">
+                <button id="loginBtn" class="btn btn-primary">Login</button>
+                <button id="registerBtn" class="btn btn-secondary">Register</button>
+            </div>
+            <p id="authStatus" class="mt-4 text-center text-red-400"></p>
+        </div>
+
+        <div id="adminContent" class="hidden">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold text-white">Manage Items</h2>
+                <button id="logoutBtn" class="btn btn-danger">Logout</button>
+            </div>
+
+            <div class="mb-8 p-6 bg-purple-900/50 rounded-lg">
+                <h3 class="text-xl font-bold mb-4 text-white">Add/Edit Item</h3>
+                <input type="hidden" id="itemId"> <div class="form-group">
+                    <label for="itemType">Item Type:</label>
+                    <select id="itemType" class="w-full">
+                        <option value="Games">Game</option>
+                        <option value="Apps">App</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="itemName">Name:</label>
+                    <input type="text" id="itemName" placeholder="Item Name">
+                </div>
+                <div class="form-group">
+                    <label for="itemDescription">Description:</label>
+                    <textarea id="itemDescription" placeholder="Detailed description"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="itemIcon">Icon URL (AWS S3 or similar):</label>
+                    <input type="url" id="itemIcon" placeholder="https://your-s3-bucket/icons/item_icon.png">
+                    </div>
+                <div class="form-group">
+                    <label for="itemVersion">Version:</label>
+                    <input type="text" id="itemVersion" placeholder="1.0.0">
+                </div>
+                <div class="form-group">
+                    <label for="itemDownload">Download URL (AWS S3 .ipa file):</label>
+                    <input type="url" id="itemDownload" placeholder="https://your-s3-bucket/items/item_file.ipa">
+                </div>
+                <div class="form-group">
+                    <label for="itemGenre">Genre:</label>
+                    <input type="text" id="itemGenre" placeholder="Action, Utility, etc.">
+                </div>
+                <div class="form-group">
+                    <label for="itemFileSize">File Size:</label>
+                    <input type="text" id="itemFileSize" placeholder="150 MB">
+                </div>
+                <div class="form-group">
+                    <label for="itemMinIosVersion">Min iOS Version:</label>
+                    <input type="text" id="itemMinIosVersion" placeholder="iOS 12.0">
+                </div>
+                <div class="form-group">
+                    <label for="itemAccessType">Access Type:</label>
+                    <select id="itemAccessType" class="w-full">
+                        <option value="Free">Free</option>
+                        <option value="VIP">VIP</option>
+                    </select>
+                </div>
+                <div class="flex space-x-4">
+                    <button id="saveItemBtn" class="btn btn-primary">Add New Item</button>
+                    <button id="clearFormBtn" class="btn btn-secondary">Clear Form</button>
+                </div>
+            </div>
+
+            <div class="p-6 bg-purple-900/50 rounded-lg">
+                <h3 class="text-xl font-bold mb-4 text-white">Current Items</h3>
+                <input type="text" id="adminSearchInput" class="w-full mb-4" placeholder="Search items...">
+                <table class="table-auto">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Name</th>
+                            <th>Type</th>
+                            <th>Version</th>
+                            <th>Access</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="itemsTableBody">
+                        </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="./admin.js"></script>
+</body>
+</html>
