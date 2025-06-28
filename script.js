@@ -68,63 +68,21 @@ document.addEventListener("DOMContentLoaded", () => {
     vipMessageModal.classList.add('hidden');
   }
 
-  // Глобальные массивы, которые будут заполняться из Firebase
   let gamesData = [];
   let appsData = [];
-  let filteredData = []; // Этот массив будет содержать отфильтрованные данные
-  let currentCatalog = "games"; // Начальный каталог
+  let filteredData = [];
+  let currentCatalog = "games";
 
   let currentPage = 1;
   const itemsPerPage = 5;
 
   let downloadsFromFirebase = {};
 
-  // **** УДАЛЯЕМ loadJSON, так как данные будут идти из Firebase ****
-  // async function loadJSON(url) {
-  //   const response = await fetch(url);
-  //   if (!response.ok) throw new Error("Load error: " + url);
-  //   return await response.json();
-  // }
-
-  // Функция для обработки данных, полученных из Firebase
-  // Применяет ту же логику по умолчанию, что и старый loadJSON
-  function processFirebaseData(data) {
-      if (!data) return [];
-      // Object.values() преобразует объект с ключами Firebase в массив
-      const processedArray = Object.values(data).map(item => ({
-          ...item,
-          fileSize: item.fileSize || `${(Math.random() * 500 + 50).toFixed(0)} MB`,
-          minIosVersion: item.minIosVersion || `iOS ${Math.floor(Math.random() * 5) + 10}.0`,
-          lastModified: item.lastModified || new Date(Date.now() - Math.random() * 365 * 24 * 60 * 60 * 1000).toISOString(),
-          access_type: item.access_type || 'Free'
-      }));
-      return processedArray;
+  async function loadJSON(url) {
+    const response = await fetch(url);
+    if (!response.ok) throw new Error("Load error: " + url);
+    return await response.json();
   }
-
-  // **** НОВЫЙ КОД: Загрузка игр из Firebase ****
-  // Слушатель для изменений в узле 'games'
-  onValue(ref(db, 'games'), (snapshot) => {
-      const data = snapshot.val();
-      gamesData = processFirebaseData(data);
-      // Если текущий каталог - игры, обновляем список сразу после получения данных
-      if (currentCatalog === "games") {
-          applyFilter();
-      }
-      updateDownloadCounts(); // Обновляем счетчики загрузок, если они зависят от gamesData
-  });
-
-  // **** НОВЫЙ КОД: Загрузка приложений из Firebase ****
-  // Слушатель для изменений в узле 'apps'
-  onValue(ref(db, 'apps'), (snapshot) => {
-      const data = snapshot.val();
-      appsData = processFirebaseData(data);
-      // Если текущий каталог - приложения, обновляем список сразу после получения данных
-      if (currentCatalog === "apps") {
-          applyFilter();
-      }
-      updateDownloadCounts(); // Обновляем счетчики загрузок, если они зависят от appsData
-  });
-
 
   function paginate(data, page) {
     const start = (page - 1) * itemsPerPage;
@@ -134,10 +92,6 @@ document.addEventListener("DOMContentLoaded", () => {
   function renderPagination(totalItems) {
     const totalPages = Math.ceil(totalItems / itemsPerPage);
     const container = document.getElementById("showMoreContainer");
-    if (!container) { // Добавлено, чтобы избежать ошибки, если элемента нет
-        console.warn("Pagination container not found.");
-        return;
-    }
     container.innerHTML = "";
     if (totalPages <= 1) return;
 
@@ -183,7 +137,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function renderList(data) {
-    filteredData = data; // Обновляем filteredData здесь
+    filteredData = data;
     const pageItems = paginate(data, currentPage);
     gamesList.innerHTML = "";
     pageItems.forEach(item => {
@@ -269,21 +223,37 @@ document.addEventListener("DOMContentLoaded", () => {
     renderList(dataToRender);
   }
 
-  // **** ИЗМЕНЕННЫЙ КОД: loadCatalog теперь просто переключает вид и вызывает applyFilter ****
-  // Данные gamesData и appsData уже загружаются слушателями onValue
   async function loadCatalog(type) {
     currentCatalog = type;
     searchInput.classList.remove("hidden");
-    loader.style.display = "flex"; // Оставим лоадер на короткое время, пока applyFilter обновляет DOM
+    loader.style.display = "flex";
 
     certificateInfo.style.display = "none";
     catalogSection.style.display = "block";
 
     activateButton(currentCatalog === "games" ? document.getElementById("navGames") : document.getElementById("navApps"));
 
-    applyFilter(); // Просто обновляем отображение с уже загруженными данными
+    try {
+      const data = await loadJSON(`${type}.json`);
+      const processedData = data.map(item => ({
+        ...item,
+        fileSize: item.fileSize || `${(Math.random() * 500 + 50).toFixed(0)} MB`,
+        minIosVersion: item.minIosVersion || `iOS ${Math.floor(Math.random() * 5) + 10}.0`,
+        // ВОЗВРАЩЕНО К ИСХОДНОМУ ПОВЕДЕНИЮ: используем lastModified из JSON, если есть, иначе генерируем
+        lastModified: item.lastModified || new Date(Date.now() - Math.random() * 365 * 24 * 60 * 60 * 1000).toISOString(),
+        access_type: item.access_type || 'Free'
+      }));
+      if (type === "games") gamesData = processedData;
+      else appsData = processedData;
 
-    loader.style.display = "none"; // Скрываем лоадер
+      applyFilter();
+
+    } catch(error) {
+      console.error("Error loading catalog:", error);
+      gamesList.innerHTML = "<p class='text-red-500'>Error loading data</p>";
+    }
+
+    loader.style.display = "none";
   }
 
   function activateButton(button) {
@@ -362,7 +332,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         modalSize.textContent = size;
         modalMinIos.textContent = minIos;
-        modalAddedDate.textContent = timeAgo(lastModified);
+        modalAddedDate.textContent = timeAgo(lastModified); // Теперь здесь будет использоваться дата из JSON
         modalVersion.textContent = version;
         document.getElementById("modalGenre").textContent = genre;
 
@@ -384,13 +354,11 @@ document.addEventListener("DOMContentLoaded", () => {
       incrementDownloadCount(title);
   });
 
-  // Изначальная инициализация:
-  // updateDownloadCounts() вызывается в onValue для games и apps,
-  // что гарантирует, что downloadsFromFirebase будет заполнен.
-  // document.getElementById("navGames").click(); инициирует отображение игр.
-  document.getElementById("navGames").click(); // Это вызовет loadCatalog("games"), который вызовет applyFilter()
+  updateDownloadCounts();
+  document.getElementById("navGames").click();
   certificateInfo.style.display = "block";
   catalogSection.style.display = "none";
   searchInput.classList.add("hidden");
   activateButton(null);
 });
+
